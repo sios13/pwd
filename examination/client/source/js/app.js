@@ -3,7 +3,7 @@ const PWD = require("./PWD.js");
 window.addEventListener("load", function() {
     let container = document.querySelector("main");
 
-    let PWD = new PWD();
+    let pwd = new PWD();
 
-    container.appendChild(PWD.getContainer());
+    container.appendChild(pwd.getContainer());
 });
