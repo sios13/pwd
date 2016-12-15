@@ -5,6 +5,8 @@ function Window(settings) {
 
     this.yPos = settings.yPos ? settings.yPos : 100;
 
+    this.backgroundColor = settings.backgroundColor ? settings.backgroundColor : Math.floor(Math.random()*16777215).toString(16);
+
     this.active = settings.active ? settings.active : true;
 
     this.container = initializeContainer.bind(this)();
@@ -18,18 +20,38 @@ function Window(settings) {
 
         container.style.top = this.yPos + "px";
 
+        //alert(this.backgroundColor);
+
+        container.style.backgroundColor = "#" + this.backgroundColor;
+
         container.classList.add("PWD-window");
 
         return container;
     }
 }
 
+Window.prototype.updatePos = function(xMovement, yMovement) {
+    this.xPos += xMovement;
+    this.yPos += yMovement;
+
+    this.container.style.left = this.xPos + "px";
+    this.container.style.top = this.yPos + "px";
+}
+
 Window.prototype.setXPos = function(xPos) {
-    this.container.style.left = xPos + "px";
+    this.yPos = xPos + "px";
 }
 
 Window.prototype.setYPos = function(yPos) {
-    this.container.style.top = yPos + "px";
+    this.yPos = yPos + "px";
+}
+
+Window.prototype.getXPos = function() {
+    return this.xPos;
+}
+
+Window.prototype.getYPos = function() {
+    return this.yPos;
 }
 
 Window.prototype.getId = function() {

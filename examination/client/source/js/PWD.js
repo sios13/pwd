@@ -9,8 +9,9 @@ function PWD() {
 
     let newWindowYPos = 0;
 
-    windows.push(new Window({"id": 0, "xPos": getNewWindowXPos(), "yPos": getNewWindowYPos()}));
-    windows.push(new Window({"id": 1, "xPos": getNewWindowXPos(), "yPos": getNewWindowYPos()}));
+    for (let i = 0; i < 10; i++) {
+        windows.push(new Window({"id": i, "xPos": getNewWindowXPos(), "yPos": getNewWindowYPos()}));
+    }
 
     for (let i = 0; i < windows.length; i++) {
         this.container.appendChild(windows[i].getContainer());
@@ -41,9 +42,22 @@ function PWD() {
         let pwdWindow = getActiveWindow();
 
         if (pwdWindow) {
-            pwdWindow.setXPos(e.clientX);
-            pwdWindow.setYPos(e.clientY);
-            console.log("move");
+            //pwdWindowElem = getContainer();
+
+            pwdWindow.updatePos(e.movementX, e.movementY);
+
+            //console.log(e.movementX);
+            //pwdWindow.setXPos(pwdWindow.getXPos() + e.movementX);
+            //pwdWindow.setYPos(pwdWindow.getYPos() + e.movementY);
+
+            //let pwdWindowElem = pwdWindow.getContainer();
+
+            //console.log(pwdWindowElem.style.left);
+
+            //console.log(e.clientX2 - (e.clientX - pwdWindow.getContainer().offsetLeft));
+            //console.log(e.clientX - (e.clientX - pwdWindow.getContainer().offsetLeft));
+            //pwdWindow.setXPos( e.clientX - (e.clientX - pwdWindow.getContainer().offsetLeft) );
+            //pwdWindow.setYPos( e.clientY - (e.clientY - pwdWindow.getContainer().offsetTop) );
         }
     }
 
