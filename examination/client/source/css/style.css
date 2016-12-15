@@ -6,4 +6,12 @@ body {
     width:200px;
     height:300px;
     background-color:blue;
+    position:absolute;
+}
+.PWD-window--active {
+    z-index:1;
+    background-color:green;
+}
+.PWD-window-inactive {
+    z-index:0;
 }
