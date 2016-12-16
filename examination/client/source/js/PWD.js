@@ -1,8 +1,10 @@
 const Window = require("./Window.js");
 const Icon = require("./Icon.js");
 
-function PWD() {
-    this.container = new DocumentFragment();
+function PWD(settings = {}) {
+    let container = document.createElement("main");
+
+    document.querySelector(settings.container).appendChild(container);
 
     let windows = [];
 
@@ -29,13 +31,15 @@ function PWD() {
     }));
 
     for (let i = 0; i < icons.length; i++) {
-        this.container.appendChild(icons[i].getContainer());
+        container.appendChild(icons[i].getContainer());
     }
 
     addListeners.bind(this)();
 
     function addListeners() {
         window.addEventListener("mousedown", function(e) {
+            e.preventDefault();
+
             let pwdWindow = getWindow(parseInt(e.target.getAttribute("data-windowid")));
 
             if (pwdWindow) {
@@ -53,6 +57,10 @@ function PWD() {
         });
 
         window.addEventListener("dblclick", function(e) {
+            if (e.target.nodeName !== "IMG") {
+                return;
+            }
+
             let pwdIconDiv = e.target.parentNode;
             let pwdIconObj = getIcon(parseInt(pwdIconDiv.getAttribute("data-iconid")));
 
@@ -66,7 +74,9 @@ function PWD() {
     function launchApplication(iconObj) {
         let pwdWindow = new Window();
 
-        this.container.appendChild(pwdWindow.getContainer());
+        windows.push(pwdWindow);
+
+        container.appendChild(pwdWindow.getContainer());
     }
 
     /**
