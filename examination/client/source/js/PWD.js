@@ -1,4 +1,5 @@
 const Window = require("./Window.js");
+const Icon = require("./Icon.js");
 
 function PWD() {
     this.container = new DocumentFragment();
@@ -12,10 +13,18 @@ function PWD() {
     for (let i = 0; i < 10; i++) {
         windows.push(new Window({"id": i, "xPos": getNewWindowXPos(), "yPos": getNewWindowYPos()}));
     }
-
+/*
     for (let i = 0; i < windows.length; i++) {
         this.container.appendChild(windows[i].getContainer());
     }
+*/
+    let testIcon = new Icon({
+        "application": "memory",
+        //"iconImage": "memory.png",
+        "windowSize": "medium"
+    });
+
+    this.container.appendChild(testIcon.getContainer());
 
     addListeners.bind(this)();
 
@@ -42,22 +51,7 @@ function PWD() {
         let pwdWindow = getActiveWindow();
 
         if (pwdWindow) {
-            //pwdWindowElem = getContainer();
-
             pwdWindow.updatePos(e.movementX, e.movementY);
-
-            //console.log(e.movementX);
-            //pwdWindow.setXPos(pwdWindow.getXPos() + e.movementX);
-            //pwdWindow.setYPos(pwdWindow.getYPos() + e.movementY);
-
-            //let pwdWindowElem = pwdWindow.getContainer();
-
-            //console.log(pwdWindowElem.style.left);
-
-            //console.log(e.clientX2 - (e.clientX - pwdWindow.getContainer().offsetLeft));
-            //console.log(e.clientX - (e.clientX - pwdWindow.getContainer().offsetLeft));
-            //pwdWindow.setXPos( e.clientX - (e.clientX - pwdWindow.getContainer().offsetLeft) );
-            //pwdWindow.setYPos( e.clientY - (e.clientY - pwdWindow.getContainer().offsetTop) );
         }
     }
 

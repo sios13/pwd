@@ -20,8 +20,6 @@ function Window(settings) {
 
         container.style.top = this.yPos + "px";
 
-        //alert(this.backgroundColor);
-
         container.style.backgroundColor = "#" + this.backgroundColor;
 
         container.classList.add("PWD-window");
@@ -36,22 +34,6 @@ Window.prototype.updatePos = function(xMovement, yMovement) {
 
     this.container.style.left = this.xPos + "px";
     this.container.style.top = this.yPos + "px";
-}
-
-Window.prototype.setXPos = function(xPos) {
-    this.yPos = xPos + "px";
-}
-
-Window.prototype.setYPos = function(yPos) {
-    this.yPos = yPos + "px";
-}
-
-Window.prototype.getXPos = function() {
-    return this.xPos;
-}
-
-Window.prototype.getYPos = function() {
-    return this.yPos;
 }
 
 Window.prototype.getId = function() {
