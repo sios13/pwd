@@ -16,7 +16,7 @@ function Window(settings = {}) {
 
     this.backgroundColor = settings.backgroundColor ? settings.backgroundColor : Math.floor(Math.random()*16777215).toString(16);
 
-    this.active = settings.active ? settings.active : true;
+    this.isActive = settings.active ? settings.active : true;
 
     this.dragging = settings.dragging ? settings.dragging : false;
 
@@ -99,14 +99,14 @@ Window.prototype.setIsDragging = function(value) {
 /**
  * Return true if this window is active
  */
-Window.prototype.isActive = function() {
-    return this.active;
+Window.prototype.getIsActive = function() {
+    return this.isActive;
 }
 
-Window.prototype.setActive = function(value) {
-    this.active = value;
+Window.prototype.setIsActive = function(value) {
+    this.isActive = value;
 
-    if (this.active) {
+    if (this.isActive) {
         this.container.classList.remove("PWD-window--inactive");
         this.container.classList.add("PWD-window--active");
     } else {

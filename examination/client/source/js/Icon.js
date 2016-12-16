@@ -17,7 +17,11 @@ function Icon(settings = {}) {
         let iconImageElem = document.createElement("img");
         iconImageElem.src = "./image/" + this.iconImage;
 
+        let iconText = document.createElement("span");
+        iconText.textContent = this.applicationName;
+
         container.appendChild(iconImageElem);
+        container.appendChild(iconText);
 
         return container;
     }
