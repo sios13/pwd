@@ -1,5 +1,6 @@
 const Window = require("./Window.js");
 const Icon = require("./Icon.js");
+const Memory = require("./apps/Memory/MemoryGame.js");
 
 function PWD(settings = {}) {
     let container = document.createElement("main");
@@ -25,7 +26,7 @@ function PWD(settings = {}) {
 */
     icons.push(new Icon({
         "id": 0,
-        "application": "memory",
+        "applicationName": "Memory",
         //"iconImage": "memory.png",
         "windowSize": "medium"
     }));
@@ -72,11 +73,19 @@ function PWD(settings = {}) {
      * Launch an application using the meta data in a given icon object
      */
     function launchApplication(iconObj) {
-        let pwdWindow = new Window();
+        let pwdWindow = new Window({
+            "windowSize": iconObj.getWindowSize()
+        });
 
         windows.push(pwdWindow);
 
         container.appendChild(pwdWindow.getContainer());
+
+        if (iconObj.getApplicationName() === "Memory") {
+            let memory = new Memory({
+                "container": "#pwd-window-" + pwdWindow.getId()
+            });
+        }
     }
 
     /**

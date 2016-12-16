@@ -18,6 +18,8 @@ function Window(settings = {}) {
 
     this.active = settings.active ? settings.active : true;
 
+    this.windowSize = settings.windowSize ? settings.windowSize : "medium";
+
     this.container = initializeContainer.bind(this)();
 
     function initializeContainer() {
@@ -26,6 +28,8 @@ function Window(settings = {}) {
         container.classList.add("PWD-window");
 
         container.setAttribute("data-windowid", this.id);
+
+        container.setAttribute("id", "pwd-window-" + this.id);
 
         container.style.left = this.xPos + "px";
 

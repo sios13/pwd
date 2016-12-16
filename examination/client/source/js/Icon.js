@@ -1,7 +1,7 @@
 function Icon(settings = {}) {
     this.id = settings.id;
 
-    this.application = settings.application ? settings.application : "";
+    this.applicationName = settings.applicationName ? settings.applicationName : "";
 
     this.iconImage = settings.iconImage ? settings.iconImage : "defaultIcon.ico";
 
@@ -25,6 +25,14 @@ function Icon(settings = {}) {
 
 Icon.prototype.launchEvent = function() {
 
+}
+
+Icon.prototype.getApplicationName = function() {
+    return this.applicationName;
+}
+
+Icon.prototype.getWindowSize = function() {
+    return this.windowSize;
 }
 
 Icon.prototype.getId = function() {

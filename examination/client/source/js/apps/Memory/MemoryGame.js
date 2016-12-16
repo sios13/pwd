@@ -3,7 +3,7 @@ const Cards = require("./Cards.js");
 function MemoryGame(config) {
     this.nrOfPairs = config.nrOfPairs ? config.nrOfPairs : 4;
 
-    let container = config.container ? config.container : ".asd";
+    let container = config.container ? config.container : "#cool";
 
     this.cards = new Cards(this.nrOfPairs);
 
