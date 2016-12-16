@@ -18,6 +18,8 @@ function Window(settings = {}) {
 
     this.active = settings.active ? settings.active : true;
 
+    this.dragging = settings.dragging ? settings.dragging : false;
+
     this.name = settings.name ? settings.name : "No name";
 
     this.icon = settings.icon ? settings.icon : "defaultIcon.ico";
@@ -34,6 +36,18 @@ function Window(settings = {}) {
         container.style.left = this.xPos + "px";
         container.style.top = this.yPos + "px";
         container.style.backgroundColor = "#" + this.backgroundColor;
+
+        switch(this.windowSize) {
+            case "small":
+                container.classList.add("PWD-window--small");
+                break;
+            case "medium":
+                container.classList.add("PWD-window--medium");
+                break;
+            case "big":
+                container.classList.add("PWD-window--big");
+                break;
+        }
 
         let windowTopBar = document.createElement("div");
         windowTopBar.classList.add("PWD-window_topbar");
@@ -65,6 +79,20 @@ Window.prototype.updatePos = function(xMovement, yMovement) {
 
 Window.prototype.getId = function() {
     return this.id;
+}
+
+Window.prototype.getIsDragging = function() {
+    return this.dragging;
+}
+
+Window.prototype.setIsDragging = function(value) {
+    this.dragging = value;
+
+    if (this.dragging) {
+        this.container.classList.add("PWD-window--dragging");
+    } else {
+        this.container.classList.remove("PWD-window--dragging");
+    }
 }
 
 /**

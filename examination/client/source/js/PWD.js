@@ -43,22 +43,26 @@ function PWD(settings = {}) {
         window.addEventListener("mousedown", function(e) {
             e.preventDefault();
 
+            setActive();
+
             for (let i = 0; i < windows.length; i++) {
                 let windowElem = windows[i].getContainer();
 
                 /**
-                 * Check if a click has been made inside a window -> make the window active
+                 * if a mousedown has been made inside a window -> make the window active
                  */
                 if (windowElem.contains(e.target)) {
                     setActive(windows[i]);
 
                     /**
-                     * Check if a click has been made inside a top bar
+                     * if a mousedown has been made inside a top bar -> start dragging
                      */
                     let windowTopBarElem = windowElem.querySelector(".PWD-window_topbar");
 
                     if (windowTopBarElem.contains(e.target)) {
                         window.addEventListener("mousemove", windowMoveEvent);
+
+                        windows[i].setIsDragging(true);
                     }
                 }
             }
@@ -66,6 +70,14 @@ function PWD(settings = {}) {
 
         window.addEventListener("mouseup", function() {
             window.removeEventListener("mousemove", windowMoveEvent);
+
+            /**
+             * ALl windows stop dragging
+             */
+            for (let i = 0; i < windows.length; i++) {
+                windows[i].setIsDragging(false);
+            }
+
             console.log("up");
         });
 
@@ -75,6 +87,7 @@ function PWD(settings = {}) {
             }
 
             let pwdIconDiv = e.target.parentNode;
+
             let pwdIconObj = getIcon(parseInt(pwdIconDiv.getAttribute("data-iconid")));
 
             launchApplication(pwdIconObj);
@@ -140,27 +153,32 @@ function PWD(settings = {}) {
 
     /**
      * Sets all the windows as inactive
-     * Sets the given window as active
+     * If a pwdWindow is given, set it as active
      */
     function setActive(pwdWindow) {
         for (let i = 0; i < windows.length; i++) {
             windows[i].setActive(false);
         }
 
-        pwdWindow.setActive(true);
+        if (pwdWindow) {
+            pwdWindow.setActive(true);
+        }
     }
 
     /**
      * Returns the window object with the given id
      */
-    function getWindow(id) {
+    /*
+    function getWindowObj(id) {
         for (let i = 0; i < windows.length; i++) {
             if (windows[i].getId() === id) {
                 return windows[i];
             }
         }
-    }
 
+        return undefined;
+    }
+    */
     function getNewWindowXPos() {
         newWindowXPos += 20;
 

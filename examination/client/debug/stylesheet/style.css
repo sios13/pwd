@@ -4,27 +4,44 @@ body {
 
 .PWD-window {
     position:absolute;
+    width:300px;
+    height:450px;
+    background-color:blue;
+}
+.PWD-window--small {
     width:200px;
     height:300px;
-    background-color:blue;
+}
+.PWD-window--medium {
+    width:300;
+    height:450px;
+}
+.PWD-window--big {
+    width:400px;
+    height:600px;
 }
 .PWD-window--active {
     z-index:1;
     background-color:green;
+    box-shadow:0px 0px 7px 1px rgba(0,0,0,0.75);
 }
-.PWD-window-inactive {
+.PWD-window--inactive {
     z-index:0;
+}
+.PWD-window--dragging {
+    opacity:0.5;
 }
 
 .PWD-window_topbar {
     width:100%;
-    height:20px;
-    background-color:yellow;
+    height:30px;
 }
 
 .PWD-window_content {
-    width:100%;
-    height:calc(100% - 20px);
+    width:calc(100% - 10px);
+    height:calc(100% - 40px);
+    margin:5px;
+    background-color:#eee;
 }
 
 .PWD-icon {
