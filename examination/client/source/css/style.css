@@ -17,5 +17,10 @@ body {
 }
 
 .PWD-icon {
-    
+    width:80px;
+    height:80px;
+}
+.PWD-icon img {
+    width:100%;
+    height:100%;
 }

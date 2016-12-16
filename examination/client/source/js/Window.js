@@ -1,9 +1,18 @@
-function Window(settings) {
-    this.id = settings.id ? settings.id : 0;
+function Window(settings = {}) {
+    this.id = Window.id;
+    Window.id += 1;
 
-    this.xPos = settings.xPos ? settings.xPos : 100;
+    this.xPos = Window.xPos;
+    Window.xPos += 20;
 
-    this.yPos = settings.yPos ? settings.yPos : 100;
+    this.yPos = Window.yPos;
+    Window.yPos += 20;
+
+    //this.id = settings.id ? settings.id : 0;
+
+    //this.xPos = settings.xPos ? settings.xPos : 100;
+
+    //this.yPos = settings.yPos ? settings.yPos : 100;
 
     this.backgroundColor = settings.backgroundColor ? settings.backgroundColor : Math.floor(Math.random()*16777215).toString(16);
 
@@ -14,6 +23,8 @@ function Window(settings) {
     function initializeContainer() {
         let container = document.createElement("div");
 
+        container.classList.add("PWD-window");
+
         container.setAttribute("data-windowid", this.id);
 
         container.style.left = this.xPos + "px";
@@ -22,11 +33,15 @@ function Window(settings) {
 
         container.style.backgroundColor = "#" + this.backgroundColor;
 
-        container.classList.add("PWD-window");
-
         return container;
     }
 }
+
+Window.id = 0;
+
+Window.xPos = 20;
+
+Window.yPos = 20;
 
 Window.prototype.updatePos = function(xMovement, yMovement) {
     this.xPos += xMovement;

@@ -1,4 +1,6 @@
-function Icon(settings) {
+function Icon(settings = {}) {
+    this.id = settings.id;
+
     this.application = settings.application ? settings.application : "";
 
     this.iconImage = settings.iconImage ? settings.iconImage : "defaultIcon.ico";
@@ -9,6 +11,8 @@ function Icon(settings) {
 
     function initializeContainer() {
         let container = document.createElement("div");
+        container.classList.add("PWD-icon");
+        container.setAttribute("data-iconid", this.id);
 
         let iconImageElem = document.createElement("img");
         iconImageElem.src = "./image/" + this.iconImage;
@@ -21,6 +25,10 @@ function Icon(settings) {
 
 Icon.prototype.launchEvent = function() {
 
+}
+
+Icon.prototype.getId = function() {
+    return this.id;
 }
 
 Icon.prototype.getContainer = function() {

@@ -10,21 +10,27 @@ function PWD() {
 
     let newWindowYPos = 0;
 
+    let icons = [];
+/*
     for (let i = 0; i < 10; i++) {
         windows.push(new Window({"id": i, "xPos": getNewWindowXPos(), "yPos": getNewWindowYPos()}));
     }
+*/
 /*
     for (let i = 0; i < windows.length; i++) {
         this.container.appendChild(windows[i].getContainer());
     }
 */
-    let testIcon = new Icon({
+    icons.push(new Icon({
+        "id": 0,
         "application": "memory",
         //"iconImage": "memory.png",
         "windowSize": "medium"
-    });
+    }));
 
-    this.container.appendChild(testIcon.getContainer());
+    for (let i = 0; i < icons.length; i++) {
+        this.container.appendChild(icons[i].getContainer());
+    }
 
     addListeners.bind(this)();
 
@@ -45,6 +51,35 @@ function PWD() {
             window.removeEventListener("mousemove", windowMoveEvent);
             console.log("up");
         });
+
+        window.addEventListener("dblclick", function(e) {
+            let pwdIconDiv = e.target.parentNode;
+            let pwdIconObj = getIcon(parseInt(pwdIconDiv.getAttribute("data-iconid")));
+
+            launchApplication(pwdIconObj);
+        });
+    }
+
+    /**
+     * Launch an application using the meta data in a given icon object
+     */
+    function launchApplication(iconObj) {
+        let pwdWindow = new Window();
+
+        this.container.appendChild(pwdWindow.getContainer());
+    }
+
+    /**
+     * Returns the icon object with the given id
+     */
+    function getIcon(id) {
+        for (let i = 0; i < icons.length; i++) {
+            if (icons[i].getId() === id) {
+                return icons[i];
+            }
+        }
+
+        return undefined;
     }
 
     function windowMoveEvent(e) {
