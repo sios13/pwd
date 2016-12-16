@@ -7,6 +7,8 @@ function Icon(settings = {}) {
 
     this.windowSize = settings.windowSize ? settings.windowSize : "small";
 
+    this.isSelected = settings.isSelected ? settings.isSelected : false;
+
     this.container = initializeContainer.bind(this)();
 
     function initializeContainer() {
@@ -29,6 +31,20 @@ function Icon(settings = {}) {
 
 Icon.prototype.launchEvent = function() {
 
+}
+
+Icon.prototype.getIsSelected = function() {
+    return this.isSelected;
+}
+
+Icon.prototype.setIsSelected = function(value) {
+    this.isSelected = value;
+
+    if (this.isSelected) {
+        this.container.classList.add("PWD-icon--selected");
+    } else {
+        this.container.classList.remove("PWD-icon--selected");
+    }
 }
 
 Icon.prototype.getApplicationName = function() {

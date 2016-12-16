@@ -11,6 +11,12 @@ function PWD(settings = {}) {
 
     let icons = [];
 
+    let pwdWidth = 1300;
+
+    let pwdHeight = 600;
+
+    let windowsMadeCounter = 0;
+
     /**
      * Create the icons
      */
@@ -45,27 +51,44 @@ function PWD(settings = {}) {
              * Iterate the windows
              */
             for (let i = 0; i < windows.length; i++) {
-                let windowElem = windows[i].getContainer();
-
                 /**
                  * If a mousedown has been made inside a window
                  */
-                if (windowElem.contains(e.target)) {
+                if (windows[i].getContainer().contains(e.target)) {
                     /**
                      * Make the window active
                      */
                     windows[i].setIsActive(true);
 
                     /**
-                     * If a mousedown has been made inside a top bar -> start dragging
+                     * If a mousedown has been made on a top bar -> start dragging
                      */
-                    let windowTopBarElem = windowElem.querySelector(".PWD-window_topbar");
+                    let windowTopBarElem = windows[i].getContainer().querySelector(".PWD-window_topbar");
 
                     if (windowTopBarElem.contains(e.target)) {
                         window.addEventListener("mousemove", windowMoveEvent);
 
                         windows[i].setIsDragging(true);
                     }
+                }
+            }
+
+            /**
+             * Deselect all icons
+             */
+            for (let i = 0; i < icons.length; i++) {
+                icons[i].setIsSelected(false);
+            }
+
+            /**
+             * Iterate the icons
+             */
+            for (let i = 0; i < icons.length; i++) {
+                /**
+                 * If a mousedown has been made on an icon -> mark it as selected
+                 */
+                if (icons[i].getContainer().contains(e.target)) {
+                    icons[i].setIsSelected(true);
                 }
             }
         });
@@ -94,14 +117,26 @@ function PWD(settings = {}) {
         });
     }
 
+    function getNewWindowXPos() {
+
+    }
+
+    function getNewWindowYPos() {
+
+    }
+
     /**
      * Launch an application using the meta data in a given icon object
      */
     function launchApplication(iconObj) {
         let pwdWindow = new Window({
             "windowSize": iconObj.getWindowSize(),
-            "name": iconObj.getApplicationName()
+            "name": iconObj.getApplicationName(),
+            "xPos": (100 + 15 * windowsMadeCounter),
+            "yPos": (20 + 30 * windowsMadeCounter)
         });
+
+        windowsMadeCounter += 1;
 
         windows.push(pwdWindow);
 
@@ -134,7 +169,26 @@ function PWD(settings = {}) {
          * If a window is found -> update its position
          */
         if (pwdWindow) {
-            pwdWindow.updatePos(e.movementX, e.movementY);
+            let movementX = e.movementX;
+            let movementY = e.movementY;
+
+            if ((pwdWindow.getXPos() + movementX + pwdWindow.getWidth()) > pwdWidth) {
+                movementX = 0;
+            }
+
+            if (pwdWindow.getXPos() + movementX < 0) {
+                movementX = 0;
+            }
+
+            if ((pwdWindow.getYPos() + movementY + pwdWindow.getHeight()) > pwdHeight) {
+                movementY = 0;
+            }
+
+            if (pwdWindow.getYPos() + movementY < 0) {
+                movementY = 0;
+            }
+
+            pwdWindow.updatePos(movementX, movementY);
         }
     }
 }

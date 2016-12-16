@@ -1,18 +1,18 @@
 function Window(settings = {}) {
     this.id = Window.id;
     Window.id += 1;
-
+/*
     this.xPos = Window.xPos;
     Window.xPos += 20;
 
     this.yPos = Window.yPos;
     Window.yPos += 20;
-
+*/
     //this.id = settings.id ? settings.id : 0;
 
-    //this.xPos = settings.xPos ? settings.xPos : 100;
+    this.xPos = settings.xPos ? settings.xPos : 100;
 
-    //this.yPos = settings.yPos ? settings.yPos : 100;
+    this.yPos = settings.yPos ? settings.yPos : 100;
 
     this.backgroundColor = settings.backgroundColor ? settings.backgroundColor : Math.floor(Math.random()*16777215).toString(16);
 
@@ -25,6 +25,21 @@ function Window(settings = {}) {
     this.icon = settings.icon ? settings.icon : "defaultIcon.ico";
 
     this.windowSize = settings.windowSize ? settings.windowSize : "medium";
+
+    switch (this.windowSize) {
+        case "small":
+            this.width = 200;
+            this.height = 300;
+            break;
+        case "medium":
+            this.width = 300;
+            this.height = 450;
+            break;
+        case "big":
+            this.width = 400;
+            this.height = 600;
+            break;
+    }
 
     this.container = initializeContainer.bind(this)();
 
@@ -70,12 +85,28 @@ Window.xPos = 20;
 
 Window.yPos = 20;
 
+Window.prototype.getXPos = function() {
+    return this.xPos;
+}
+
+Window.prototype.getYPos = function() {
+    return this.yPos;
+}
+
 Window.prototype.updatePos = function(xMovement, yMovement) {
     this.xPos += xMovement;
     this.yPos += yMovement;
 
     this.container.style.left = this.xPos + "px";
     this.container.style.top = this.yPos + "px";
+}
+
+Window.prototype.getWidth = function() {
+    return this.width;
+}
+
+Window.prototype.getHeight = function() {
+    return this.height;
 }
 
 Window.prototype.getId = function() {
