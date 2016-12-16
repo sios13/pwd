@@ -82,15 +82,14 @@ function PWD(settings = {}) {
         });
 
         window.addEventListener("dblclick", function(e) {
-            if (e.target.nodeName !== "IMG") {
-                return;
+            for (let i = 0; i < icons.length; i++) {
+                /**
+                 * if a doubleclick has been made on an icon -> launch the associated application
+                 */
+                if (icons[i].getContainer().contains(e.target)) {
+                    launchApplication(icons[i]);
+                }
             }
-
-            let pwdIconDiv = e.target.parentNode;
-
-            let pwdIconObj = getIcon(parseInt(pwdIconDiv.getAttribute("data-iconid")));
-
-            launchApplication(pwdIconObj);
         });
     }
 
@@ -108,17 +107,16 @@ function PWD(settings = {}) {
         container.appendChild(pwdWindow.getContainer());
 
         if (iconObj.getApplicationName() === "Memory") {
-            /*
             let memory = new Memory({
-                "container": "#pwd-window-" + pwdWindow.getId()
+                "container": "#pwd-window_content-" + pwdWindow.getId()
             });
-            */
         }
     }
 
     /**
      * Returns the icon object with the given id
      */
+    /*
     function getIcon(id) {
         for (let i = 0; i < icons.length; i++) {
             if (icons[i].getId() === id) {
@@ -128,7 +126,7 @@ function PWD(settings = {}) {
 
         return undefined;
     }
-
+    */
     function windowMoveEvent(e) {
         let pwdWindow = getActiveWindow();
 

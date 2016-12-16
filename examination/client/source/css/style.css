@@ -23,7 +23,7 @@ body {
 .PWD-window--active {
     z-index:1;
     background-color:green;
-    box-shadow:0px 0px 7px 1px rgba(0,0,0,0.75);
+    box-shadow:0px 0px 10px 0px rgba(0,0,0,0.5);
 }
 .PWD-window--inactive {
     z-index:0;

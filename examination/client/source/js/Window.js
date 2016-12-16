@@ -31,8 +31,8 @@ function Window(settings = {}) {
     function initializeContainer() {
         let container = document.createElement("div");
         container.classList.add("PWD-window");
-        container.setAttribute("data-windowid", this.id);
-        container.setAttribute("id", "pwd-window-" + this.id);
+        //container.setAttribute("data-windowid", this.id);
+        //container.setAttribute("id", "pwd-window-" + this.id);
         container.style.left = this.xPos + "px";
         container.style.top = this.yPos + "px";
         container.style.backgroundColor = "#" + this.backgroundColor;
@@ -55,6 +55,7 @@ function Window(settings = {}) {
 
         let windowContent = document.createElement("div");
         windowContent.classList.add("PWD-window_content");
+        windowContent.setAttribute("id", "pwd-window_content-" + this.id);
 
         container.appendChild(windowTopBar);
         container.appendChild(windowContent);
