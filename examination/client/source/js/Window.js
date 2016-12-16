@@ -18,24 +18,32 @@ function Window(settings = {}) {
 
     this.active = settings.active ? settings.active : true;
 
+    this.name = settings.name ? settings.name : "No name";
+
+    this.icon = settings.icon ? settings.icon : "defaultIcon.ico";
+
     this.windowSize = settings.windowSize ? settings.windowSize : "medium";
 
     this.container = initializeContainer.bind(this)();
 
     function initializeContainer() {
         let container = document.createElement("div");
-
         container.classList.add("PWD-window");
-
         container.setAttribute("data-windowid", this.id);
-
         container.setAttribute("id", "pwd-window-" + this.id);
-
         container.style.left = this.xPos + "px";
-
         container.style.top = this.yPos + "px";
-
         container.style.backgroundColor = "#" + this.backgroundColor;
+
+        let windowTopBar = document.createElement("div");
+        windowTopBar.classList.add("PWD-window_topbar");
+        windowTopBar.textContent = this.name;
+
+        let windowContent = document.createElement("div");
+        windowContent.classList.add("PWD-window_content");
+
+        container.appendChild(windowTopBar);
+        container.appendChild(windowContent);
 
         return container;
     }

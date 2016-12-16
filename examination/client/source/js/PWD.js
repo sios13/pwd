@@ -7,6 +7,8 @@ function PWD(settings = {}) {
 
     document.querySelector(settings.container).appendChild(container);
 
+    //alert(document.querySelector("html").parentNode.parentNode);
+
     let windows = [];
 
     let newWindowXPos = 0;
@@ -41,14 +43,24 @@ function PWD(settings = {}) {
         window.addEventListener("mousedown", function(e) {
             e.preventDefault();
 
-            let pwdWindow = getWindow(parseInt(e.target.getAttribute("data-windowid")));
+            for (let i = 0; i < windows.length; i++) {
+                let windowElem = windows[i].getContainer();
 
-            if (pwdWindow) {
-                setActive(pwdWindow);
+                /**
+                 * Check if a click has been made inside a window -> make the window active
+                 */
+                if (windowElem.contains(e.target)) {
+                    setActive(windows[i]);
 
-                let pwdWindowElem = pwdWindow.getContainer();
+                    /**
+                     * Check if a click has been made inside a top bar
+                     */
+                    let windowTopBarElem = windowElem.querySelector(".PWD-window_topbar");
 
-                window.addEventListener("mousemove", windowMoveEvent);
+                    if (windowTopBarElem.contains(e.target)) {
+                        window.addEventListener("mousemove", windowMoveEvent);
+                    }
+                }
             }
         });
 
@@ -74,7 +86,8 @@ function PWD(settings = {}) {
      */
     function launchApplication(iconObj) {
         let pwdWindow = new Window({
-            "windowSize": iconObj.getWindowSize()
+            "windowSize": iconObj.getWindowSize(),
+            "name": iconObj.getApplicationName()
         });
 
         windows.push(pwdWindow);
@@ -82,9 +95,11 @@ function PWD(settings = {}) {
         container.appendChild(pwdWindow.getContainer());
 
         if (iconObj.getApplicationName() === "Memory") {
+            /*
             let memory = new Memory({
                 "container": "#pwd-window-" + pwdWindow.getId()
             });
+            */
         }
     }
 
