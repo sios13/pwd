@@ -67,8 +67,6 @@ function PWD(settings = {}) {
 
                     if (windowTopBarElem.contains(e.target)) {
                         window.addEventListener("mousemove", windowMoveEvent);
-
-                        windows[i].setIsDragging(true);
                     }
                 }
             }
@@ -93,7 +91,9 @@ function PWD(settings = {}) {
             }
         });
 
-        window.addEventListener("mouseup", function() {
+        window.addEventListener("mouseup", function(e) {
+            e.preventDefault();
+
             window.removeEventListener("mousemove", windowMoveEvent);
             /**
              * ALl windows stop dragging
@@ -105,7 +105,13 @@ function PWD(settings = {}) {
             console.log("up");
         });
 
+        window.addEventListener("click", function(e) {
+            e.preventDefault();
+        });
+
         window.addEventListener("dblclick", function(e) {
+            e.preventDefault();
+
             for (let i = 0; i < icons.length; i++) {
                 /**
                  * if a doubleclick has been made on an icon -> launch the associated application
@@ -144,7 +150,7 @@ function PWD(settings = {}) {
 
         if (iconObj.getApplicationName() === "Memory") {
             let memory = new Memory({
-                "container": "#pwd-window_content-" + pwdWindow.getId()
+                "container": "#PWD-window_content-" + pwdWindow.getId()
             });
         }
     }
@@ -169,6 +175,8 @@ function PWD(settings = {}) {
          * If a window is found -> update its position
          */
         if (pwdWindow) {
+            pwdWindow.setIsDragging(true);
+
             let movementX = e.movementX;
             let movementY = e.movementY;
 

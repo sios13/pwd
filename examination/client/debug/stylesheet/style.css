@@ -1,13 +1,14 @@
 body {
     margin:0;
-    font-family: 'Open Sans', sans-serif;
+    font-family:"Open Sans", sans-serif;
+    background-color:#EEEEEE;
 }
 
 .PWD-window {
     position:absolute;
     width:300px;
     height:450px;
-    background-color:blue;
+    box-shadow:0px 0px 2px 0px rgba(0,0,0,0.5);
 }
 .PWD-window--small {
     width:200px;
@@ -23,7 +24,6 @@ body {
 }
 .PWD-window--active {
     z-index:1;
-    background-color:green;
     box-shadow:0px 0px 10px 0px rgba(0,0,0,0.5);
 }
 .PWD-window--inactive {
@@ -34,15 +34,29 @@ body {
 }
 
 .PWD-window_topbar {
-    width:100%;
+    width:calc(100% - 10px);
     height:30px;
+    padding:5px;
+    background:white;
+}
+.PWD-window_topbar img {
+    float:left;
+    width:30px;
+    height:30px;
+}
+.PWD-window_topbar span {
+    float:left;
+    margin-top:4px;
+    margin-left:5px;
+}
+.PWD-window--inactive > .PWD-window_topbar span {
+    color:#B0B0B0;
 }
 
 .PWD-window_content {
-    width:calc(100% - 10px);
+    width:100%;
     height:calc(100% - 40px);
-    margin:5px;
-    background-color:#eee;
+    overflow:auto;
 }
 
 .PWD-icon {
@@ -51,12 +65,14 @@ body {
     height:80px;
     padding:1px;
     text-align:center;
+    text-decoration:none;
 }
 .PWD-icon:hover {
-    background:blue;
+    background:rgb(173,216,230);
 }
 .PWD-icon--selected {
-    background:green;
+    opacity:0.80;
+    background:rgb(173,216,230);
 }
 .PWD-icon img {
     width:70%;
@@ -65,9 +81,8 @@ body {
     display:block;
 }
 .PWD-icon span {
+    color:black;
     font-size:14px;
-    margin-top:1px;
-    display:block;
 }
 
 /**

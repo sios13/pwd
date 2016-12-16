@@ -50,7 +50,6 @@ function Window(settings = {}) {
         //container.setAttribute("id", "pwd-window-" + this.id);
         container.style.left = this.xPos + "px";
         container.style.top = this.yPos + "px";
-        container.style.backgroundColor = "#" + this.backgroundColor;
 
         switch(this.windowSize) {
             case "small":
@@ -66,11 +65,20 @@ function Window(settings = {}) {
 
         let windowTopBar = document.createElement("div");
         windowTopBar.classList.add("PWD-window_topbar");
-        windowTopBar.textContent = this.name;
+
+        let windowTopBarIcon = document.createElement("img");
+        windowTopBarIcon.src = "./image/" + this.icon;
+
+        let windowTopBarSpan = document.createElement("span");
+        windowTopBarSpan.textContent = this.name;
 
         let windowContent = document.createElement("div");
         windowContent.classList.add("PWD-window_content");
-        windowContent.setAttribute("id", "pwd-window_content-" + this.id);
+        windowContent.setAttribute("id", "PWD-window_content-" + this.id);
+        windowContent.style.backgroundColor = "#" + this.backgroundColor;
+
+        windowTopBar.appendChild(windowTopBarIcon);
+        windowTopBar.appendChild(windowTopBarSpan);
 
         container.appendChild(windowTopBar);
         container.appendChild(windowContent);

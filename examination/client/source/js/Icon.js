@@ -12,9 +12,9 @@ function Icon(settings = {}) {
     this.container = initializeContainer.bind(this)();
 
     function initializeContainer() {
-        let container = document.createElement("div");
+        let container = document.createElement("a");
+        container.setAttribute("href", "#");
         container.classList.add("PWD-icon");
-        container.setAttribute("data-iconid", this.id);
 
         let iconImageElem = document.createElement("img");
         iconImageElem.src = "./image/" + this.iconImage;
