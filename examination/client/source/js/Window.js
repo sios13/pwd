@@ -1,24 +1,16 @@
+const Entity = require("./Entity.js");
+
 function Window(settings = {}) {
-    this.id = Window.id;
-    Window.id += 1;
-/*
-    this.xPos = Window.xPos;
-    Window.xPos += 20;
+    Entity.call(this, {
+        "xPos": settings.xPos,
+        "yPos": settings.yPos,
+        "isSelected": settings.isSelected,
+        "isDragging": settings.isDragging
+    });
 
-    this.yPos = Window.yPos;
-    Window.yPos += 20;
-*/
-    //this.id = settings.id ? settings.id : 0;
-
-    this.xPos = settings.xPos ? settings.xPos : 100;
-
-    this.yPos = settings.yPos ? settings.yPos : 100;
+    this.id = settings.id ? settings.id : undefined;
 
     this.backgroundColor = settings.backgroundColor ? settings.backgroundColor : Math.floor(Math.random()*16777215).toString(16);
-
-    this.isActive = settings.active ? settings.active : true;
-
-    this.dragging = settings.dragging ? settings.dragging : false;
 
     this.name = settings.name ? settings.name : "No name";
 
@@ -46,8 +38,6 @@ function Window(settings = {}) {
     function initializeContainer() {
         let container = document.createElement("div");
         container.classList.add("PWD-window");
-        //container.setAttribute("data-windowid", this.id);
-        //container.setAttribute("id", "pwd-window-" + this.id);
         container.style.left = this.xPos + "px";
         container.style.top = this.yPos + "px";
 
@@ -87,75 +77,14 @@ function Window(settings = {}) {
     }
 }
 
-Window.id = 0;
-
-Window.xPos = 20;
-
-Window.yPos = 20;
-
-Window.prototype.getXPos = function() {
-    return this.xPos;
-}
-
-Window.prototype.getYPos = function() {
-    return this.yPos;
-}
-
-Window.prototype.updatePos = function(xMovement, yMovement) {
-    this.xPos += xMovement;
-    this.yPos += yMovement;
-
-    this.container.style.left = this.xPos + "px";
-    this.container.style.top = this.yPos + "px";
-}
-
-Window.prototype.getWidth = function() {
-    return this.width;
-}
-
-Window.prototype.getHeight = function() {
-    return this.height;
-}
+/**
+ * Window inherits from Entity
+ */
+Window.prototype = Object.create(Entity.prototype);
+Window.prototype.constructor = Window;
 
 Window.prototype.getId = function() {
     return this.id;
-}
-
-Window.prototype.getIsDragging = function() {
-    return this.dragging;
-}
-
-Window.prototype.setIsDragging = function(value) {
-    this.dragging = value;
-
-    if (this.dragging) {
-        this.container.classList.add("PWD-window--dragging");
-    } else {
-        this.container.classList.remove("PWD-window--dragging");
-    }
-}
-
-/**
- * Return true if this window is active
- */
-Window.prototype.getIsActive = function() {
-    return this.isActive;
-}
-
-Window.prototype.setIsActive = function(value) {
-    this.isActive = value;
-
-    if (this.isActive) {
-        this.container.classList.remove("PWD-window--inactive");
-        this.container.classList.add("PWD-window--active");
-    } else {
-        this.container.classList.remove("PWD-window--active");
-        this.container.classList.add("PWD-window--inactive");
-    }
-}
-
-Window.prototype.getContainer = function() {
-    return this.container;
 }
 
 module.exports = Window;

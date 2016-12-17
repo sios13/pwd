@@ -1,13 +1,22 @@
+const Entity = require("./Entity.js");
+
 function Icon(settings = {}) {
-    this.id = settings.id;
+    Entity.call(this, {
+        "xPos": settings.xPos,
+        "yPos": settings.yPos,
+        "isSelected": settings.isSelected,
+        "isDragging": settings.isDragging
+    });
+
+    this.width = settings.width ? settings.width : 80;
+
+    this.height = settings.height ? settings.height : 80;
 
     this.applicationName = settings.applicationName ? settings.applicationName : "";
 
     this.iconImage = settings.iconImage ? settings.iconImage : "defaultIcon.ico";
 
     this.windowSize = settings.windowSize ? settings.windowSize : "small";
-
-    this.isSelected = settings.isSelected ? settings.isSelected : false;
 
     this.container = initializeContainer.bind(this)();
 
@@ -29,23 +38,11 @@ function Icon(settings = {}) {
     }
 }
 
-Icon.prototype.launchEvent = function() {
-
-}
-
-Icon.prototype.getIsSelected = function() {
-    return this.isSelected;
-}
-
-Icon.prototype.setIsSelected = function(value) {
-    this.isSelected = value;
-
-    if (this.isSelected) {
-        this.container.classList.add("PWD-icon--selected");
-    } else {
-        this.container.classList.remove("PWD-icon--selected");
-    }
-}
+/**
+ * Icon inherits from Entity
+ */
+Icon.prototype = Object.create(Entity.prototype);
+Icon.prototype.constructor = Icon;
 
 Icon.prototype.getApplicationName = function() {
     return this.applicationName;
@@ -53,14 +50,6 @@ Icon.prototype.getApplicationName = function() {
 
 Icon.prototype.getWindowSize = function() {
     return this.windowSize;
-}
-
-Icon.prototype.getId = function() {
-    return this.id;
-}
-
-Icon.prototype.getContainer = function() {
-    return this.container;
 }
 
 module.exports = Icon;

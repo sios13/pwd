@@ -18,10 +18,15 @@ function PWD(settings = {}) {
     let windowsMadeCounter = 0;
 
     /**
+     * The selected entity is the currently selected window or icon
+     */
+    let selectedEntity = undefined;
+
+    /**
      * Create the icons
      */
     icons.push( new Icon({
-        "id": 0,
+        //"id": 0,
         "applicationName": "Memory",
         //"iconImage": "memory.png",
         "windowSize": "medium"
@@ -40,12 +45,11 @@ function PWD(settings = {}) {
         window.addEventListener("mousedown", function(e) {
             e.preventDefault();
 
-            /**
-             * Make all windows inactive
-             */
-            for (let i = 0; i < windows.length; i++) {
-                 windows[i].setIsActive(false);
+            if (selectedEntity) {
+                selectedEntity.setIsSelected(false);
             }
+
+            selectedEntity = undefined;
 
             /**
              * Iterate the windows
@@ -58,7 +62,9 @@ function PWD(settings = {}) {
                     /**
                      * Make the window active
                      */
-                    windows[i].setIsActive(true);
+                    windows[i].setIsSelected(true);
+
+                    selectedEntity = windows[i];
 
                     /**
                      * If a mousedown has been made on a top bar -> start dragging
@@ -68,14 +74,9 @@ function PWD(settings = {}) {
                     if (windowTopBarElem.contains(e.target)) {
                         window.addEventListener("mousemove", windowMoveEvent);
                     }
-                }
-            }
 
-            /**
-             * Deselect all icons
-             */
-            for (let i = 0; i < icons.length; i++) {
-                icons[i].setIsSelected(false);
+                    break;
+                }
             }
 
             /**
@@ -87,6 +88,12 @@ function PWD(settings = {}) {
                  */
                 if (icons[i].getContainer().contains(e.target)) {
                     icons[i].setIsSelected(true);
+
+                    selectedEntity = icons[i];
+
+                    window.addEventListener("mousemove", windowMoveEvent);
+
+                    break;
                 }
             }
         });
@@ -94,12 +101,13 @@ function PWD(settings = {}) {
         window.addEventListener("mouseup", function(e) {
             e.preventDefault();
 
-            window.removeEventListener("mousemove", windowMoveEvent);
             /**
-             * ALl windows stop dragging
+             * If there is an active entity -> remove the mousemove event and stop dragging
              */
-            for (let i = 0; i < windows.length; i++) {
-                windows[i].setIsDragging(false);
+            if (selectedEntity) {
+                window.removeEventListener("mousemove", windowMoveEvent);
+
+                selectedEntity.setIsDragging(false);
             }
 
             console.log("up");
@@ -136,6 +144,7 @@ function PWD(settings = {}) {
      */
     function launchApplication(iconObj) {
         let pwdWindow = new Window({
+            "id": windowsMadeCounter,
             "windowSize": iconObj.getWindowSize(),
             "name": iconObj.getApplicationName(),
             "xPos": (100 + 15 * windowsMadeCounter),
@@ -156,47 +165,35 @@ function PWD(settings = {}) {
     }
 
     /**
-     * Update the position of the active window
+     * Update the position of the active entity
      */
     function windowMoveEvent(e) {
         /**
-         * Find the active window
+         * If there is an active entity -> update its position
          */
-        let pwdWindow = undefined;
-
-        for (let i = 0; i < windows.length; i++) {
-            if (windows[i].getIsActive()) {
-                pwdWindow = windows[i];
-                break;
-            }
-        }
-
-        /**
-         * If a window is found -> update its position
-         */
-        if (pwdWindow) {
-            pwdWindow.setIsDragging(true);
+        if (selectedEntity) {
+            selectedEntity.setIsDragging(true);
 
             let movementX = e.movementX;
             let movementY = e.movementY;
 
-            if ((pwdWindow.getXPos() + movementX + pwdWindow.getWidth()) > pwdWidth) {
+            if ((selectedEntity.getXPos() + movementX + selectedEntity.getWidth()) > pwdWidth) {
                 movementX = 0;
             }
 
-            if (pwdWindow.getXPos() + movementX < 0) {
+            if (selectedEntity.getXPos() + movementX < 0) {
                 movementX = 0;
             }
 
-            if ((pwdWindow.getYPos() + movementY + pwdWindow.getHeight()) > pwdHeight) {
+            if ((selectedEntity.getYPos() + movementY + selectedEntity.getHeight()) > pwdHeight) {
                 movementY = 0;
             }
 
-            if (pwdWindow.getYPos() + movementY < 0) {
+            if (selectedEntity.getYPos() + movementY < 0) {
                 movementY = 0;
             }
 
-            pwdWindow.updatePos(movementX, movementY);
+            selectedEntity.updatePos(movementX, movementY);
         }
     }
 }
