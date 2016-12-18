@@ -8,7 +8,7 @@ function Window(settings = {}) {
         "isDragging": settings.isDragging
     });
 
-    this.id = settings.id ? settings.id : undefined;
+    this.id = settings.id ? settings.id : 0;
 
     this.backgroundColor = settings.backgroundColor ? settings.backgroundColor : Math.floor(Math.random()*16777215).toString(16);
 

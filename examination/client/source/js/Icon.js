@@ -24,6 +24,8 @@ function Icon(settings = {}) {
         let container = document.createElement("a");
         container.setAttribute("href", "#");
         container.classList.add("PWD-icon");
+        container.style.left = this.xPos + "px";
+        container.style.top = this.yPos + "px";
 
         let iconImageElem = document.createElement("img");
         iconImageElem.src = "./image/" + this.iconImage;

@@ -46,6 +46,10 @@ Entity.prototype.setIsSelected = function(value) {
     }
 }
 
+Entity.prototype.getIsSelected = function() {
+    return this.isSelected;
+}
+
 Entity.prototype.setIsDragging = function(value) {
     this.isDragging = value;
 
@@ -54,6 +58,10 @@ Entity.prototype.setIsDragging = function(value) {
     } else {
         this.container.classList.remove("dragging");
     }
+}
+
+Entity.prototype.getIsDragging = function() {
+    return this.isDragging;
 }
 
 Entity.prototype.getContainer = function() {

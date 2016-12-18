@@ -28,6 +28,8 @@ function PWD(settings = {}) {
     icons.push( new Icon({
         //"id": 0,
         "applicationName": "Memory",
+        "xPos": 10,
+        "yPos": 10,
         //"iconImage": "memory.png",
         "windowSize": "medium"
     }) );
@@ -60,7 +62,7 @@ function PWD(settings = {}) {
                  */
                 if (windows[i].getContainer().contains(e.target)) {
                     /**
-                     * Make the window active
+                     * Mark the window as selected
                      */
                     windows[i].setIsSelected(true);
 
@@ -72,7 +74,7 @@ function PWD(settings = {}) {
                     let windowTopBarElem = windows[i].getContainer().querySelector(".PWD-window_topbar");
 
                     if (windowTopBarElem.contains(e.target)) {
-                        window.addEventListener("mousemove", windowMoveEvent);
+                        window.addEventListener("mousemove", entityMoveEvent);
                     }
 
                     break;
@@ -91,7 +93,7 @@ function PWD(settings = {}) {
 
                     selectedEntity = icons[i];
 
-                    window.addEventListener("mousemove", windowMoveEvent);
+                    window.addEventListener("mousemove", entityMoveEvent);
 
                     break;
                 }
@@ -102,12 +104,14 @@ function PWD(settings = {}) {
             e.preventDefault();
 
             /**
-             * If there is an active entity -> remove the mousemove event and stop dragging
+             * If there is a selected entity -> remove the mousemove event and stop dragging
              */
             if (selectedEntity) {
-                window.removeEventListener("mousemove", windowMoveEvent);
-
+            //if (selectedEntity.getIsDragging()) {
                 selectedEntity.setIsDragging(false);
+
+                window.removeEventListener("mousemove", entityMoveEvent);
+            //}
             }
 
             console.log("up");
@@ -167,7 +171,7 @@ function PWD(settings = {}) {
     /**
      * Update the position of the active entity
      */
-    function windowMoveEvent(e) {
+    function entityMoveEvent(e) {
         /**
          * If there is an active entity -> update its position
          */
