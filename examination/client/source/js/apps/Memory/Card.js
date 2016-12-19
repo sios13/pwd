@@ -5,23 +5,35 @@ function Card(value) {
 
     this.isComplete = false;
 
+    let cardTemplate = document.querySelector("#memoryCardTemplate");
+
+    this.cardElem = document.importNode(cardTemplate.content, true);
+
+    this.cardElem.querySelector(".Memory-card").setAttribute("data-index", this.value);
+
+    this.coverImage = this.cardElem.querySelector(".Memory-card_back");
+    this.coverImage.src = "image/" + this.value[0] + ".png";
+
+    this.cardImage = this.cardElem.querySelector(".Memory-card_front");
+/*
     this.cardElem = document.createElement("a");
     this.cardElem.setAttribute("href", "#");
-    this.cardElem.setAttribute("class", "memoryCard");
+    this.cardElem.setAttribute("class", "Memory-card");
     this.cardElem.setAttribute("data-index", this.value);
 
     this.coverImage = document.createElement("img");
-    this.coverImage.setAttribute("class", "front");
+    this.coverImage.setAttribute("class", "Memory-card_front");
     this.coverImage.setAttribute("src", "image/0.png");
     this.coverImage.setAttribute("alt", "Cover image");
 
     this.cardImage = document.createElement("img");
-    this.cardImage.classList.add("back");
+    this.cardImage.classList.add("Memory-card_back");
     this.cardImage.setAttribute("src", "image/" + this.value[0] + ".png");
     this.cardImage.setAttribute("alt", "Memory card");
 
     this.cardElem.appendChild(this.coverImage);
     this.cardElem.appendChild(this.cardImage);
+*/
 }
 
 /**
@@ -37,19 +49,19 @@ Card.prototype.getValue = function() {
  */
 Card.prototype.flip = function() {
     if (this.isFlipped) {
-        this.coverImage.classList.remove("flip");
-        this.cardImage.classList.remove("flip");
+        this.coverImage.classList.remove("Memory-card--flip");
+        this.cardImage.classList.remove("Memory-card--flip");
 
-        this.coverImage.classList.add("backflip");
-        this.cardImage.classList.add("backflip");
+        this.coverImage.classList.add("Memory-card--backflip");
+        this.cardImage.classList.add("Memory-card--backflip");
 
         this.isFlipped = false;
     } else {
-        this.coverImage.classList.remove("backflip");
-        this.cardImage.classList.remove("backflip");
+        this.coverImage.classList.remove("Memory-card--backflip");
+        this.cardImage.classList.remove("Memory-card--backflip");
 
-        this.coverImage.classList.add("flip");
-        this.cardImage.classList.add("flip");
+        this.coverImage.classList.add("Memory-card--flip");
+        this.cardImage.classList.add("Memory-card--flip");
 
         this.isFlipped = true;
     }

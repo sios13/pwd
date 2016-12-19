@@ -20,7 +20,7 @@ function MemoryGame(config) {
     this.isCheckingAnswer = false;
 
     let memoryWrapperDiv = document.createElement("div");
-    memoryWrapperDiv.classList.add("memoryWrapper");
+    memoryWrapperDiv.classList.add("Memory-wrapper");
 
     memoryWrapperDiv.addEventListener("click", e => {
         e.preventDefault();
@@ -49,28 +49,30 @@ function MemoryGame(config) {
     });
 
     this.memoryPanel = document.createElement("div");
-    this.memoryPanel.classList.add("memoryPanel");
+    this.memoryPanel.classList.add("Memory-panel");
 
     this.memoryCards = document.createElement("div");
-    this.memoryCards.classList.add("memoryCards");
+    this.memoryCards.classList.add("Memory-cards");
+    /*
     switch(this.nrOfPairs) {
         case 1:
         case 2:
-            this.memoryCards.classList.add("memoryCards--width-240");
+            this.memoryCards.classList.add("Memory-cards--width-240");
             break;
         case 3:
         case 4:
-            this.memoryCards.classList.add("memoryCards--width-360");
+            this.memoryCards.classList.add("Memory-cards--width-360");
             break;
         case 5:
         case 6:
-            this.memoryCards.classList.add("memoryCards--width-480");
+            this.memoryCards.classList.add("Memory-cards--width-480");
             break;
         case 7:
         case 8:
-            this.memoryCards.classList.add("memoryCards--width-600");
+            this.memoryCards.classList.add("Memory-cards--width-600");
             break;
     }
+    */
     this.memoryCards.appendChild(this.cards.getCardsFrag());
 
     memoryWrapperDiv.appendChild(this.memoryPanel);
@@ -96,8 +98,8 @@ MemoryGame.prototype.checkAnswer = function() {
             this.firstCard.setIsComplete(true);
             this.secondCard.setIsComplete(true);
 
-            this.firstCard.addClass("memoryCard--correct");
-            this.secondCard.addClass("memoryCard--correct");
+            this.firstCard.addClass("Memory-card--correct");
+            this.secondCard.addClass("Memory-card--correct");
 
             this.score++;
 

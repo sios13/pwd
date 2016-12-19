@@ -25,7 +25,7 @@ function PWD(settings = {}) {
     /**
      * Create the icons
      */
-    //for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 2; i++) {
         icons.push( new Icon({
             "applicationName": "Memory",
             "xPos": 10,
@@ -33,7 +33,7 @@ function PWD(settings = {}) {
             //"iconImage": "memory.png",
             "windowSize": "medium"
         }) );
-    //}
+    }
 
     /**
      * Append the icons to the container
@@ -188,7 +188,6 @@ function PWD(settings = {}) {
          * If there is an active entity -> update its position
          */
         if (selectedEntity) {
-            console.log(e.target);
             selectedEntity.setIsDragging(true);
 
             let movementX = e.movementX;

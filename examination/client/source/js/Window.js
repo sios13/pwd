@@ -10,7 +10,8 @@ function Window(settings = {}) {
 
     this.id = settings.id ? settings.id : 0;
 
-    this.backgroundColor = settings.backgroundColor ? settings.backgroundColor : Math.floor(Math.random()*16777215).toString(16);
+    this.backgroundColor = settings.backgroundColor ? settings.backgroundColor : "white";
+    //this.backgroundColor = settings.backgroundColor ? settings.backgroundColor : "#" + Math.floor(Math.random()*16777215).toString(16);
 
     this.name = settings.name ? settings.name : "No name";
 
@@ -65,7 +66,7 @@ function Window(settings = {}) {
         let windowContent = document.createElement("div");
         windowContent.classList.add("PWD-window_content");
         windowContent.setAttribute("id", "PWD-window_content-" + this.id);
-        windowContent.style.backgroundColor = "#" + this.backgroundColor;
+        windowContent.style.backgroundColor = this.backgroundColor;
 
         windowTopBar.appendChild(windowTopBarIcon);
         windowTopBar.appendChild(windowTopBarSpan);
