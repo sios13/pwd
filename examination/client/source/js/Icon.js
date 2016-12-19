@@ -50,6 +50,18 @@ Icon.prototype.getApplicationName = function() {
     return this.applicationName;
 }
 
+/**
+ * Icons are supposed to be aligned in a grid system.
+ * This function corrects the x and y coordinates of the icon, making it align to the nearest grid
+ */
+Icon.prototype.correctGridPosition = function() {
+    this.xPos = 10 + this.xPos - this.xPos % 92;
+    this.yPos = 10 + this.yPos - this.yPos % 92;
+
+    this.container.style.left = this.xPos + "px";
+    this.container.style.top = this.yPos + "px";
+}
+
 Icon.prototype.getWindowSize = function() {
     return this.windowSize;
 }

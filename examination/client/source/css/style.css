@@ -19,6 +19,7 @@ body {
     color:#000000;
 }
 .PWD-window.dragging {
+    z-index:2;
     opacity:0.6;
 }
 .PWD-window--small {
@@ -67,13 +68,17 @@ body {
     text-decoration:none;
 }
 .PWD-icon:hover {
-    background:rgb(173,216,230);
+    background:#ADD8E6;
 }
 .PWD-icon.selected {
-    background:rgb(173,216,230);
+    background:#D7ECF3;
+}
+.PWD-icon.selected:hover {
+    background:#C3E3ED;
 }
 .PWD-icon.dragging {
-    opacity:0.80;
+    z-index:2;
+    opacity:0.4;
 }
 .PWD-icon img {
     width:70%;

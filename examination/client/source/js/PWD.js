@@ -25,14 +25,15 @@ function PWD(settings = {}) {
     /**
      * Create the icons
      */
-    icons.push( new Icon({
-        //"id": 0,
-        "applicationName": "Memory",
-        "xPos": 10,
-        "yPos": 10,
-        //"iconImage": "memory.png",
-        "windowSize": "medium"
-    }) );
+    //for (let i = 0; i < 10; i++) {
+        icons.push( new Icon({
+            "applicationName": "Memory",
+            "xPos": 10,
+            "yPos": 10,
+            //"iconImage": "memory.png",
+            "windowSize": "medium"
+        }) );
+    //}
 
     /**
      * Append the icons to the container
@@ -107,11 +108,16 @@ function PWD(settings = {}) {
              * If there is a selected entity -> remove the mousemove event and stop dragging
              */
             if (selectedEntity) {
-            //if (selectedEntity.getIsDragging()) {
                 selectedEntity.setIsDragging(false);
 
                 window.removeEventListener("mousemove", entityMoveEvent);
-            //}
+
+                /**
+                 * If an icon -> align the icon to the grid
+                 */
+                if (selectedEntity instanceof Icon) {
+                    selectedEntity.correctGridPosition();
+                }
             }
 
             console.log("up");
@@ -147,6 +153,9 @@ function PWD(settings = {}) {
      * Launch an application using the meta data in a given icon object
      */
     function launchApplication(iconObj) {
+        /**
+         * Create a new window to launch the application in
+         */
         let pwdWindow = new Window({
             "id": windowsMadeCounter,
             "windowSize": iconObj.getWindowSize(),
@@ -161,6 +170,9 @@ function PWD(settings = {}) {
 
         container.appendChild(pwdWindow.getContainer());
 
+        /**
+         * Start the application and append it to the newly created window
+         */
         if (iconObj.getApplicationName() === "Memory") {
             let memory = new Memory({
                 "container": "#PWD-window_content-" + pwdWindow.getId()
@@ -176,6 +188,7 @@ function PWD(settings = {}) {
          * If there is an active entity -> update its position
          */
         if (selectedEntity) {
+            console.log(e.target);
             selectedEntity.setIsDragging(true);
 
             let movementX = e.movementX;
