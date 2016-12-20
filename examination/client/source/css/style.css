@@ -108,6 +108,10 @@ body {
     height:50px;
 }
 
+.Memory-panel span {
+    display:block;
+}
+
 .Memory-cards {
     width:100%;
     display:block;

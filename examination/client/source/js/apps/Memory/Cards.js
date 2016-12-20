@@ -3,8 +3,6 @@ const Card = require("./Card.js");
 function Cards(nrOfCards) {
     this.cards = [];
 
-    this.numberOfCards = nrOfCards;
-
     /**
      * Create the cards
      */

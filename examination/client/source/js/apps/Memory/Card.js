@@ -1,40 +1,29 @@
 function Card(value) {
+    /**
+     * Properties
+     */
     this.value = value;
 
     this.isFlipped = false;
 
     this.isComplete = false;
 
+    /**
+     * Elements
+     */
     let cardTemplate = document.querySelector("#memoryCardTemplate");
-
     let cardTemplateFrag = document.importNode(cardTemplate.content, true);
 
+    // The cardElem is the element wrapping the two images
     this.cardElem = cardTemplateFrag.querySelector(".Memory-card");
     this.cardElem.setAttribute("data-index", this.value);
 
+    // The coverImage is the question mark above the card image
     this.coverImage = this.cardElem.querySelector(".Memory-card_back");
     this.coverImage.src = "image/" + this.value[0] + ".png";
 
+    // The cardImage is the image of the memory card
     this.cardImage = this.cardElem.querySelector(".Memory-card_front");
-/*
-    this.cardElem = document.createElement("a");
-    this.cardElem.setAttribute("href", "#");
-    this.cardElem.setAttribute("class", "Memory-card");
-    this.cardElem.setAttribute("data-index", this.value);
-
-    this.coverImage = document.createElement("img");
-    this.coverImage.setAttribute("class", "Memory-card_front");
-    this.coverImage.setAttribute("src", "image/0.png");
-    this.coverImage.setAttribute("alt", "Cover image");
-
-    this.cardImage = document.createElement("img");
-    this.cardImage.classList.add("Memory-card_back");
-    this.cardImage.setAttribute("src", "image/" + this.value[0] + ".png");
-    this.cardImage.setAttribute("alt", "Memory card");
-
-    this.cardElem.appendChild(this.coverImage);
-    this.cardElem.appendChild(this.cardImage);
-*/
 }
 
 /**
