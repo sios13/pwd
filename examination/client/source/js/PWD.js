@@ -25,7 +25,7 @@ function PWD(settings = {}) {
     /**
      * Create the icons
      */
-    for (let i = 0; i < 2; i++) {
+    for (let i = 0; i < 1; i++) {
         icons.push( new Icon({
             "applicationName": "Memory",
             "xPos": 10,
