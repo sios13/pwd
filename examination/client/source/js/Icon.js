@@ -8,9 +8,9 @@ function Icon(settings = {}) {
         "isDragging": settings.isDragging
     });
 
-    this.width = settings.width ? settings.width : 80;
+    this.width = settings.width ? settings.width : 10;
 
-    this.height = settings.height ? settings.height : 80;
+    this.height = settings.height ? settings.height : 10;
 
     this.applicationName = settings.applicationName ? settings.applicationName : "";
 

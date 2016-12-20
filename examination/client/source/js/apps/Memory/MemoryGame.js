@@ -1,28 +1,105 @@
 const Cards = require("./Cards.js");
 
 function MemoryGame(config) {
-    this.nrOfPairs = config.nrOfPairs ? config.nrOfPairs : 4;
+    /**
+     * Properties
+     */
+    let nrOfPairs = config.nrOfPairs ? config.nrOfPairs : 4;
 
     let container = config.container ? config.container : "#cool";
 
-    this.cards = new Cards(this.nrOfPairs);
+    let cards = new Cards(this.nrOfPairs);
 
-    this.score = 0;
+    let score = 0;
 
-    this.gameTimer = 0;
+    let gameTimer = 0;
 
-    this.attempts = 0;
+    let attempts = 0;
 
-    this.firstCard = "";
+    let firstCard = "";
 
-    this.secondCard = "";
+    let secondCard = "";
 
-    this.isCheckingAnswer = false;
+    let isCheckingAnswer = false;
 
-    let memoryWrapperDiv = document.createElement("div");
-    memoryWrapperDiv.classList.add("Memory-wrapper");
+    //let memoryWrapperDiv = document.createElement("div");
+    //memoryWrapperDiv.classList.add("Memory-wrapper");
 
-    memoryWrapperDiv.addEventListener("click", e => {
+    /**
+     * ELements
+     */
+    //let memoryWrapperTemplate = document.querySelector("#memoryWrapperTemplate");
+    //let memoryWrapperFrag = document.importNode(memoryWrapperTemplate.content, true);
+
+    //this.memoryWrapperDiv = memoryWrapperFrag.querySelector(".Memory-cards");
+    //this.memoryWrapperDiv.addEventListener("click", memoryWrapperClickEvent);
+
+    let memoryPanelTemplate = document.querySelector("#memoryPanelTemplate");
+    let memoryPanelFrag = document.importNode(memoryPanelTemplate, true);
+
+    let memoryPanelDiv          = memoryPanelFrag.querySelector(".Memory-panel");
+    let memoryPanelAttemptsSpan = memoryPanelFrag.querySelector("#memoryPanelAttemptsSpan");
+    let memoryPanelTimeSpan     = memoryPanelFrag.querySelector("#memoryPanelTimeSpan");
+    let memoryPanelMessageSpan  = memoryPanelFrag.querySelector("#memoryPanelMessageSpan");
+
+    let memoyCardsTemplate = document.querySelector("#memoryCardsTemplate");
+    let memoryCardsFrag = document.importNode(memoryCardsTemplate.content, true);
+
+    let memoryCardsDiv = memoryCardsFrag.querySelector(".Memory-cards");
+    /*
+    this.memoryPanel = document.createElement("div");
+    this.memoryPanel.classList.add("Memory-panel");
+
+    this.memoryCards = document.createElement("div");
+    this.memoryCards.classList.add("Memory-cards");
+    */
+    /*
+    switch(this.nrOfPairs) {
+        case 1:
+        case 2:
+            this.memoryCards.classList.add("Memory-cards--width-240");
+            break;
+        case 3:
+        case 4:
+            this.memoryCards.classList.add("Memory-cards--width-360");
+            break;
+        case 5:
+        case 6:
+            this.memoryCards.classList.add("Memory-cards--width-480");
+            break;
+        case 7:
+        case 8:
+            this.memoryCards.classList.add("Memory-cards--width-600");
+            break;
+    }
+    */
+    this.memoryCards.appendChild(this.cards.getCardsFrag());
+
+    //memoryWrapperDiv.appendChild(this.memoryPanel);
+    //memoryWrapperDiv.appendChild(this.memoryCards);
+
+    let memoryContainerDiv = document.querySelector(container);
+    memoryContainerDiv.appendChild(memoryPanel);
+    memoryContainerDiv.appendChild(memoryCards);
+    //memoryContainerDiv.appendChild(memoryWrapperDiv);
+
+    this.gameTimerInterval = setInterval(timer), 1000);
+
+    function timer() {
+        this.gameTimer++;
+
+        this.memoryPanel.textContent = "";
+        this.memoryPanel.appendChild(document.createTextNode("Attempts: "));
+        this.memoryPanel.appendChild(document.createTextNode(this.attempts));
+        this.memoryPanel.appendChild(document.createElement("br"));
+        this.memoryPanel.appendChild(document.createTextNode("Time: "));
+        this.memoryPanel.appendChild(document.createTextNode(this.gameTimer));
+        this.memoryPanel.appendChild(document.createTextNode(" secounds"));
+        this.memoryPanel.appendChild(document.createElement("br"));
+        //this.memoryPanel.textContent = "Time: " + this.gameTimer + ", Attempts: " + this.attempts;
+    }
+
+    function memoryWrapperClickEvent(e) {
         e.preventDefault();
 
         let imgElem = e.target;
@@ -46,46 +123,7 @@ function MemoryGame(config) {
                 }
             }
         }
-    });
-
-    this.memoryPanel = document.createElement("div");
-    this.memoryPanel.classList.add("Memory-panel");
-
-    this.memoryCards = document.createElement("div");
-    this.memoryCards.classList.add("Memory-cards");
-    /*
-    switch(this.nrOfPairs) {
-        case 1:
-        case 2:
-            this.memoryCards.classList.add("Memory-cards--width-240");
-            break;
-        case 3:
-        case 4:
-            this.memoryCards.classList.add("Memory-cards--width-360");
-            break;
-        case 5:
-        case 6:
-            this.memoryCards.classList.add("Memory-cards--width-480");
-            break;
-        case 7:
-        case 8:
-            this.memoryCards.classList.add("Memory-cards--width-600");
-            break;
     }
-    */
-    this.memoryCards.appendChild(this.cards.getCardsFrag());
-
-    memoryWrapperDiv.appendChild(this.memoryPanel);
-    memoryWrapperDiv.appendChild(this.memoryCards);
-
-    let memoryContainerDiv = document.querySelector(container);
-    memoryContainerDiv.appendChild(memoryWrapperDiv);
-
-    this.gameTimerInterval = setInterval(function() {
-        this.gameTimer++;
-
-        this.memoryPanel.textContent = "Time: " + this.gameTimer + ", Attempts: " + this.attempts;
-    }.bind(this), 1000);
 }
 
 MemoryGame.prototype.checkAnswer = function() {
@@ -105,7 +143,11 @@ MemoryGame.prototype.checkAnswer = function() {
 
             if (this.score === this.nrOfPairs) {
                 clearInterval(this.gameTimerInterval);
-                this.memoryPanel.textContent = "You completed the game in " + this.gameTimer + " seconds after " + this.attempts + " attempts!";
+                this.memoryPanel.textContent = "You completed the game!"
+                this.memoryPanel.appendChild(document.createElement("br"));
+                this.memoryPanel.textContent += "Attempts: " + this.attempts;
+                this.memoryPanel.appendChild(document.createElement("br"));
+                this.memoryPanel.textContent += "Time: " + this.gameTimer + " seconds";
             }
         } else {
             this.firstCard.flip();

@@ -7,9 +7,10 @@ function Card(value) {
 
     let cardTemplate = document.querySelector("#memoryCardTemplate");
 
-    this.cardElem = document.importNode(cardTemplate.content, true);
+    let cardTemplateFrag = document.importNode(cardTemplate.content, true);
 
-    this.cardElem.querySelector(".Memory-card").setAttribute("data-index", this.value);
+    this.cardElem = cardTemplateFrag.querySelector(".Memory-card");
+    this.cardElem.setAttribute("data-index", this.value);
 
     this.coverImage = this.cardElem.querySelector(".Memory-card_back");
     this.coverImage.src = "image/" + this.value[0] + ".png";
