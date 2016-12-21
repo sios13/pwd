@@ -63,6 +63,9 @@ function Window(settings = {}) {
         let windowTopBarSpan = document.createElement("span");
         windowTopBarSpan.textContent = this.topBarText;
 
+        let windowCloseDiv = document.createElement("div");
+        windowCloseDiv.classList.add("PWD-window_close");
+
         let windowContent = document.createElement("div");
         windowContent.classList.add("PWD-window_content");
         windowContent.setAttribute("id", "PWD-window_content-" + this.id);
@@ -74,6 +77,7 @@ function Window(settings = {}) {
         windowTopBar.appendChild(windowTopBarSpan);
 
         container.appendChild(windowTopBar);
+        container.appendChild(windowCloseDiv);
         container.appendChild(windowContent);
 
         return container;

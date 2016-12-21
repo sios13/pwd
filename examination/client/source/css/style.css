@@ -36,21 +36,30 @@ body {
 }
 
 .PWD-window_topbar {
-    width:calc(100% - 10px);
-    height:30px;
-    padding:5px;
+    float:left;
+    width:calc(100% - 40px);
+    height:35px;
     background:white;
     color:#B0B0B0;
 }
 .PWD-window_topbar img {
     float:left;
     width:30px;
-    height:30px;
+    padding:5px;
+    padding-bottom:0px;
 }
 .PWD-window_topbar span {
     float:left;
-    margin-top:4px;
-    margin-left:5px;
+    width:calc(100% - 40px);
+    height:calc(100% - 5px);
+    padding-top:5px;
+    line-height:30px;
+}
+.PWD-window_close {
+    float:left;
+    width:40px;
+    height:35px;
+    background-color:red;
 }
 
 .PWD-window_content {

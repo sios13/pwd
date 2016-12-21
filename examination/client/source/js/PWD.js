@@ -1,6 +1,7 @@
 const Window = require("./Window.js");
 const Icon = require("./Icon.js");
 const Memory = require("./apps/Memory/MemoryGame.js");
+const Chat = require("./apps/Chat/Chat.js");
 
 function PWD(settings = {}) {
     let container = document.createElement("main");
@@ -49,6 +50,14 @@ function PWD(settings = {}) {
         //"iconImage": "memory.png",
         "windowSize": "big"
     }) );
+    icons.push( new Icon({
+        "iconText": "Chat",
+        "applicationName": "Chat",
+        "xPos": 10,
+        "yPos": 350,
+        //"iconImage": "memory.png",
+        "windowSize": "medium"
+    }) );
 
     /**
      * Append the icons to the container
@@ -91,6 +100,15 @@ function PWD(settings = {}) {
 
                     if (windowTopBarElem.contains(e.target)) {
                         window.addEventListener("mousemove", entityMoveEvent);
+                    }
+
+                    /**
+                     * If a mousedown has been made on the close button -> remove the window from the DOM
+                     */
+                    let windowCloseDiv = windows[i].getContainer().querySelector(".PWD-window_close");
+
+                    if (windowCloseDiv.contains(e.target)) {
+                        windows[i].getContainer().parentNode.removeChild(windows[i].getContainer());
                     }
 
                     break;
@@ -191,6 +209,10 @@ function PWD(settings = {}) {
          */
         if (iconObj.getApplicationName() === "Memory") {
             let memory = new Memory({
+                "container": "#PWD-window_content-" + pwdWindow.getId()
+            });
+        } else if (iconObj.getApplicationName() === "Chat") {
+            let chat = new Chat({
                 "container": "#PWD-window_content-" + pwdWindow.getId()
             });
         }
