@@ -27,6 +27,20 @@ function MemoryGameBoard(config) {
     /**
      * ELements
      */
+    // Memory wrapper
+    let memoryWrapperTemplate = document.querySelector("#memoryWrapperTemplate");
+    let memoryWrapperFrag = document.importNode(memoryWrapperTemplate.content, true);
+
+    let memoryWrapperDiv = memoryWrapperFrag.querySelector(".Memory-wrapper");
+    memoryWrapperDiv.addEventListener("click", memoryWrapperClickEvent);
+
+    // Header
+    let memoryHeaderTemplate = document.querySelector("#memoryHeaderTemplate");
+    let memoryHeaderFrag = document.importNode(memoryHeaderTemplate.content, true);
+
+    let memoryHeader = memoryHeaderFrag.querySelector(".memoryHeader");
+    memoryWrapperDiv.appendChild(memoryHeader);
+
     // Memory panel
     let memoryPanelTemplate = document.querySelector("#memoryPanelTemplate");
     let memoryPanelFrag = document.importNode(memoryPanelTemplate.content, true);
@@ -35,6 +49,7 @@ function MemoryGameBoard(config) {
     let memoryPanelAttemptsSpan = memoryPanelFrag.querySelector("#memoryPanelAttemptsSpan");
     let memoryPanelTimeSpan     = memoryPanelFrag.querySelector("#memoryPanelTimeSpan");
     let memoryPanelMessageSpan  = memoryPanelFrag.querySelector("#memoryPanelMessageSpan");
+    memoryWrapperDiv.appendChild(memoryPanelDiv);
 
     // Memory cards
     let memoyCardsTemplate = document.querySelector("#memoryCardsTemplate");
@@ -42,14 +57,6 @@ function MemoryGameBoard(config) {
 
     let memoryCardsDiv = memoryCardsFrag.querySelector(".Memory-cards");
     memoryCardsDiv.appendChild(cards.getCardsFrag());
-
-    // Memory wrapper
-    let memoryWrapperTemplate = document.querySelector("#memoryWrapperTemplate");
-    let memoryWrapperFrag = document.importNode(memoryWrapperTemplate.content, true);
-
-    let memoryWrapperDiv = memoryWrapperFrag.querySelector(".Memory-wrapper");
-    memoryWrapperDiv.addEventListener("click", memoryWrapperClickEvent);
-    memoryWrapperDiv.appendChild(memoryPanelDiv);
     memoryWrapperDiv.appendChild(memoryCardsDiv);
 
     // Memory container

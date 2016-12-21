@@ -10,11 +10,18 @@ function MemoryGame(config) {
     /**
      * Elements
      */
-    //Wrapper
+    // Wrapper
     let memoryWrapperTemplate = document.querySelector("#memoryWrapperTemplate");
     let memoryWrapperFrag = document.importNode(memoryWrapperTemplate.content, true);
 
     let memoryWrapperDiv = memoryWrapperFrag.querySelector(".Memory-wrapper");
+
+    // Header
+    let memoryHeaderTemplate = document.querySelector("#memoryHeaderTemplate");
+    let memoryHeaderFrag = document.importNode(memoryHeaderTemplate.content, true);
+
+    let memoryHeader = memoryHeaderFrag.querySelector(".memoryHeader");
+    memoryWrapperDiv.appendChild(memoryHeader);
 
     // Pair form
     let memoryPairFormTemplate = document.querySelector("#memoryPairFormTemplate");
@@ -41,7 +48,6 @@ function MemoryGame(config) {
         memoryPairRadio.setAttribute("value", i);
 
         memoryPairForm.appendChild(memoryPairLabel);
-        memoryPairForm.appendChild(document.createElement("br"));
     }
 
     // Form button

@@ -13,9 +13,9 @@ function Window(settings = {}) {
     this.backgroundColor = settings.backgroundColor ? settings.backgroundColor : undefined;
     //this.backgroundColor = settings.backgroundColor ? settings.backgroundColor : "#" + Math.floor(Math.random()*16777215).toString(16);
 
-    this.name = settings.name ? settings.name : "No name";
+    this.topBarText = settings.topBarText ? settings.topBarText : "No text";
 
-    this.icon = settings.icon ? settings.icon : "defaultIcon.ico";
+    this.topBarIcon = settings.topBarIcon ? settings.topBarIcon : "defaultIcon.ico";
 
     this.windowSize = settings.windowSize ? settings.windowSize : "medium";
 
@@ -58,10 +58,10 @@ function Window(settings = {}) {
         windowTopBar.classList.add("PWD-window_topbar");
 
         let windowTopBarIcon = document.createElement("img");
-        windowTopBarIcon.src = "./image/" + this.icon;
+        windowTopBarIcon.src = "./image/" + this.topBarIcon;
 
         let windowTopBarSpan = document.createElement("span");
-        windowTopBarSpan.textContent = this.name;
+        windowTopBarSpan.textContent = this.topBarText;
 
         let windowContent = document.createElement("div");
         windowContent.classList.add("PWD-window_content");

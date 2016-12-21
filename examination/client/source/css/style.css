@@ -63,7 +63,6 @@ body {
 .PWD-icon {
     position:absolute;
     width:80px;
-    height:80px;
     padding:1px;
     text-align:center;
     text-decoration:none;
@@ -88,6 +87,8 @@ body {
     display:block;
 }
 .PWD-icon span {
+    display:block;
+    line-height:18px;
     color:black;
     font-size:14px;
 }
@@ -95,6 +96,35 @@ body {
 /**
  * MEMORY GAME
  */
+#memoryPairForm {
+    margin:10px auto;
+    width:100%;
+}
+#memoryPairForm label {
+    display:inline-block;
+    width:calc(50% - 16px);
+    padding:10px 5px;
+    margin:3px 3px;
+    text-align:center;
+    background:#eee;
+}
+#memoryPairForm label:hover {
+    background:#ddd;
+}
+#memoryPairForm button {
+    font-family:inherit;
+    font-size:inherit;
+    display:block;
+    margin:0 auto;
+    margin-top:10px;
+    padding:10px 20px;
+    border:0;
+    background:#eee;
+}
+#memoryPairForm button:hover {
+    background:#ddd;
+}
+
 .Memory-wrapper {
     width:100%;
     font-family:"Raleway", sans-serif;
@@ -108,9 +138,19 @@ body {
     height:50px;
 }
 
+.memoryHeader {
+    margin-top:10px;
+    margin-bottom:20px;
+    text-align:center;
+    font-size:32px;
+}
+
 .Memory-panel span {
     display:block;
 }
+.memoryPanelAttemptsSpan {}
+.memoryPanelSpanPlan {}
+.memoryPanelMessage {}
 
 .Memory-cards {
     width:100%;
@@ -126,16 +166,16 @@ body {
 .Memory-card {
     float:left;
     width:25%;
-    height:75px;
+    padding-top:25%;
     position:relative;
-}
-
-.Memory-card--correct {
-    box-shadow:inset 0px 0px 0px 5px green;
 }
 
 .Memory-card img {
     width:100%;
+}
+
+.Memory-card--correct {
+    box-shadow:inset 0px 0px 0px 5px green;
 }
 
 .Memory-card_front, .Memory-card_back {

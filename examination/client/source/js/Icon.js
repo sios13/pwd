@@ -8,17 +8,21 @@ function Icon(settings = {}) {
         "isDragging": settings.isDragging
     });
 
-    this.width = settings.width ? settings.width : 10;
+    this.iconText        = settings.iconText ? settings.iconText : "No icon text";
 
-    this.height = settings.height ? settings.height : 10;
+    this.width           = settings.width ? settings.width : 10;
+
+    this.height          = settings.height ? settings.height : 10;
 
     this.applicationName = settings.applicationName ? settings.applicationName : "";
 
-    this.iconImage = settings.iconImage ? settings.iconImage : "defaultIcon.ico";
+    this.iconImage       = settings.iconImage ? settings.iconImage : "defaultIcon.ico";
 
-    this.windowSize = settings.windowSize ? settings.windowSize : "small";
+    this.windowSize      = settings.windowSize ? settings.windowSize : "small";
 
-    this.container = initializeContainer.bind(this)();
+    this.container       = initializeContainer.bind(this)();
+
+    this.correctGridPosition();
 
     function initializeContainer() {
         let container = document.createElement("a");
@@ -31,7 +35,7 @@ function Icon(settings = {}) {
         iconImageElem.src = "./image/" + this.iconImage;
 
         let iconText = document.createElement("span");
-        iconText.textContent = this.applicationName;
+        iconText.textContent = this.iconText;
 
         container.appendChild(iconImageElem);
         container.appendChild(iconText);
@@ -55,11 +59,19 @@ Icon.prototype.getApplicationName = function() {
  * This function corrects the x and y coordinates of the icon, making it align to the nearest grid
  */
 Icon.prototype.correctGridPosition = function() {
-    this.xPos = 10 + this.xPos - this.xPos % 92;
-    this.yPos = 10 + this.yPos - this.yPos % 92;
+    this.xPos = 10 + this.xPos - this.xPos % 100;
+    this.yPos = 10 + this.yPos - this.yPos % 100;
 
     this.container.style.left = this.xPos + "px";
     this.container.style.top = this.yPos + "px";
+}
+
+Icon.prototype.getIconText = function() {
+    return this.iconText;
+}
+
+Icon.prototype.getIconImage = function() {
+    return this.iconImage;
 }
 
 Icon.prototype.getWindowSize = function() {

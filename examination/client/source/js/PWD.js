@@ -13,7 +13,7 @@ function PWD(settings = {}) {
 
     let pwdWidth = 1300;
 
-    let pwdHeight = 600;
+    let pwdHeight = 800;
 
     let windowsMadeCounter = 0;
 
@@ -25,15 +25,30 @@ function PWD(settings = {}) {
     /**
      * Create the icons
      */
-    for (let i = 0; i < 1; i++) {
-        icons.push( new Icon({
-            "applicationName": "Memory",
-            "xPos": 10,
-            "yPos": 10,
-            //"iconImage": "memory.png",
-            "windowSize": "medium"
-        }) );
-    }
+    icons.push( new Icon({
+        "iconText": "Memory small",
+        "applicationName": "Memory",
+        "xPos": 10,
+        "yPos": 10,
+        //"iconImage": "memory.png",
+        "windowSize": "small"
+    }) );
+    icons.push( new Icon({
+        "iconText": "Memory medium",
+        "applicationName": "Memory",
+        "xPos": 10,
+        "yPos": 120,
+        //"iconImage": "memory.png",
+        "windowSize": "medium"
+    }) );
+    icons.push( new Icon({
+        "iconText": "Memory big",
+        "applicationName": "Memory",
+        "xPos": 10,
+        "yPos": 250,
+        //"iconImage": "memory.png",
+        "windowSize": "big"
+    }) );
 
     /**
      * Append the icons to the container
@@ -159,7 +174,8 @@ function PWD(settings = {}) {
         let pwdWindow = new Window({
             "id": windowsMadeCounter,
             "windowSize": iconObj.getWindowSize(),
-            "name": iconObj.getApplicationName(),
+            "topBarText": iconObj.getIconText(),
+            "topBarIcon": iconObj.getIconImage(),
             "xPos": (100 + 15 * windowsMadeCounter),
             "yPos": (20 + 30 * windowsMadeCounter)
         });
