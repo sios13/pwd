@@ -107,15 +107,22 @@ body {
  */
 .chatWrapper {
     width:100%;
-    height:55%;
+    height:100%;
     position:relative;
+}
+
+.chatStartHeader {
+    text-align:center;
+    padding:40px 0;
+}
+.chatStartHeader span {
+    font-size:40px;
 }
 
 .chatStartNameInput {
     display:block;
     width:190px;
     margin:0 auto;
-    margin-top:45%;
     padding:5px;
     font-size:18px;
     text-align:center;
@@ -134,7 +141,7 @@ body {
     float:left;
     height:90%;
     width:100%;
-    overflow:scroll;
+    overflow:auto;
     font-size:14px;
 }
 

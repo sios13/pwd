@@ -31,7 +31,7 @@ function PWD(settings = {}) {
         "applicationName": "Memory",
         "xPos": 10,
         "yPos": 10,
-        //"iconImage": "memory.png",
+        "iconImage": "cards.png",
         "windowSize": "small"
     }) );
     icons.push( new Icon({
@@ -39,7 +39,7 @@ function PWD(settings = {}) {
         "applicationName": "Memory",
         "xPos": 10,
         "yPos": 120,
-        //"iconImage": "memory.png",
+        "iconImage": "cards.png",
         "windowSize": "medium"
     }) );
     icons.push( new Icon({
@@ -47,7 +47,7 @@ function PWD(settings = {}) {
         "applicationName": "Memory",
         "xPos": 10,
         "yPos": 250,
-        //"iconImage": "memory.png",
+        "iconImage": "cards.png",
         "windowSize": "big"
     }) );
     icons.push( new Icon({
@@ -109,6 +109,7 @@ function PWD(settings = {}) {
 
                     if (windowCloseDiv.contains(e.target)) {
                         windows[i].getContainer().parentNode.removeChild(windows[i].getContainer());
+                        windows[i].close();
                     }
 
                     break;
@@ -207,15 +208,19 @@ function PWD(settings = {}) {
         /**
          * Start the application and append it to the newly created window
          */
+        let applicationObj = undefined;
+
         if (iconObj.getApplicationName() === "Memory") {
-            let memory = new Memory({
+            applicationObj = new Memory({
                 "container": "#PWD-window_content-" + pwdWindow.getId()
             });
         } else if (iconObj.getApplicationName() === "Chat") {
-            let chat = new Chat({
+            applicationObj = new Chat({
                 "container": "#PWD-window_content-" + pwdWindow.getId()
             });
         }
+
+        pwdWindow.setApplicationObj(applicationObj);
     }
 
     /**

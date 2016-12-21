@@ -10,14 +10,16 @@ function Window(settings = {}) {
 
     this.id = settings.id ? settings.id : 0;
 
-    this.backgroundColor = settings.backgroundColor ? settings.backgroundColor : undefined;
     //this.backgroundColor = settings.backgroundColor ? settings.backgroundColor : "#" + Math.floor(Math.random()*16777215).toString(16);
+    this.backgroundColor = settings.backgroundColor ? settings.backgroundColor : undefined;
 
     this.topBarText = settings.topBarText ? settings.topBarText : "No text";
 
     this.topBarIcon = settings.topBarIcon ? settings.topBarIcon : "defaultIcon.ico";
 
     this.windowSize = settings.windowSize ? settings.windowSize : "medium";
+
+    this.applicationObj = settings.applicationObj ? settings.applicationObj : undefined;
 
     switch (this.windowSize) {
         case "small":
@@ -89,6 +91,14 @@ function Window(settings = {}) {
  */
 Window.prototype = Object.create(Entity.prototype);
 Window.prototype.constructor = Window;
+
+Window.prototype.close = function() {
+    this.applicationObj.close();
+}
+
+Window.prototype.setApplicationObj = function(value) {
+    this.applicationObj = value;
+}
 
 Window.prototype.getId = function() {
     return this.id;

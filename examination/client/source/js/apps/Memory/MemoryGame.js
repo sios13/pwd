@@ -75,4 +75,6 @@ function MemoryGame(settings) {
     }
 }
 
+MemoryGame.prototype.close = function() {}
+
 module.exports = MemoryGame;
