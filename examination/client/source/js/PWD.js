@@ -55,7 +55,7 @@ function PWD(settings = {}) {
         "applicationName": "Chat",
         "xPos": 10,
         "yPos": 350,
-        //"iconImage": "memory.png",
+        "iconImage": "chat.png",
         "windowSize": "medium"
     }) );
 
@@ -70,7 +70,7 @@ function PWD(settings = {}) {
 
     function addListeners() {
         window.addEventListener("mousedown", function(e) {
-            e.preventDefault();
+            //e.preventDefault();
 
             if (selectedEntity) {
                 selectedEntity.setIsSelected(false);
@@ -136,7 +136,7 @@ function PWD(settings = {}) {
         });
 
         window.addEventListener("mouseup", function(e) {
-            e.preventDefault();
+            //e.preventDefault();
 
             /**
              * If there is a selected entity -> remove the mousemove event and stop dragging
@@ -158,11 +158,11 @@ function PWD(settings = {}) {
         });
 
         window.addEventListener("click", function(e) {
-            e.preventDefault();
+            //e.preventDefault();
         });
 
         window.addEventListener("dblclick", function(e) {
-            e.preventDefault();
+            //e.preventDefault();
 
             for (let i = 0; i < icons.length; i++) {
                 /**

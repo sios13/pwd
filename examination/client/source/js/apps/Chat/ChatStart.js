@@ -54,7 +54,7 @@ function ChatStart(settings) {
         let value = chatNameInput.value;
 
         if (value === "") {
-            alert("NO!");
+            console.log("Enter a name!");
         }
 
         settings.username = value;

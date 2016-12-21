@@ -64,7 +64,7 @@ body {
 
 .PWD-window_content {
     width:100%;
-    height:calc(100% - 40px);
+    height:calc(100% - 35px);
     overflow:auto;
     background:white;
 }
@@ -90,8 +90,8 @@ body {
     opacity:0.4;
 }
 .PWD-icon img {
-    width:70%;
-    height:70%;
+    width:56px;
+    height:56px;
     margin:0 auto;
     display:block;
 }
@@ -139,8 +139,9 @@ body {
 
 .chatMessages {
     float:left;
-    height:90%;
-    width:100%;
+    padding:5px;
+    height:calc(85% - 10px);
+    width:calc(100% - 10px);
     overflow:auto;
     font-size:14px;
 }
@@ -151,19 +152,26 @@ body {
 
 .chatInput {
     float:left;
-    height:10%;
-    width:100%;
+    height:15%;
+    width:calc(100% - 10px);
     position:relative;
+    padding:0 5px;
 }
 .chatInput_textarea {
     float:left;
-    width:80%;
-    height:86%;
+    min-width:75%;
+    max-width:75%;
+    min-height:86%;
+    max-height:86%;
+    font-size:14px;
 }
 .chatInput_button {
     float:left;
-    width:17%;
-    height:100%;
+    border:0;
+    width:18%;
+    margin:8px 0;
+    height:calc(100% - 16px);
+    margin-left:10px;
 }
 
 /**

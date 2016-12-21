@@ -6,9 +6,9 @@ function Chat(settings) {
 
     let username = settings.username ? settings.username : "najssimon";
 
-    let socket = new WebSocket("ws://vhost3.lnu.se:20080/socket/");
+    this.socket = new WebSocket("ws://vhost3.lnu.se:20080/socket/");
     //socket.addEventListener("open", socketOpenEvent);
-    socket.addEventListener("message", socketMessageEvent);
+    this.socket.addEventListener("message", socketMessageEvent);
 
     /**
      * Elements
@@ -39,7 +39,7 @@ function Chat(settings) {
 
     // Button in the input div
     let inputDiv_button = document.createElement("button");
-    inputDiv_button.addEventListener("click", buttonEvent);
+    inputDiv_button.addEventListener("click", buttonEvent.bind(this));
     inputDiv_button.classList.add("chatInput_button");
     inputDiv_button.setAttribute("type", "button");
     inputDiv_button.textContent = "Send";
@@ -52,10 +52,11 @@ function Chat(settings) {
     /**
      * Functions
      */
+    /*
     function socketOpenEvent(e) {
-        //socket.send(JSON.stringify(data));
+        socket.send(JSON.stringify(data));
     }
-
+    */
     function socketMessageEvent(e) {
         let response = JSON.parse(e.data);
         console.log(response);
@@ -68,6 +69,8 @@ function Chat(settings) {
         chatMessageSpan.textContent += response.data;
 
         messagesDiv.appendChild(chatMessageSpan);
+
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
     }
 
     function buttonEvent(e) {
@@ -88,12 +91,12 @@ function Chat(settings) {
             "key": "eDBE76deU7L0H9mEBgxUKVR0VCnq0XBd"
         }
 
-        socket.send(JSON.stringify(data));
+        this.socket.send(JSON.stringify(data));
     }
 }
 
 Chat.prototype.close = function() {
-    socket.close();
+    this.socket.close();
 }
 
 module.exports = Chat;
