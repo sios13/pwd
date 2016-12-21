@@ -1,7 +1,7 @@
 const Window = require("./Window.js");
 const Icon = require("./Icon.js");
 const Memory = require("./apps/Memory/MemoryGame.js");
-const Chat = require("./apps/Chat/Chat.js");
+const Chat = require("./apps/Chat/ChatStart.js");
 
 function PWD(settings = {}) {
     let container = document.createElement("main");
