@@ -1,12 +1,12 @@
 const Cards = require("./Cards.js");
 
-function MemoryGameBoard(config) {
+function MemoryGameBoard(settings) {
     /**
      * Properties
      */
-    let nrOfPairs = config.nrOfPairs ? config.nrOfPairs : 4;
+    let container = settings.container ? settings.container : "#cool";
 
-    let container = config.container ? config.container : "#cool";
+    let nrOfPairs = settings.nrOfPairs ? settings.nrOfPairs : 4;
 
     let cards = new Cards(nrOfPairs);
 

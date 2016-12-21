@@ -1,11 +1,10 @@
 const MemoryGameBoard = require("./MemoryGameBoard.js");
 
-function MemoryGame(config) {
-    //new MemoryGameBoard(config);
+function MemoryGame(settings) {
     /**
      * Properties
      */
-    let container = config.container ? config.container : "#123";
+    let container = settings.container ? settings.container : "#123";
 
     /**
      * Elements
@@ -62,18 +61,17 @@ function MemoryGame(config) {
     // Container
     let memoryContainerDiv = document.querySelector(container);
     memoryContainerDiv.appendChild(memoryWrapperDiv);
-    /*
-    memoryContainerDiv.textContent = "";
-    new MemoryGameBoard(config);
-    */
 
+    /**
+     * Functions
+     */
     function memoryPairFormButtonEvent() {
-        //alert(document.querySelector("#memoryPairForm input:checked").value);
         let nrOfPairs = document.querySelector("#memoryPairForm input:checked").value;
 
-        memoryContainerDiv.textContent = "";
-        config.nrOfPairs = parseInt(nrOfPairs);
-        new MemoryGameBoard(config);
+        memoryWrapperDiv.parentNode.removeChild(memoryWrapperDiv);
+
+        settings.nrOfPairs = parseInt(nrOfPairs);
+        new MemoryGameBoard(settings);
     }
 }
 

@@ -103,6 +103,32 @@ body {
 }
 
 /**
+ * CHAT
+ */
+.chatWrapper {
+    width:100%;
+    height:100%;
+}
+
+.chatMessages {
+    float:left;
+    height:90%;
+    width:100%;
+    overflow:scroll;
+    font-size:14px;
+}
+
+.chatMessage {
+    display:block;
+}
+
+.chatInput {
+    float:left;
+    height:10%;
+    width:100%;
+}
+
+/**
  * MEMORY GAME
  */
 #memoryPairForm {
