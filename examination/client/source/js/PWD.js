@@ -66,7 +66,7 @@ function PWD(settings = {}) {
         container.appendChild(icons[i].getContainer());
     }
 
-    addListeners.bind(this)();
+    addListeners();
 
     function addListeners() {
         window.addEventListener("mousedown", function(e) {

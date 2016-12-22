@@ -76,6 +76,14 @@ function MemoryGameBoard(settings) {
     function memoryWrapperClickEvent(e) {
         e.preventDefault();
 
+        /**
+         * If is currently checking answer -> exit function
+         * (waiting for timer to finish)
+         */
+        if (isCheckingAnswer) {
+            return;
+        }
+
         let imgElem = e.target;
 
         let aElem = imgElem.nodeName === "IMG" ? imgElem.parentNode : imgElem;
@@ -85,7 +93,7 @@ function MemoryGameBoard(settings) {
         let card = cards.getCard(value);
 
         if (card) {
-            if (card.getIsFlipped() === false && isCheckingAnswer === false) {
+            if (card.getIsFlipped() === false) {
                 card.flip();
 
                 if (firstCard === undefined) {
@@ -106,6 +114,8 @@ function MemoryGameBoard(settings) {
 
         setTimeout(function() {
 
+            isCheckingAnswer = false;
+
             if (firstCard.getValue()[0] === secondCard.getValue()[0]) {
                 firstCard.setIsComplete(true);
                 secondCard.setIsComplete(true);
@@ -115,6 +125,9 @@ function MemoryGameBoard(settings) {
 
                 score += 1;
 
+                /**
+                 * If score is equal to maximum amount of pairs -> the game is complete
+                 */
                 if (score === nrOfPairs) {
                     clearInterval(gameTimerInterval);
                     memoryPanelMessageSpan.textContent = "You completed the game!";
@@ -126,8 +139,6 @@ function MemoryGameBoard(settings) {
 
             firstCard = undefined;
             secondCard = undefined;
-
-            isCheckingAnswer = false;
         }, 2000);
     }
 }
