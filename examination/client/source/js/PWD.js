@@ -233,9 +233,11 @@ function PWD(settings = {}) {
         if (selectedEntity) {
             selectedEntity.setIsDragging(true);
 
-            let movementX = e.movementX;
-            let movementY = e.movementY;
+            console.log(e.clientX - selectedEntity.getContainer().offsetLeft);
+            console.log(e.clientY - selectedEntity.getContainer().offsetTop);
 
+            selectedEntity.updatePos(e.clientX - selectedEntity.getContainer().offsetLeft, e.clientY - selectedEntity.getContainer().offsetTop);
+            /*
             if ((selectedEntity.getXPos() + movementX + selectedEntity.getWidth()) > pwdWidth) {
                 movementX = 0;
             }
@@ -251,8 +253,7 @@ function PWD(settings = {}) {
             if (selectedEntity.getYPos() + movementY < 0) {
                 movementY = 0;
             }
-
-            selectedEntity.updatePos(movementX, movementY);
+            */
         }
     }
 }

@@ -28,9 +28,9 @@ Entity.prototype.getYPos = function() {
     return this.yPos;
 }
 
-Entity.prototype.updatePos = function(xMovement, yMovement) {
-    this.xPos += xMovement;
-    this.yPos += yMovement;
+Entity.prototype.updatePos = function(xPos, yPos) {
+    this.xPos = xPos;
+    this.yPos = yPos;
 
     this.container.style.left = this.xPos + "px";
     this.container.style.top = this.yPos + "px";
