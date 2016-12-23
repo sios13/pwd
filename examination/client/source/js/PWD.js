@@ -108,8 +108,8 @@ function PWD(settings = {}) {
                     let windowCloseDiv = windows[i].getContainer().querySelector(".PWD-window_close");
 
                     if (windowCloseDiv.contains(e.target)) {
-                        windows[i].getContainer().parentNode.removeChild(windows[i].getContainer());
                         windows[i].close();
+                        windows[i].getContainer().parentNode.removeChild(windows[i].getContainer());
                     }
 
                     break;
