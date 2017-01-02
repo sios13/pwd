@@ -65,6 +65,12 @@ function Window(settings = {}) {
         let windowTopBarSpan = document.createElement("span");
         windowTopBarSpan.textContent = this.topBarText;
 
+        let windowTopBarMinimize = document.createElement("div");
+        windowTopBarMinimize.classList.add("PWD-window_minimize");
+
+        let windowTopBarResize = document.createElement("div");
+        windowTopBarResize.classList.add("PWD-window_resize");
+
         let windowCloseDiv = document.createElement("div");
         windowCloseDiv.classList.add("PWD-window_close");
 
@@ -79,6 +85,8 @@ function Window(settings = {}) {
         windowTopBar.appendChild(windowTopBarSpan);
 
         container.appendChild(windowTopBar);
+        container.appendChild(windowTopBarMinimize);
+        container.appendChild(windowTopBarResize);
         container.appendChild(windowCloseDiv);
         container.appendChild(windowContent);
 

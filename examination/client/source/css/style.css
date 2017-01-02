@@ -37,7 +37,7 @@ body {
 
 .PWD-window_topbar {
     float:left;
-    width:calc(100% - 40px);
+    width:calc(100% - 90px);
     height:35px;
     background:white;
     color:#B0B0B0;
@@ -54,6 +54,18 @@ body {
     height:calc(100% - 5px);
     padding-top:5px;
     line-height:30px;
+}
+.PWD-window_minimize {
+    float:left;
+    width:25px;
+    height:25px;
+    background-color:yellow;
+}
+.PWD-window_resize {
+    float:left;
+    width:25px;
+    height:25px;
+    background-color:blue;
 }
 .PWD-window_close {
     float:left;

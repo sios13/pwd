@@ -89,47 +89,26 @@ function PWD(settings = {}) {
      * Event functions
      */
     function mousedownEvent(e) {
-        //e.preventDefault();
-
-        if (selectedEntity) {
-            selectedEntity.setIsSelected(false);
+        if (this.selectedEntity) {
+            this.selectedEntity.setIsSelected(false);
         }
 
-        selectedEntity = undefined;
+        this.selectedEntity = undefined;
 
         /**
          * Iterate the windows
          */
-        for (let i = 0; i < windows.length; i++) {
+        for (let i = 0; i < this.windows.length; i++) {
             /**
              * If a mousedown has been made inside a window
              */
-            if (windows[i].getContainer().contains(e.target)) {
+            if (this.windows[i].getContainer().contains(e.target)) {
                 /**
                  * Mark the window as selected
                  */
-                windows[i].setIsSelected(true);
+                this.windows[i].setIsSelected(true);
 
-                selectedEntity = windows[i];
-
-                /**
-                 * If a mousedown has been made on a top bar -> start dragging
-                 */
-                let windowTopBarElem = windows[i].getContainer().querySelector(".PWD-window_topbar");
-
-                if (windowTopBarElem.contains(e.target)) {
-                    window.addEventListener("mousemove", entityMoveEvent);
-                }
-
-                /**
-                 * If a mousedown has been made on the close button -> remove the window from the DOM
-                 */
-                let windowCloseDiv = windows[i].getContainer().querySelector(".PWD-window_close");
-
-                if (windowCloseDiv.contains(e.target)) {
-                    windows[i].close();
-                    windows[i].getContainer().parentNode.removeChild(windows[i].getContainer());
-                }
+                this.selectedEntity = windows[i];
 
                 break;
             }
@@ -138,38 +117,61 @@ function PWD(settings = {}) {
         /**
          * Iterate the icons
          */
-        for (let i = 0; i < icons.length; i++) {
+        for (let i = 0; i < this.icons.length; i++) {
             /**
              * If a mousedown has been made on an icon -> mark it as selected
              */
-            if (icons[i].getContainer().contains(e.target)) {
-                icons[i].setIsSelected(true);
+            if (this.icons[i].getContainer().contains(e.target)) {
+                /**
+                 * Mark the icon as selected
+                 */
+                this.icons[i].setIsSelected(true);
 
-                selectedEntity = icons[i];
-
-                window.addEventListener("mousemove", entityMoveEvent);
+                this.selectedEntity = icons[i];
 
                 break;
+            }
+        }
+
+        if (selectedEntity) {
+            /**
+             * If a mousedown has been made on the selected entity
+             */
+            if (selectedEntity.getContainer().contains(e.target)) {
+                /**
+                 * Prevent default to avoid unwanted behaviour
+                 */
+                e.preventDefault();
+
+                if (selectedEntity instanceof Icon) {
+                    window.addEventListener("mousemove", entityMoveEvent);
+                }
+
+                if (selectedEntity instanceof Window) {
+                    let windowTopBarElem = selectedEntity.getContainer().querySelector(".PWD-window_topbar");
+
+                    if (windowTopBarElem.contains(e.target)) {
+                        window.addEventListener("mousemove", entityMoveEvent);
+                    }
+                }
             }
         }
     }
 
     function mouseupEvent(e) {
-        //e.preventDefault();
-
         /**
          * If there is a selected entity -> remove the mousemove event and stop dragging
          */
-        if (selectedEntity) {
-            selectedEntity.setIsDragging(false);
+        if (this.selectedEntity) {
+            this.selectedEntity.setIsDragging(false);
 
             window.removeEventListener("mousemove", entityMoveEvent);
 
             /**
              * If an icon -> align the icon to the grid
              */
-            if (selectedEntity instanceof Icon) {
-                selectedEntity.correctGridPosition();
+            if (this.selectedEntity instanceof Icon) {
+                this.selectedEntity.correctGridPosition();
             }
         }
 
@@ -177,18 +179,31 @@ function PWD(settings = {}) {
     }
 
     function clickEvent(e) {
-        //e.preventDefault();
+        if (selectedEntity) {
+            if (selectedEntity instanceof Window) {
+                /**
+                 * If a click has been made on the close button -> remove the window from the DOM
+                 */
+                let windowCloseDiv = this.selectedEntity.getContainer().querySelector(".PWD-window_close");
+
+                if (windowCloseDiv.contains(e.target)) {
+                    this.selectedEntity.close();
+                    this.selectedEntity.getContainer().parentNode.removeChild(this.selectedEntity.getContainer());
+                }
+            }
+        }
     }
 
     function dblclickEvent(e) {
-        //e.preventDefault();
-
-        for (let i = 0; i < icons.length; i++) {
+        /**
+         * Iterate the icons to see if a double click was made on an icon
+         */
+        for (let i = 0; i < this.icons.length; i++) {
             /**
              * if a doubleclick has been made on an icon -> launch the associated application
              */
-            if (icons[i].getContainer().contains(e.target)) {
-                launchApplication(icons[i]);
+            if (this.icons[i].getContainer().contains(e.target)) {
+                launchApplication(this.icons[i]);
             }
         }
     }
@@ -213,7 +228,7 @@ function PWD(settings = {}) {
 
         this.windows.push(pwdWindow);
 
-        container.appendChild(pwdWindow.getContainer());
+        this.container.appendChild(pwdWindow.getContainer());
 
         /**
          * Start the application and append it to the newly created window
@@ -230,17 +245,20 @@ function PWD(settings = {}) {
             });
         }
 
+        /**
+         * Every window has a referencce to its application
+         */
         pwdWindow.setApplicationObj(applicationObj);
     }
 
     /**
-     * Update the position of the active entity
+     * Update the position of the selected entity
      */
     function entityMoveEvent(e) {
         /**
          * If there is an active entity -> update its position
          */
-        if (selectedEntity) {
+        if (this.selectedEntity) {
             this.selectedEntity.setIsDragging(true);
             /*
             let offsetX = e.clientX - selectedEntity.getContainer().offsetLeft;
@@ -255,30 +273,30 @@ function PWD(settings = {}) {
             /**
              * If mouse pointer is outside window -> do not update the position
              */
-            if (e.clientX < 0 || e.clientX > pwdWidth || e.clientY < 0 || e.clientY > pwdHeight) {
+            if (e.clientX < 0 || e.clientX > this.pwdWidth || e.clientY < 0 || e.clientY > this.pwdHeight) {
                 return;
             }
 
             let movementX = e.movementX;
             let movementY = e.movementY;
 
-            if ((selectedEntity.getXPos() + movementX + selectedEntity.getWidth()) > pwdWidth) {
+            if ((this.selectedEntity.getXPos() + movementX + this.selectedEntity.getWidth()) > this.pwdWidth) {
                 movementX = 0;
             }
 
-            if (selectedEntity.getXPos() + movementX < 0) {
+            if (this.selectedEntity.getXPos() + movementX < 0) {
                 movementX = 0;
             }
 
-            if ((selectedEntity.getYPos() + movementY + selectedEntity.getHeight()) > pwdHeight) {
+            if ((this.selectedEntity.getYPos() + movementY + this.selectedEntity.getHeight()) > this.pwdHeight) {
                 movementY = 0;
             }
 
-            if (selectedEntity.getYPos() + movementY < 0) {
+            if (this.selectedEntity.getYPos() + movementY < 0) {
                 movementY = 0;
             }
 
-            this.selectedEntity.updatePos(selectedEntity.getXPos() + movementX, selectedEntity.getYPos() + movementY);
+            this.selectedEntity.updatePos(this.selectedEntity.getXPos() + movementX, this.selectedEntity.getYPos() + movementY);
         }
     }
 }
