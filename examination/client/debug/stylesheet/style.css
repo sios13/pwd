@@ -1,7 +1,31 @@
 body {
     margin:0;
     font-family:"Open Sans", sans-serif;
+}
+
+main {
+    position:relative;
+    width:1300px;
+    height:700px;
     background-color:#EEEEEE;
+    border:2px solid black;
+    border-bottom:0;
+}
+
+.PWD-bottomBar {
+    position:absolute;
+    left:0px;
+    top:660px;
+    height:40px;
+    width:100%;
+    background-color:black;
+}
+.PWD-bottomBar_panel {
+    float:left;
+    width:100px;
+    height:calc(100% - 8px);
+    margin:4px 2px;;
+    background-color:lightgrey;
 }
 
 .PWD-window {

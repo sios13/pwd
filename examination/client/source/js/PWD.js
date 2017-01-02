@@ -11,17 +11,28 @@ function PWD(settings = {}) {
      * Initialize default behaviour/properties
      */
     function initialize() {
+        /**
+         * Elements
+         */
         this.container = document.createElement("main");
 
-        document.querySelector(settings.container).appendChild(container);
+        this.bottomBar = document.createElement("div");
+        this.bottomBar.classList.add("PWD-bottomBar");
 
+        this.container.appendChild(this.bottomBar);
+
+        document.querySelector(settings.container).appendChild(this.container);
+
+        /**
+         * Properties
+         */
         this.windows = [];
 
         this.icons = [];
 
         this.pwdWidth = 1300;
 
-        this.pwdHeight = 800;
+        this.pwdHeight = 700;
 
         this.windowsMadeCounter = 0;
 
@@ -93,6 +104,8 @@ function PWD(settings = {}) {
          * For every mousedown event we will attempt to find a new selected entity
          */
         findSelectedEntity(e.target);
+
+        updateBottomBar();
 
         if (this.selectedEntity) {
             if (this.selectedEntity instanceof Icon) {
@@ -191,6 +204,17 @@ function PWD(settings = {}) {
             if (this.selectedEntity instanceof Icon) {
                 launchApplication(this.selectedEntity);
             }
+        }
+    }
+
+    function updateBottomBar() {
+        bottomBar.textContent = "";
+
+        for (let i = 0; i < this.windows.length; i++) {
+            let bottomBarPanel = document.createElement("div");
+            bottomBarPanel.classList.add("PWD-bottomBar_panel");
+
+            bottomBar.appendChild(bottomBarPanel);
         }
     }
 
@@ -307,6 +331,10 @@ function PWD(settings = {}) {
 
             selectedEntity.updatePos(selectedEntity.getXPos() + offsetX, selectedEntity.getYPos() + offsetY);
             */
+
+            if (!this.selectedEntity.getContainer().querySelector(".PWD-window_topbar").contains(e.target)) {
+                return;
+            }
 
             /**
              * If mouse pointer is outside window -> do not update the position
