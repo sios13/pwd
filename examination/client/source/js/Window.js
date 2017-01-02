@@ -21,40 +21,32 @@ function Window(settings = {}) {
 
     this.applicationObj = settings.applicationObj ? settings.applicationObj : undefined;
 
-    switch (this.windowSize) {
-        case "small":
-            this.width = 200;
-            this.height = 300;
-            break;
-        case "medium":
-            this.width = 300;
-            this.height = 450;
-            break;
-        case "big":
-            this.width = 400;
-            this.height = 600;
-            break;
-    }
-
     this.container = initializeContainer.bind(this)();
+
+    this.update = function() {
+        switch (this.windowSize) {
+            case "small":
+                this.width = 200;
+                this.height = 300;
+                break;
+            case "medium":
+                this.width = 300;
+                this.height = 450;
+                break;
+            case "big":
+                this.width = 400;
+                this.height = 600;
+                break;
+        }
+
+        this.container.classList.add("PWD-window--" + this.windowSize);
+    }
 
     function initializeContainer() {
         let container = document.createElement("div");
         container.classList.add("PWD-window");
         container.style.left = this.xPos + "px";
         container.style.top = this.yPos + "px";
-
-        switch(this.windowSize) {
-            case "small":
-                container.classList.add("PWD-window--small");
-                break;
-            case "medium":
-                container.classList.add("PWD-window--medium");
-                break;
-            case "big":
-                container.classList.add("PWD-window--big");
-                break;
-        }
 
         let windowTopBar = document.createElement("div");
         windowTopBar.classList.add("PWD-window_topbar");
@@ -65,11 +57,11 @@ function Window(settings = {}) {
         let windowTopBarSpan = document.createElement("span");
         windowTopBarSpan.textContent = this.topBarText;
 
-        let windowTopBarMinimize = document.createElement("div");
-        windowTopBarMinimize.classList.add("PWD-window_minimize");
+        let windowMinimizeDiv = document.createElement("div");
+        windowMinimizeDiv.classList.add("PWD-window_minimize");
 
-        let windowTopBarResize = document.createElement("div");
-        windowTopBarResize.classList.add("PWD-window_resize");
+        let windowResizeDiv = document.createElement("div");
+        windowResizeDiv.classList.add("PWD-window_resize");
 
         let windowCloseDiv = document.createElement("div");
         windowCloseDiv.classList.add("PWD-window_close");
@@ -85,8 +77,8 @@ function Window(settings = {}) {
         windowTopBar.appendChild(windowTopBarSpan);
 
         container.appendChild(windowTopBar);
-        container.appendChild(windowTopBarMinimize);
-        container.appendChild(windowTopBarResize);
+        container.appendChild(windowMinimizeDiv);
+        container.appendChild(windowResizeDiv);
         container.appendChild(windowCloseDiv);
         container.appendChild(windowContent);
 
@@ -100,12 +92,30 @@ function Window(settings = {}) {
 Window.prototype = Object.create(Entity.prototype);
 Window.prototype.constructor = Window;
 
+Window.prototype.resize = function() {
+    this.container.classList.remove("PWD-window--" + this.windowSize);
+
+    switch(this.windowSize) {
+        case "small":
+            this.windowSize = "medium";
+            break;
+        case "medium":
+            this.windowSize = "big";
+            break;
+        case "big":
+            this.windowSize = "small";
+            break;
+    }
+
+    this.update();
+}
+
 Window.prototype.close = function() {
     this.applicationObj.close();
 }
 
-Window.prototype.setApplicationObj = function(value) {
-    this.applicationObj = value;
+Window.prototype.setApplicationObj = function(applicationObj) {
+    this.applicationObj = applicationObj;
 }
 
 Window.prototype.getId = function() {

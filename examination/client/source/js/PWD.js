@@ -89,83 +89,43 @@ function PWD(settings = {}) {
      * Event functions
      */
     function mousedownEvent(e) {
+        /**
+         * For every mousedown event we will attempt to find a new selected entity
+         */
+        findSelectedEntity(e.target);
+
         if (this.selectedEntity) {
-            this.selectedEntity.setIsSelected(false);
-        }
+            if (this.selectedEntity instanceof Icon) {
+                window.addEventListener("mousemove", entityMoveEvent);
 
-        this.selectedEntity = undefined;
-
-        /**
-         * Iterate the windows
-         */
-        for (let i = 0; i < this.windows.length; i++) {
-            /**
-             * If a mousedown has been made inside a window
-             */
-            if (this.windows[i].getContainer().contains(e.target)) {
-                /**
-                 * Mark the window as selected
-                 */
-                this.windows[i].setIsSelected(true);
-
-                this.selectedEntity = windows[i];
-
-                break;
-            }
-        }
-
-        /**
-         * Iterate the icons
-         */
-        for (let i = 0; i < this.icons.length; i++) {
-            /**
-             * If a mousedown has been made on an icon -> mark it as selected
-             */
-            if (this.icons[i].getContainer().contains(e.target)) {
-                /**
-                 * Mark the icon as selected
-                 */
-                this.icons[i].setIsSelected(true);
-
-                this.selectedEntity = icons[i];
-
-                break;
-            }
-        }
-
-        if (selectedEntity) {
-            /**
-             * If a mousedown has been made on the selected entity
-             */
-            if (selectedEntity.getContainer().contains(e.target)) {
-                /**
-                 * Prevent default to avoid unwanted behaviour
-                 */
                 e.preventDefault();
+            }
 
-                if (selectedEntity instanceof Icon) {
+            if (this.selectedEntity instanceof Window) {
+                /**
+                 * Windows should only be draggable by the topbar
+                 */
+                let windowTopBarElem = this.selectedEntity.getContainer().querySelector(".PWD-window_topbar");
+
+                if (windowTopBarElem.contains(e.target)) {
                     window.addEventListener("mousemove", entityMoveEvent);
-                }
 
-                if (selectedEntity instanceof Window) {
-                    let windowTopBarElem = selectedEntity.getContainer().querySelector(".PWD-window_topbar");
-
-                    if (windowTopBarElem.contains(e.target)) {
-                        window.addEventListener("mousemove", entityMoveEvent);
-                    }
+                    e.preventDefault();
                 }
             }
         }
     }
 
     function mouseupEvent(e) {
-        /**
-         * If there is a selected entity -> remove the mousemove event and stop dragging
-         */
         if (this.selectedEntity) {
-            this.selectedEntity.setIsDragging(false);
+            /**
+             * If the entity is dragging -> stop dragging
+             */
+            //if (this.selectedEntity.getIsDragging()) {
+                this.selectedEntity.setIsDragging(false);
 
-            window.removeEventListener("mousemove", entityMoveEvent);
+                window.removeEventListener("mousemove", entityMoveEvent);
+            //}
 
             /**
              * If an icon -> align the icon to the grid
@@ -179,31 +139,109 @@ function PWD(settings = {}) {
     }
 
     function clickEvent(e) {
-        if (selectedEntity) {
-            if (selectedEntity instanceof Window) {
-                /**
-                 * If a click has been made on the close button -> remove the window from the DOM
-                 */
+        if (this.selectedEntity) {
+            if (this.selectedEntity instanceof Window) {
                 let windowCloseDiv = this.selectedEntity.getContainer().querySelector(".PWD-window_close");
+                let windowResizeDiv = this.selectedEntity.getContainer().querySelector(".PWD-window_resize");
+                let windowMinimizeDiv = this.selectedEntity.getContainer().querySelector(".PWD-window_minimize");
 
+                /**
+                 * If a click has been made on the close button
+                 */
                 if (windowCloseDiv.contains(e.target)) {
+                    /**
+                     * Call the close functionn implemented by every application
+                     */
                     this.selectedEntity.close();
+
+                    /**
+                     * Remove the window from the DOM
+                     */
                     this.selectedEntity.getContainer().parentNode.removeChild(this.selectedEntity.getContainer());
+
+                    /**
+                     * Remove the window from the array
+                     */
+                    let index = windows.indexOf(this.selectedEntity);
+                    windows.splice(index, 1);
+                }
+
+                /**
+                 * If a click has been made on the resize button -> resize the window
+                 */
+                if (windowResizeDiv.contains(e.target)) {
+                    this.selectedEntity.resize();
+                }
+
+                /**
+                 * If a click has been made on the minimize button
+                 */
+                if (windowMinimizeDiv.contains(e.target)) {
+                    alert("minimize");
                 }
             }
         }
     }
 
     function dblclickEvent(e) {
-        /**
-         * Iterate the icons to see if a double click was made on an icon
-         */
-        for (let i = 0; i < this.icons.length; i++) {
+        if (this.selectedEntity) {
             /**
              * if a doubleclick has been made on an icon -> launch the associated application
              */
-            if (this.icons[i].getContainer().contains(e.target)) {
-                launchApplication(this.icons[i]);
+            if (this.selectedEntity instanceof Icon) {
+                launchApplication(this.selectedEntity);
+            }
+        }
+    }
+
+    /**
+     * Set the selected entity if the provided target exists inside a entity (window or icon)
+     */
+    function findSelectedEntity(target) {
+        /**
+         * If there is a selected entity -> reset it
+         */
+        if (this.selectedEntity) {
+            this.selectedEntity.setIsSelected(false);
+
+            this.selectedEntity = undefined;
+        }
+
+        /**
+         * We will now attempt to find the selected entity, iterating the windows and icons
+         */
+
+        /**
+         * Iterate the windows
+         */
+        for (let i = 0; i < this.windows.length; i++) {
+            /**
+             * If a mousedown has been made in a window -> mark the window as selected
+             */
+            if (this.windows[i].getContainer().contains(target)) {
+
+                this.windows[i].setIsSelected(true);
+
+                this.selectedEntity = windows[i];
+
+                break;
+            }
+        }
+
+        /**
+         * Iterate the icons
+         */
+        for (let i = 0; i < this.icons.length; i++) {
+            /**
+             * If a mousedown has been made on an icon -> mark the icon as selected
+             */
+            if (this.icons[i].getContainer().contains(target)) {
+
+                this.icons[i].setIsSelected(true);
+
+                this.selectedEntity = icons[i];
+
+                break;
             }
         }
     }
@@ -280,7 +318,7 @@ function PWD(settings = {}) {
             let movementX = e.movementX;
             let movementY = e.movementY;
 
-            if ((this.selectedEntity.getXPos() + movementX + this.selectedEntity.getWidth()) > this.pwdWidth) {
+            if ((this.selectedEntity.getXPos() + movementX + this.selectedEntity.getWidth()) > this.pwdWidth && movementX > 0) {
                 movementX = 0;
             }
 
@@ -288,7 +326,7 @@ function PWD(settings = {}) {
                 movementX = 0;
             }
 
-            if ((this.selectedEntity.getYPos() + movementY + this.selectedEntity.getHeight()) > this.pwdHeight) {
+            if ((this.selectedEntity.getYPos() + movementY + this.selectedEntity.getHeight()) > this.pwdHeight && movementY > 0) {
                 movementY = 0;
             }
 

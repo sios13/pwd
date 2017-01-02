@@ -3,6 +3,10 @@
  */
 
 function Entity(settings = {}) {
+    this.width = settings.width ? settings.width : 100;
+
+    this.height = settings.height ? settings.height : 100;
+
     this.xPos = settings.xPos ? settings.xPos : 100;
 
     this.yPos = settings.yPos ? settings.yPos : 100;
