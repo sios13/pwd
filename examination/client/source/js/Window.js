@@ -1,6 +1,9 @@
 const Entity = require("./Entity.js");
 
 function Window(settings = {}) {
+    /**
+     * Properties
+     */
     Entity.call(this, {
         "xPos": settings.xPos,
         "yPos": settings.yPos,
@@ -21,69 +24,85 @@ function Window(settings = {}) {
 
     this.applicationObj = settings.applicationObj ? settings.applicationObj : undefined;
 
-    this.container = initializeContainer.bind(this)();
+    /**
+     * Elements
+     */
+    this.container = document.createElement("div");
+    this.container.classList.add("PWD-window");
+    this.container.style.left = this.xPos + "px";
+    this.container.style.top = this.yPos + "px";
+
+    let windowTopBar = document.createElement("div");
+    windowTopBar.classList.add("PWD-window_topbar");
+
+    let windowTopBarIcon = document.createElement("img");
+    windowTopBarIcon.src = "./image/" + this.topBarIcon;
+    windowTopBarIcon.alt = "Top bar icon";
+
+    let windowTopBarSpan = document.createElement("span");
+    windowTopBarSpan.textContent = this.topBarText;
+
+    let windowMinimizeDiv = document.createElement("div");
+    windowMinimizeDiv.classList.add("PWD-window_minimize");
+    windowMinimizeDiv.classList.add("ion-minus-round");
+
+    this.windowResizeDiv = document.createElement("div");
+    this.windowResizeDiv.classList.add("PWD-window_resize");
+
+    let windowCloseDiv = document.createElement("div");
+    windowCloseDiv.classList.add("PWD-window_close");
+    windowCloseDiv.classList.add("ion-close-round");
+
+    let windowContent = document.createElement("div");
+    windowContent.classList.add("PWD-window_content");
+    windowContent.setAttribute("id", "PWD-window_content-" + this.id);
+    if (this.backgroundColor) {
+        windowContent.style.backgroundColor = this.backgroundColor;
+    }
+
+    let windowTopBarWrapper = document.createElement("div");
+    windowTopBarWrapper.classList.add("PWD-window_topbar_wrapper");
+
+    windowTopBar.appendChild(windowTopBarIcon);
+    windowTopBar.appendChild(windowTopBarSpan);
+
+    windowTopBarWrapper.appendChild(windowTopBar);
+    windowTopBarWrapper.appendChild(windowMinimizeDiv);
+    windowTopBarWrapper.appendChild(this.windowResizeDiv);
+    windowTopBarWrapper.appendChild(windowCloseDiv);
+
+    this.container.appendChild(windowTopBarWrapper);
+    this.container.appendChild(windowContent);
 
     this.update = function() {
+        /**
+         * Remove all classes
+         */
+        this.windowResizeDiv.classList.remove("ion-arrow-expand");
+        this.windowResizeDiv.classList.remove("ion-arrow-shrink");
+
         switch (this.windowSize) {
             case "small":
                 this.width = 200;
                 this.height = 300;
+                this.windowResizeDiv.classList.add("ion-arrow-expand");
                 break;
             case "medium":
                 this.width = 300;
                 this.height = 450;
+                this.windowResizeDiv.classList.add("ion-arrow-expand");
                 break;
             case "big":
                 this.width = 400;
                 this.height = 600;
+                this.windowResizeDiv.classList.add("ion-arrow-shrink");
                 break;
         }
 
         this.container.classList.add("PWD-window--" + this.windowSize);
     }
 
-    function initializeContainer() {
-        let container = document.createElement("div");
-        container.classList.add("PWD-window");
-        container.style.left = this.xPos + "px";
-        container.style.top = this.yPos + "px";
-
-        let windowTopBar = document.createElement("div");
-        windowTopBar.classList.add("PWD-window_topbar");
-
-        let windowTopBarIcon = document.createElement("img");
-        windowTopBarIcon.src = "./image/" + this.topBarIcon;
-
-        let windowTopBarSpan = document.createElement("span");
-        windowTopBarSpan.textContent = this.topBarText;
-
-        let windowMinimizeDiv = document.createElement("div");
-        windowMinimizeDiv.classList.add("PWD-window_minimize");
-
-        let windowResizeDiv = document.createElement("div");
-        windowResizeDiv.classList.add("PWD-window_resize");
-
-        let windowCloseDiv = document.createElement("div");
-        windowCloseDiv.classList.add("PWD-window_close");
-
-        let windowContent = document.createElement("div");
-        windowContent.classList.add("PWD-window_content");
-        windowContent.setAttribute("id", "PWD-window_content-" + this.id);
-        if (this.backgroundColor) {
-            windowContent.style.backgroundColor = this.backgroundColor;
-        }
-
-        windowTopBar.appendChild(windowTopBarIcon);
-        windowTopBar.appendChild(windowTopBarSpan);
-
-        container.appendChild(windowTopBar);
-        container.appendChild(windowMinimizeDiv);
-        container.appendChild(windowResizeDiv);
-        container.appendChild(windowCloseDiv);
-        container.appendChild(windowContent);
-
-        return container;
-    }
+    this.update();
 }
 
 /**
