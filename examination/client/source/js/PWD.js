@@ -1,5 +1,6 @@
 const Window = require("./Window.js");
 const Icon = require("./Icon.js");
+const Panel = require("./Panel.js");
 const Memory = require("./apps/Memory/MemoryGame.js");
 const Chat = require("./apps/Chat/ChatStart.js");
 
@@ -28,7 +29,11 @@ function PWD(settings = {}) {
          */
         this.windows = [];
 
+        this.panels = [];
+
         this.icons = [];
+
+        this.applications = [];
 
         this.pwdWidth = 1300;
 
@@ -155,42 +160,64 @@ function PWD(settings = {}) {
         if (this.selectedEntity) {
             if (this.selectedEntity instanceof Window) {
                 let windowCloseDiv = this.selectedEntity.getContainer().querySelector(".PWD-window_close");
-                let windowResizeDiv = this.selectedEntity.getContainer().querySelector(".PWD-window_resize");
-                let windowMinimizeDiv = this.selectedEntity.getContainer().querySelector(".PWD-window_minimize");
 
                 /**
                  * If a click has been made on the close button
                  */
                 if (windowCloseDiv.contains(e.target)) {
+                    let index = this.windows.indexOf(this.selectedEntity);
+
                     /**
                      * Call the close functionn implemented by every application
                      */
-                    this.selectedEntity.close();
+                    this.applications[index].close();
 
                     /**
                      * Remove the window from the DOM
                      */
-                    this.selectedEntity.getContainer().parentNode.removeChild(this.selectedEntity.getContainer());
+                    this.windows[index].getContainer().parentNode.removeChild(this.selectedEntity.getContainer());
 
                     /**
-                     * Remove the window from the array
+                     * Remove the window, panel and application from their respective arrays
                      */
-                    let index = windows.indexOf(this.selectedEntity);
-                    windows.splice(index, 1);
+                    this.windows[index].setIsSelected(false);
+                    this.panels[index].setIsSelected(false);
+
+                    this.windows.splice(index, 1);
+                    this.panels.splice(index, 1);
+                    this.applications.splice(index, 1);
+
+                    this.selectedEntity = undefined;
+
+                    return;
                 }
+
+                let windowResizeDiv = this.selectedEntity.getContainer().querySelector(".PWD-window_resize");
 
                 /**
                  * If a click has been made on the resize button -> resize the window
                  */
                 if (windowResizeDiv.contains(e.target)) {
                     this.selectedEntity.resize();
+
+                    return;
                 }
+
+                let windowMinimizeDiv = this.selectedEntity.getContainer().querySelector(".PWD-window_minimize");
 
                 /**
                  * If a click has been made on the minimize button
                  */
                 if (windowMinimizeDiv.contains(e.target)) {
-                    alert("minimize");
+                    this.selectedEntity.setMinimized(true);
+
+                    this.selectedEntity.setIsSelected(false);
+
+                    let index = windows.indexOf(this.selectedEntity);
+
+                    this.panels[index].setIsSelected(false);
+
+                    return;
                 }
             }
         }
@@ -208,14 +235,7 @@ function PWD(settings = {}) {
     }
 
     function updateBottomBar() {
-        bottomBar.textContent = "";
 
-        for (let i = 0; i < this.windows.length; i++) {
-            let bottomBarPanel = document.createElement("div");
-            bottomBarPanel.classList.add("PWD-bottomBar_panel");
-
-            bottomBar.appendChild(bottomBarPanel);
-        }
     }
 
     /**
@@ -223,10 +243,20 @@ function PWD(settings = {}) {
      */
     function findSelectedEntity(target) {
         /**
-         * If there is a selected entity -> reset it
+         * If there is a selected entity -> deselect and set as undefined
          */
         if (this.selectedEntity) {
-            this.selectedEntity.setIsSelected(false);
+            if (this.selectedEntity instanceof Window) {
+                let index = windows.indexOf(this.selectedEntity);
+
+                this.windows[index].setIsSelected(false);
+
+                this.panels[index].setIsSelected(false);
+            }
+
+            if (this.selectedEntity instanceof Icon) {
+                this.selectedEntity.setIsSelected(false);
+            }
 
             this.selectedEntity = undefined;
         }
@@ -243,10 +273,11 @@ function PWD(settings = {}) {
              * If a mousedown has been made in a window -> mark the window as selected
              */
             if (this.windows[i].getContainer().contains(target)) {
-
                 this.windows[i].setIsSelected(true);
 
                 this.selectedEntity = windows[i];
+
+                this.panels[i].setIsSelected(true);
 
                 break;
             }
@@ -274,23 +305,37 @@ function PWD(settings = {}) {
      * Launch an application using the meta data in a given icon object
      */
     function launchApplication(iconObj) {
+        let id = this.windows.length;
+
         /**
          * Create a new window to launch the application in
          */
         let pwdWindow = new Window({
-            "id": windowsMadeCounter,
+            "id": this.windows.length,
             "windowSize": iconObj.getWindowSize(),
             "topBarText": iconObj.getIconText(),
             "topBarIcon": iconObj.getIconImage(),
-            "xPos": (100 + 15 * windowsMadeCounter),
-            "yPos": (20 + 30 * windowsMadeCounter)
+            "xPos": (100 + 15 * id),
+            "yPos": (20 + 30 * id)
         });
 
-        windowsMadeCounter += 1;
+        //windowsMadeCounter += 1;
 
         this.windows.push(pwdWindow);
 
         this.container.appendChild(pwdWindow.getContainer());
+
+        /**
+         * For every window there is also a panel in the bottom bar
+         */
+        let pwdPanel = new Panel({
+            "text": iconObj.getIconText(),
+            "icon": iconObj.getIconImage()
+        });
+
+        this.panels.push(pwdPanel);
+
+        this.bottomBar.appendChild(pwdPanel.getContainer());
 
         /**
          * Start the application and append it to the newly created window
@@ -299,18 +344,15 @@ function PWD(settings = {}) {
 
         if (iconObj.getApplicationName() === "Memory") {
             applicationObj = new Memory({
-                "container": "#PWD-window_content-" + pwdWindow.getId()
+                "container": "#PWD-window_content-" + id
             });
         } else if (iconObj.getApplicationName() === "Chat") {
             applicationObj = new Chat({
-                "container": "#PWD-window_content-" + pwdWindow.getId()
+                "container": "#PWD-window_content-" + id
             });
         }
 
-        /**
-         * Every window has a referencce to its application
-         */
-        pwdWindow.setApplicationObj(applicationObj);
+        this.applications.push(applicationObj);
     }
 
     /**

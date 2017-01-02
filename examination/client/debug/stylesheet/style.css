@@ -27,6 +27,9 @@ main {
     margin:4px 2px;;
     background-color:lightgrey;
 }
+.PWD-bottomBar_panel.selected {
+    background-color:green;
+}
 
 .PWD-window {
     position:absolute;
@@ -57,6 +60,9 @@ main {
 .PWD-window--big {
     width:400px;
     height:600px;
+}
+.PWD-window--invisible {
+    visibility:hidden;
 }
 
 .PWD-window_topbar_wrapper {

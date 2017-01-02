@@ -22,8 +22,6 @@ function Window(settings = {}) {
 
     this.windowSize = settings.windowSize ? settings.windowSize : "medium";
 
-    this.applicationObj = settings.applicationObj ? settings.applicationObj : undefined;
-
     /**
      * Elements
      */
@@ -111,6 +109,16 @@ function Window(settings = {}) {
 Window.prototype = Object.create(Entity.prototype);
 Window.prototype.constructor = Window;
 
+Window.prototype.setMinimized = function(value) {
+    this.minimized = value;
+
+    if (this.minimized) {
+        this.container.classList.add("PWD-window--invisible");
+    } else {
+        this.container.classList.remove("PWD-window--invisible");
+    }
+}
+
 Window.prototype.resize = function() {
     this.container.classList.remove("PWD-window--" + this.windowSize);
 
@@ -131,10 +139,6 @@ Window.prototype.resize = function() {
 
 Window.prototype.close = function() {
     this.applicationObj.close();
-}
-
-Window.prototype.setApplicationObj = function(applicationObj) {
-    this.applicationObj = applicationObj;
 }
 
 Window.prototype.getId = function() {
