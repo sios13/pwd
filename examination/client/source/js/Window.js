@@ -109,13 +109,17 @@ function Window(settings = {}) {
 Window.prototype = Object.create(Entity.prototype);
 Window.prototype.constructor = Window;
 
+Window.prototype.isMinimized = function() {
+    return this.minimized;
+}
+
 Window.prototype.setMinimized = function(value) {
     this.minimized = value;
 
     if (this.minimized) {
-        this.container.classList.add("PWD-window--invisible");
+        this.container.classList.add("PWD-window--minimized");
     } else {
-        this.container.classList.remove("PWD-window--invisible");
+        this.container.classList.remove("PWD-window--minimized");
     }
 }
 

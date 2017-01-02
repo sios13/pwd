@@ -24,8 +24,9 @@ main {
     float:left;
     width:100px;
     height:calc(100% - 8px);
-    margin:4px 2px;;
+    margin:4px 2px;
     background-color:lightgrey;
+    overflow:hidden;
 }
 .PWD-bottomBar_panel.selected {
     background-color:green;
@@ -61,8 +62,8 @@ main {
     width:400px;
     height:600px;
 }
-.PWD-window--invisible {
-    visibility:hidden;
+.PWD-window--minimized {
+    display:none;
 }
 
 .PWD-window_topbar_wrapper {
