@@ -22,35 +22,51 @@ main {
 }
 .PWD-bottomBar_panel {
     float:left;
-    width:150px;
-    height:calc(100% - 8px);
-    margin:4px 2px;
-    line-height:32px;
+    width:180px;
+    height:calc(100% - 2px);
+    border-bottom:2px solid rgb(118,185,237);
+    margin:0px 4px;
+    line-height:38px;
     font-size:14px;
-    background-color:lightgrey;
+    color:white;
+    background-color:red;
+}
+.PWD-bottomBar_panel:hover {
+    background-color:rgb(25,30,35);
 }
 .PWD-bottomBar_panel.selected {
-    background-color:green;
+    background-color:rgb(51,54,58);
+}
+.PWD-bottomBar_panel.selected:hover {
+    background-color:rgb(71,74,77);
 }
 .PWD-bottomBar_panel__icon {
     float:left;
     width:26px;
     height:26px;
-    margin:3px;
+    margin:6px 3px;
 }
 .PWD-bottomBar_panel__span {
     float:left;
-    width:86px;
+    width:112px;
     height:100%;
+    padding-left:4px;
     overflow:hidden;
-    background-color:yellow;
+    white-space:nowrap;
+    text-overflow:ellipsis;
 }
 .PWD-bottomBar_panel__close {
     float:left;
     width:26px;
     height:26px;
-    margin:3px;
-    background-color:red;
+    line-height:26px;
+    margin:6px 3px;
+    text-align:center;
+    color:grey;
+}
+.PWD-bottomBar_panel__close:hover {
+    background-color:rgb(232,17,35);
+    color:white;
 }
 
 .PWD-window {
@@ -112,6 +128,8 @@ main {
     padding-top:5px;
     line-height:30px;
     overflow:hidden;
+    white-space:nowrap;
+    text-overflow:ellipsis;
 }
 .PWD-window_minimize, .PWD-window_resize {
     float:left;

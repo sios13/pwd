@@ -25,6 +25,7 @@ function Panel(settings = {}) {
 
     let closeElem = document.createElement("div");
     closeElem.classList.add("PWD-bottomBar_panel__close");
+    closeElem.classList.add("ion-close-round");
 
     this.container.appendChild(iconElem);
     this.container.appendChild(spanElem);
