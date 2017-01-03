@@ -14,7 +14,21 @@ function Panel(settings = {}) {
     this.container = document.createElement("div");
     this.container.classList.add("PWD-bottomBar_panel");
 
-    this.container.textContent = this.text;
+    let iconElem = document.createElement("img");
+    iconElem.classList.add("PWD-bottomBar_panel__icon");
+    iconElem.src = "./image/" + this.icon;
+    iconElem.alt = "Icon";
+
+    let spanElem = document.createElement("span");
+    spanElem.classList.add("PWD-bottomBar_panel__span");
+    spanElem.textContent = this.text;
+
+    let closeElem = document.createElement("div");
+    closeElem.classList.add("PWD-bottomBar_panel__close");
+
+    this.container.appendChild(iconElem);
+    this.container.appendChild(spanElem);
+    this.container.appendChild(closeElem);
 }
 
 Panel.prototype.getIsSelected = function() {

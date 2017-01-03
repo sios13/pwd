@@ -104,7 +104,7 @@ function PWD(settings = {}) {
      */
     function mousedownEvent(e) {
         /**
-         * For every mousedown event we will attempt to find a new selected entity
+         * For every mousedown event we will attempt to find a new target
          */
         this.target = findTarget(e.target);
 
@@ -157,35 +157,28 @@ function PWD(settings = {}) {
          * If target is a panel
          */
         if (this.target instanceof Panel) {
-            if (this.target.getIsSelected() === true) {
-                /**
-                 * Set the window as deselected
-                 */
-                this.target.setIsSelected(false);
+            /**
+             * Set the panel as selected
+             */
+            this.target.setIsSelected(true);
 
-                /**
-                 * Set the associated window as deselected
-                 */
-                let index = panels.indexOf(this.target);
+            /**
+             * Set the associated window as selected
+             */
+            let index = panels.indexOf(this.target);
 
-                this.windows[index].setIsSelected(false);
+            this.windows[index].setIsSelected(true);
 
+            if (this.windows[index].getIsMinimized()) {
                 /**
-                 * Minimize the window
+                 * Bring up the window
                  */
-                this.windows[index].setMinimized(true);
+                this.windows[index].setMinimized(false);
             } else {
                 /**
-                 * Set the panel as selected
+                 * Bring down the window
                  */
-                this.target.setIsSelected(true);
-
-                /**
-                 * Set the associated window as selected
-                 */
-                let index = panels.indexOf(this.target);
-
-                this.windows[index].setIsSelected(true);
+                //this.windows[index].setMinimized(true);
             }
 
             return;
@@ -202,36 +195,21 @@ function PWD(settings = {}) {
 
             return;
         }
-
-        // if (this.selectedEntity) {
-        //     if (this.selectedEntity instanceof Icon) {
-        //         window.addEventListener("mousemove", entityMoveEvent);
-        //
-        //         e.preventDefault();
-        //     }
-        //
-        //     if (this.selectedEntity instanceof Window) {
-        //         /**
-        //          * Windows should only be draggable by the topbar
-        //          */
-        //         let windowTopBarElem = this.selectedEntity.getContainer().querySelector(".PWD-window_topbar");
-        //
-        //         if (windowTopBarElem.contains(e.target)) {
-        //             window.addEventListener("mousemove", entityMoveEvent);
-        //
-        //             e.preventDefault();
-        //         }
-        //     }
-        // }
     }
 
     function mouseupEvent(e) {
+        /**
+         * If target is a window
+         */
         if (this.target instanceof Window) {
             this.target.setIsDragging(false);
 
             window.removeEventListener("mousemove", entityMoveEvent);
         }
 
+        /**
+         * If target is an icon
+         */
         if (this.target instanceof Icon) {
             this.target.setIsDragging(false);
 
@@ -239,23 +217,6 @@ function PWD(settings = {}) {
 
             this.target.correctGridPosition();
         }
-        // if (this.selectedEntity) {
-        //     /**
-        //      * If the entity is dragging -> stop dragging
-        //      */
-        //     //if (this.selectedEntity.getIsDragging()) {
-        //         this.selectedEntity.setIsDragging(false);
-        //
-        //         window.removeEventListener("mousemove", entityMoveEvent);
-        //     //}
-        //
-        //     /**
-        //      * If an icon -> align the icon to the grid
-        //      */
-        //     if (this.selectedEntity instanceof Icon) {
-        //         this.selectedEntity.correctGridPosition();
-        //     }
-        // }
 
         console.log("up");
     }
@@ -270,23 +231,7 @@ function PWD(settings = {}) {
             if (windowCloseDiv.contains(e.target)) {
                 let index = this.windows.indexOf(this.target);
 
-                /**
-                 * Call the close functionn implemented by every application
-                 */
-                this.applications[index].close();
-
-                /**
-                 * Remove the window and panel from the DOM
-                 */
-                this.windows[index].getContainer().parentNode.removeChild(this.windows[index].getContainer());
-                this.panels[index].getContainer().parentNode.removeChild(this.panels[index].getContainer());
-
-                /**
-                 * Remove the window, panel and application from their respective arrays
-                 */
-                this.windows.splice(index, 1);
-                this.panels.splice(index, 1);
-                this.applications.splice(index, 1);
+                closeWindow(index);
 
                 return;
             }
@@ -319,98 +264,66 @@ function PWD(settings = {}) {
                 return;
             }
         }
-        // if (this.selectedEntity) {
-        //     /**
-        //      * If a click has been made in a window
-        //      */
-        //     if (this.selectedEntity instanceof Window) {
-        //         let windowCloseDiv = this.selectedEntity.getContainer().querySelector(".PWD-window_close");
-        //
-        //         /**
-        //          * If a click has been made on the close button
-        //          */
-        //         if (windowCloseDiv.contains(e.target)) {
-        //             let index = this.windows.indexOf(this.selectedEntity);
-        //
-        //             /**
-        //              * Call the close functionn implemented by every application
-        //              */
-        //             this.applications[index].close();
-        //
-        //             /**
-        //              * Remove the window and panel from the DOM
-        //              */
-        //             this.windows[index].getContainer().parentNode.removeChild(this.windows[index].getContainer());
-        //             this.panels[index].getContainer().parentNode.removeChild(this.panels[index].getContainer());
-        //
-        //             /**
-        //              * Remove the window, panel and application from their respective arrays
-        //              */
-        //             this.windows.splice(index, 1);
-        //             this.panels.splice(index, 1);
-        //             this.applications.splice(index, 1);
-        //
-        //             this.selectedEntity = undefined;
-        //
-        //             return;
-        //         }
-        //
-        //         let windowResizeDiv = this.selectedEntity.getContainer().querySelector(".PWD-window_resize");
-        //
-        //         /**
-        //          * If a click has been made on the resize button -> resize the window
-        //          */
-        //         if (windowResizeDiv.contains(e.target)) {
-        //             this.selectedEntity.resize();
-        //
-        //             return;
-        //         }
-        //
-        //         let windowMinimizeDiv = this.selectedEntity.getContainer().querySelector(".PWD-window_minimize");
-        //
-        //         /**
-        //          * If a click has been made on the minimize button
-        //          */
-        //         if (windowMinimizeDiv.contains(e.target)) {
-        //             this.selectedEntity.setMinimized(true);
-        //
-        //             this.selectedEntity.setIsSelected(false);
-        //
-        //             let index = windows.indexOf(this.selectedEntity);
-        //
-        //             this.panels[index].setIsSelected(false);
-        //
-        //             return;
-        //         }
-        //     }
-        // }
+
+        /**
+         * If target is an icon
+         */
+        if (this.target instanceof Panel) {
+            let index = panels.indexOf(this.target);
+
+            /**
+             * If a click has been made on the close button
+             */
+            if (this.target.getContainer().querySelector(".PWD-bottomBar_panel__close").contains(e.target)) {
+                closeWindow(index);
+
+                return;
+            }
+        }
     }
 
     function dblclickEvent(e) {
+        /**
+         * If target is an icon
+         */
         if (this.target instanceof Icon) {
+            /**
+             * Launch the application associated with the icon
+             */
             launchApplication(this.target);
 
             return;
         }
-        // if (this.selectedEntity) {
-        //     /**
-        //      * if a doubleclick has been made on an icon -> launch the associated application
-        //      */
-        //     if (this.selectedEntity instanceof Icon) {
-        //         launchApplication(this.selectedEntity);
-        //     }
-        // }
     }
 
     /**
-     * Set the selected entity if the provided target exists inside an entity (window or icon)
+     * CLose a window with a given index
      */
-    function findTarget(target) {
+    function closeWindow(index) {
+        /**
+         * Call the close functionn implemented by every application
+         */
+        this.applications[index].close();
 
         /**
-         * We will now attempt to find the selected entity, iterating the windows, panels and icons
+         * Remove the window and panel from the DOM
          */
+        this.windows[index].getContainer().parentNode.removeChild(this.windows[index].getContainer());
 
+        this.panels[index].getContainer().parentNode.removeChild(this.panels[index].getContainer());
+
+        /**
+         * Remove the window, panel and application from their respective arrays
+         */
+        this.windows.splice(index, 1);
+        this.panels.splice(index, 1);
+        this.applications.splice(index, 1);
+    }
+
+    /**
+     * Check if a given target exists in a window, panel or icon
+     */
+    function findTarget(target) {
         /**
          * Iterate the windows
          */
@@ -420,15 +333,6 @@ function PWD(settings = {}) {
              */
             if (this.windows[i].getContainer().contains(target)) {
                 return this.windows[i];
-                /*
-                this.windows[i].setIsSelected(true);
-
-                this.selectedEntity = windows[i];
-
-                this.panels[i].setIsSelected(true);
-
-                return;
-                */
             }
         }
 
@@ -441,23 +345,6 @@ function PWD(settings = {}) {
              */
             if (this.panels[i].getContainer().contains(target)) {
                 return this.panels[i];
-                /*
-                if (this.windows[i].isMinimized()) {
-                    this.windows[i].setMinimized(false);
-                }
-
-                if (this.windows[i].getIsSelected()) {
-                    this.windows[i].setMinimized(true);
-                }
-
-                this.windows[i].setIsSelected(true);
-
-                this.selectedEntity = windows[i];
-
-                this.panels[i].setIsSelected(true);
-
-                return;
-                */
             }
         }
 
@@ -470,38 +357,13 @@ function PWD(settings = {}) {
              */
             if (this.icons[i].getContainer().contains(target)) {
                 return this.icons[i];
-                /*
-                this.icons[i].setIsSelected(true);
-
-                this.selectedEntity = icons[i];
-
-                return;
-                */
             }
         }
-
-        return undefined;
 
         /**
-         * At this point we know a click was made outside any window, panel or icon so we can safely deselect the selected entity
+         * There is no target -> return undefined
          */
-        /*
-        if (this.selectedEntity) {
-            if (this.selectedEntity instanceof Window) {
-                let index = windows.indexOf(this.selectedEntity);
-
-                this.windows[index].setIsSelected(false);
-
-                this.panels[index].setIsSelected(false);
-            }
-
-            if (this.selectedEntity instanceof Icon) {
-                this.selectedEntity.setIsSelected(false);
-            }
-
-            this.selectedEntity = undefined;
-        }
-        */
+        return undefined;
     }
 
     /**

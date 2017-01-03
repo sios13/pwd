@@ -109,7 +109,7 @@ function Window(settings = {}) {
 Window.prototype = Object.create(Entity.prototype);
 Window.prototype.constructor = Window;
 
-Window.prototype.isMinimized = function() {
+Window.prototype.getIsMinimized = function() {
     return this.minimized;
 }
 
