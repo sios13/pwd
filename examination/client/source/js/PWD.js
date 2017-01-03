@@ -109,25 +109,18 @@ function PWD(settings = {}) {
         this.target = findTarget(e.target);
 
         /**
-         * If target is undefined
+         * Deselect everything
          */
-        if (this.target === undefined) {
-            /**
-             * Deselect everything
-             */
-            for (let i = 0; i < this.windows.length; i++) {
-                this.windows[i].setIsSelected(false);
-            }
+        for (let i = 0; i < this.windows.length; i++) {
+            this.windows[i].setIsSelected(false);
+        }
 
-            for (let i = 0; i < this.panels.length; i++) {
-                this.panels[i].setIsSelected(false);
-            }
+        for (let i = 0; i < this.panels.length; i++) {
+            this.panels[i].setIsSelected(false);
+        }
 
-            for (let i = 0; i < this.icons.length; i++) {
-                this.icons[i].setIsSelected(false);
-            }
-
-            return;
+        for (let i = 0; i < this.icons.length; i++) {
+            this.icons[i].setIsSelected(false);
         }
 
         /**
@@ -164,17 +157,36 @@ function PWD(settings = {}) {
          * If target is a panel
          */
         if (this.target instanceof Panel) {
-            /**
-             * Set the panel as selected
-             */
-            this.target.setIsSelected(true);
+            if (this.target.getIsSelected() === true) {
+                /**
+                 * Set the window as deselected
+                 */
+                this.target.setIsSelected(false);
 
-            /**
-             * Mark the associated window as selected
-             */
-            let index = panels.indexOf(this.target);
+                /**
+                 * Set the associated window as deselected
+                 */
+                let index = panels.indexOf(this.target);
 
-            this.windows[index].setIsSelected(true);
+                this.windows[index].setIsSelected(false);
+
+                /**
+                 * Minimize the window
+                 */
+                this.windows[index].setMinimized(true);
+            } else {
+                /**
+                 * Set the panel as selected
+                 */
+                this.target.setIsSelected(true);
+
+                /**
+                 * Set the associated window as selected
+                 */
+                let index = panels.indexOf(this.target);
+
+                this.windows[index].setIsSelected(true);
+            }
 
             return;
         }
@@ -214,93 +226,164 @@ function PWD(settings = {}) {
     }
 
     function mouseupEvent(e) {
-        if (this.selectedEntity) {
-            /**
-             * If the entity is dragging -> stop dragging
-             */
-            //if (this.selectedEntity.getIsDragging()) {
-                this.selectedEntity.setIsDragging(false);
+        if (this.target instanceof Window) {
+            this.target.setIsDragging(false);
 
-                window.removeEventListener("mousemove", entityMoveEvent);
-            //}
-
-            /**
-             * If an icon -> align the icon to the grid
-             */
-            if (this.selectedEntity instanceof Icon) {
-                this.selectedEntity.correctGridPosition();
-            }
+            window.removeEventListener("mousemove", entityMoveEvent);
         }
+
+        if (this.target instanceof Icon) {
+            this.target.setIsDragging(false);
+
+            window.removeEventListener("mousemove", entityMoveEvent);
+
+            this.target.correctGridPosition();
+        }
+        // if (this.selectedEntity) {
+        //     /**
+        //      * If the entity is dragging -> stop dragging
+        //      */
+        //     //if (this.selectedEntity.getIsDragging()) {
+        //         this.selectedEntity.setIsDragging(false);
+        //
+        //         window.removeEventListener("mousemove", entityMoveEvent);
+        //     //}
+        //
+        //     /**
+        //      * If an icon -> align the icon to the grid
+        //      */
+        //     if (this.selectedEntity instanceof Icon) {
+        //         this.selectedEntity.correctGridPosition();
+        //     }
+        // }
 
         console.log("up");
     }
 
     function clickEvent(e) {
-        if (this.selectedEntity) {
+        if (this.target instanceof Window) {
             /**
-             * If a click has been made in a window
+             * If a click has been made on the close button
              */
-            if (this.selectedEntity instanceof Window) {
-                let windowCloseDiv = this.selectedEntity.getContainer().querySelector(".PWD-window_close");
+            let windowCloseDiv = this.target.getContainer().querySelector(".PWD-window_close");
+
+            if (windowCloseDiv.contains(e.target)) {
+                let index = this.windows.indexOf(this.target);
 
                 /**
-                 * If a click has been made on the close button
+                 * Call the close functionn implemented by every application
                  */
-                if (windowCloseDiv.contains(e.target)) {
-                    let index = this.windows.indexOf(this.selectedEntity);
-
-                    /**
-                     * Call the close functionn implemented by every application
-                     */
-                    this.applications[index].close();
-
-                    /**
-                     * Remove the window and panel from the DOM
-                     */
-                    this.windows[index].getContainer().parentNode.removeChild(this.windows[index].getContainer());
-                    this.panels[index].getContainer().parentNode.removeChild(this.panels[index].getContainer());
-
-                    /**
-                     * Remove the window, panel and application from their respective arrays
-                     */
-                    this.windows.splice(index, 1);
-                    this.panels.splice(index, 1);
-                    this.applications.splice(index, 1);
-
-                    this.selectedEntity = undefined;
-
-                    return;
-                }
-
-                let windowResizeDiv = this.selectedEntity.getContainer().querySelector(".PWD-window_resize");
+                this.applications[index].close();
 
                 /**
-                 * If a click has been made on the resize button -> resize the window
+                 * Remove the window and panel from the DOM
                  */
-                if (windowResizeDiv.contains(e.target)) {
-                    this.selectedEntity.resize();
-
-                    return;
-                }
-
-                let windowMinimizeDiv = this.selectedEntity.getContainer().querySelector(".PWD-window_minimize");
+                this.windows[index].getContainer().parentNode.removeChild(this.windows[index].getContainer());
+                this.panels[index].getContainer().parentNode.removeChild(this.panels[index].getContainer());
 
                 /**
-                 * If a click has been made on the minimize button
+                 * Remove the window, panel and application from their respective arrays
                  */
-                if (windowMinimizeDiv.contains(e.target)) {
-                    this.selectedEntity.setMinimized(true);
+                this.windows.splice(index, 1);
+                this.panels.splice(index, 1);
+                this.applications.splice(index, 1);
 
-                    this.selectedEntity.setIsSelected(false);
+                return;
+            }
 
-                    let index = windows.indexOf(this.selectedEntity);
+            /**
+             * If a click has been made on the resize button -> resize the window
+             */
+            let windowResizeDiv = this.target.getContainer().querySelector(".PWD-window_resize");
 
-                    this.panels[index].setIsSelected(false);
+            if (windowResizeDiv.contains(e.target)) {
+                this.target.resize();
 
-                    return;
-                }
+                return;
+            }
+
+            /**
+             * If a click has been made on the minimize button
+             */
+            let windowMinimizeDiv = this.target.getContainer().querySelector(".PWD-window_minimize");
+
+            if (windowMinimizeDiv.contains(e.target)) {
+                this.target.setMinimized(true);
+
+                this.target.setIsSelected(false);
+
+                let index = windows.indexOf(this.target);
+
+                this.panels[index].setIsSelected(false);
+
+                return;
             }
         }
+        // if (this.selectedEntity) {
+        //     /**
+        //      * If a click has been made in a window
+        //      */
+        //     if (this.selectedEntity instanceof Window) {
+        //         let windowCloseDiv = this.selectedEntity.getContainer().querySelector(".PWD-window_close");
+        //
+        //         /**
+        //          * If a click has been made on the close button
+        //          */
+        //         if (windowCloseDiv.contains(e.target)) {
+        //             let index = this.windows.indexOf(this.selectedEntity);
+        //
+        //             /**
+        //              * Call the close functionn implemented by every application
+        //              */
+        //             this.applications[index].close();
+        //
+        //             /**
+        //              * Remove the window and panel from the DOM
+        //              */
+        //             this.windows[index].getContainer().parentNode.removeChild(this.windows[index].getContainer());
+        //             this.panels[index].getContainer().parentNode.removeChild(this.panels[index].getContainer());
+        //
+        //             /**
+        //              * Remove the window, panel and application from their respective arrays
+        //              */
+        //             this.windows.splice(index, 1);
+        //             this.panels.splice(index, 1);
+        //             this.applications.splice(index, 1);
+        //
+        //             this.selectedEntity = undefined;
+        //
+        //             return;
+        //         }
+        //
+        //         let windowResizeDiv = this.selectedEntity.getContainer().querySelector(".PWD-window_resize");
+        //
+        //         /**
+        //          * If a click has been made on the resize button -> resize the window
+        //          */
+        //         if (windowResizeDiv.contains(e.target)) {
+        //             this.selectedEntity.resize();
+        //
+        //             return;
+        //         }
+        //
+        //         let windowMinimizeDiv = this.selectedEntity.getContainer().querySelector(".PWD-window_minimize");
+        //
+        //         /**
+        //          * If a click has been made on the minimize button
+        //          */
+        //         if (windowMinimizeDiv.contains(e.target)) {
+        //             this.selectedEntity.setMinimized(true);
+        //
+        //             this.selectedEntity.setIsSelected(false);
+        //
+        //             let index = windows.indexOf(this.selectedEntity);
+        //
+        //             this.panels[index].setIsSelected(false);
+        //
+        //             return;
+        //         }
+        //     }
+        // }
     }
 
     function dblclickEvent(e) {

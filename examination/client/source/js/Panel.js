@@ -17,6 +17,10 @@ function Panel(settings = {}) {
     this.container.textContent = this.text;
 }
 
+Panel.prototype.getIsSelected = function() {
+    return this.isSelected;
+}
+
 Panel.prototype.setIsSelected = function(value) {
     this.isSelected = value;
 
