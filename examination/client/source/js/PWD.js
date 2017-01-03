@@ -52,7 +52,7 @@ function PWD(settings = {}) {
             "applicationName": "Memory",
             "xPos": 10,
             "yPos": 10,
-            "iconImage": "cards.png",
+            "iconImage": "memoryIcon.png",
             "windowSize": "small"
         }) );
         this.icons.push( new Icon({
@@ -60,15 +60,16 @@ function PWD(settings = {}) {
             "applicationName": "Memory",
             "xPos": 10,
             "yPos": 120,
-            "iconImage": "cards.png",
-            "windowSize": "medium"
+            "iconImage": "memoryIcon.png",
+            "windowSize": "medium",
+            "backgroundColor": "rgb(193,154,107)"
         }) );
         this.icons.push( new Icon({
             "iconText": "Memory big",
             "applicationName": "Memory",
             "xPos": 10,
             "yPos": 250,
-            "iconImage": "cards.png",
+            "iconImage": "memoryIcon.png",
             "windowSize": "big"
         }) );
         this.icons.push( new Icon({
@@ -381,7 +382,8 @@ function PWD(settings = {}) {
             "topBarText": iconObj.getIconText(),
             "topBarIcon": iconObj.getIconImage(),
             "xPos": (100 + 15 * id),
-            "yPos": (20 + 30 * id)
+            "yPos": (20 + 30 * id),
+            "backgroundColor" : iconObj.getBackgroundColor()
         });
 
         this.windows.push(pwdWindow);

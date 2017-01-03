@@ -20,6 +20,8 @@ function Icon(settings = {}) {
 
     this.windowSize      = settings.windowSize ? settings.windowSize : "small";
 
+    this. backgroundColor = settings.backgroundColor ? settings.backgroundColor : "";
+
     this.container       = initializeContainer.bind(this)();
 
     this.correctGridPosition();
@@ -64,6 +66,10 @@ Icon.prototype.correctGridPosition = function() {
 
     this.container.style.left = this.xPos + "px";
     this.container.style.top = this.yPos + "px";
+}
+
+Icon.prototype.getBackgroundColor = function() {
+    return this.backgroundColor;
 }
 
 Icon.prototype.getIconText = function() {
