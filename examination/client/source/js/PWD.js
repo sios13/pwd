@@ -40,9 +40,9 @@ function PWD(settings = {}) {
         this.pwdHeight = 700;
 
         /**
-         * The selected entity is the currently selected window or icon
+         * The target is...
          */
-        this.selectedEntity = undefined;
+        this.target = undefined;
 
         /**
          * Create the desktop icons
@@ -106,28 +106,111 @@ function PWD(settings = {}) {
         /**
          * For every mousedown event we will attempt to find a new selected entity
          */
-        findSelectedEntity(e.target);
+        this.target = findTarget(e.target);
 
-        if (this.selectedEntity) {
-            if (this.selectedEntity instanceof Icon) {
+        /**
+         * If target is undefined
+         */
+        if (this.target === undefined) {
+            /**
+             * Deselect everything
+             */
+            for (let i = 0; i < this.windows.length; i++) {
+                this.windows[i].setIsSelected(false);
+            }
+
+            for (let i = 0; i < this.panels.length; i++) {
+                this.panels[i].setIsSelected(false);
+            }
+
+            for (let i = 0; i < this.icons.length; i++) {
+                this.icons[i].setIsSelected(false);
+            }
+
+            return;
+        }
+
+        /**
+         * If target is a window
+         */
+        if (this.target instanceof Window) {
+            /**
+             * Set the window as selected
+             */
+            this.target.setIsSelected(true);
+
+            /**
+             * Mark the associated panel as selected
+             */
+            let index = windows.indexOf(this.target);
+
+            this.panels[index].setIsSelected(true);
+
+            /**
+             * If target is the window top bar -> add mousemove listener
+             */
+            let windowTopBarElem = this.target.getContainer().querySelector(".PWD-window_topbar");
+
+            if (windowTopBarElem.contains(e.target)) {
                 window.addEventListener("mousemove", entityMoveEvent);
 
                 e.preventDefault();
             }
 
-            if (this.selectedEntity instanceof Window) {
-                /**
-                 * Windows should only be draggable by the topbar
-                 */
-                let windowTopBarElem = this.selectedEntity.getContainer().querySelector(".PWD-window_topbar");
-
-                if (windowTopBarElem.contains(e.target)) {
-                    window.addEventListener("mousemove", entityMoveEvent);
-
-                    e.preventDefault();
-                }
-            }
+            return;
         }
+
+        /**
+         * If target is a panel
+         */
+        if (this.target instanceof Panel) {
+            /**
+             * Set the panel as selected
+             */
+            this.target.setIsSelected(true);
+
+            /**
+             * Mark the associated window as selected
+             */
+            let index = panels.indexOf(this.target);
+
+            this.windows[index].setIsSelected(true);
+
+            return;
+        }
+
+        /**
+         * If target is an icon
+         */
+        if (this.target instanceof Icon) {
+            /**
+             * Set the icon as selected
+             */
+            this.target.setIsSelected(true);
+
+            return;
+        }
+
+        // if (this.selectedEntity) {
+        //     if (this.selectedEntity instanceof Icon) {
+        //         window.addEventListener("mousemove", entityMoveEvent);
+        //
+        //         e.preventDefault();
+        //     }
+        //
+        //     if (this.selectedEntity instanceof Window) {
+        //         /**
+        //          * Windows should only be draggable by the topbar
+        //          */
+        //         let windowTopBarElem = this.selectedEntity.getContainer().querySelector(".PWD-window_topbar");
+        //
+        //         if (windowTopBarElem.contains(e.target)) {
+        //             window.addEventListener("mousemove", entityMoveEvent);
+        //
+        //             e.preventDefault();
+        //         }
+        //     }
+        // }
     }
 
     function mouseupEvent(e) {
@@ -221,20 +304,25 @@ function PWD(settings = {}) {
     }
 
     function dblclickEvent(e) {
-        if (this.selectedEntity) {
-            /**
-             * if a doubleclick has been made on an icon -> launch the associated application
-             */
-            if (this.selectedEntity instanceof Icon) {
-                launchApplication(this.selectedEntity);
-            }
+        if (this.target instanceof Icon) {
+            launchApplication(this.target);
+
+            return;
         }
+        // if (this.selectedEntity) {
+        //     /**
+        //      * if a doubleclick has been made on an icon -> launch the associated application
+        //      */
+        //     if (this.selectedEntity instanceof Icon) {
+        //         launchApplication(this.selectedEntity);
+        //     }
+        // }
     }
 
     /**
      * Set the selected entity if the provided target exists inside an entity (window or icon)
      */
-    function findSelectedEntity(target) {
+    function findTarget(target) {
 
         /**
          * We will now attempt to find the selected entity, iterating the windows, panels and icons
@@ -248,6 +336,8 @@ function PWD(settings = {}) {
              * If a mousedown has been made in a window -> mark the window and the panel as selected
              */
             if (this.windows[i].getContainer().contains(target)) {
+                return this.windows[i];
+                /*
                 this.windows[i].setIsSelected(true);
 
                 this.selectedEntity = windows[i];
@@ -255,6 +345,7 @@ function PWD(settings = {}) {
                 this.panels[i].setIsSelected(true);
 
                 return;
+                */
             }
         }
 
@@ -266,6 +357,8 @@ function PWD(settings = {}) {
              * If a mousedown has been made in a panel -> mark the panel and the window as selected
              */
             if (this.panels[i].getContainer().contains(target)) {
+                return this.panels[i];
+                /*
                 if (this.windows[i].isMinimized()) {
                     this.windows[i].setMinimized(false);
                 }
@@ -281,6 +374,7 @@ function PWD(settings = {}) {
                 this.panels[i].setIsSelected(true);
 
                 return;
+                */
             }
         }
 
@@ -292,18 +386,23 @@ function PWD(settings = {}) {
              * If a mousedown has been made on an icon -> mark the icon as selected
              */
             if (this.icons[i].getContainer().contains(target)) {
-
+                return this.icons[i];
+                /*
                 this.icons[i].setIsSelected(true);
 
                 this.selectedEntity = icons[i];
 
                 return;
+                */
             }
         }
+
+        return undefined;
 
         /**
          * At this point we know a click was made outside any window, panel or icon so we can safely deselect the selected entity
          */
+        /*
         if (this.selectedEntity) {
             if (this.selectedEntity instanceof Window) {
                 let index = windows.indexOf(this.selectedEntity);
@@ -319,6 +418,7 @@ function PWD(settings = {}) {
 
             this.selectedEntity = undefined;
         }
+        */
     }
 
     /**
@@ -380,8 +480,8 @@ function PWD(settings = {}) {
         /**
          * If there is an active entity -> update its position
          */
-        if (this.selectedEntity) {
-            this.selectedEntity.setIsDragging(true);
+        //if (this.selectedEntity) {
+            this.target.setIsDragging(true);
             /*
             let offsetX = e.clientX - selectedEntity.getContainer().offsetLeft;
             let offsetY = e.clientY - selectedEntity.getContainer().offsetTop;
@@ -392,7 +492,7 @@ function PWD(settings = {}) {
             selectedEntity.updatePos(selectedEntity.getXPos() + offsetX, selectedEntity.getYPos() + offsetY);
             */
 
-            if (!this.selectedEntity.getContainer().querySelector(".PWD-window_topbar").contains(e.target)) {
+            if (!this.target.getContainer().querySelector(".PWD-window_topbar").contains(e.target)) {
                 return;
             }
 
@@ -406,24 +506,24 @@ function PWD(settings = {}) {
             let movementX = e.movementX;
             let movementY = e.movementY;
 
-            if ((this.selectedEntity.getXPos() + movementX + this.selectedEntity.getWidth()) > this.pwdWidth && movementX > 0) {
+            if ((this.target.getXPos() + movementX + this.target.getWidth()) > this.pwdWidth && movementX > 0) {
                 movementX = 0;
             }
 
-            if (this.selectedEntity.getXPos() + movementX < 0) {
+            if (this.target.getXPos() + movementX < 0) {
                 movementX = 0;
             }
 
-            if ((this.selectedEntity.getYPos() + movementY + this.selectedEntity.getHeight()) > this.pwdHeight && movementY > 0) {
+            if ((this.target.getYPos() + movementY + this.target.getHeight()) > this.pwdHeight && movementY > 0) {
                 movementY = 0;
             }
 
-            if (this.selectedEntity.getYPos() + movementY < 0) {
+            if (this.target.getYPos() + movementY < 0) {
                 movementY = 0;
             }
 
-            this.selectedEntity.updatePos(this.selectedEntity.getXPos() + movementX, this.selectedEntity.getYPos() + movementY);
-        }
+            this.target.updatePos(this.target.getXPos() + movementX, this.target.getYPos() + movementY);
+        //}
     }
 }
 
