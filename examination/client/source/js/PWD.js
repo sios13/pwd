@@ -194,6 +194,10 @@ function PWD(settings = {}) {
              */
             this.target.setIsSelected(true);
 
+            window.addEventListener("mousemove", entityMoveEvent);
+
+            e.preventDefault();
+
             return;
         }
     }
@@ -438,11 +442,11 @@ function PWD(settings = {}) {
 
             selectedEntity.updatePos(selectedEntity.getXPos() + offsetX, selectedEntity.getYPos() + offsetY);
             */
-
+            /*
             if (!this.target.getContainer().querySelector(".PWD-window_topbar").contains(e.target)) {
                 return;
             }
-
+            */
             /**
              * If mouse pointer is outside window -> do not update the position
              */

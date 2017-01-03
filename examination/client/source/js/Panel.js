@@ -11,19 +11,21 @@ function Panel(settings = {}) {
     /**
      * Elements
      */
-    this.container = document.createElement("div");
+    this.container = document.createElement("a");
+    this.container.href = "#";
     this.container.classList.add("PWD-bottomBar_panel");
 
     let iconElem = document.createElement("img");
-    iconElem.classList.add("PWD-bottomBar_panel__icon");
     iconElem.src = "./image/" + this.icon;
     iconElem.alt = "Icon";
+    iconElem.classList.add("PWD-bottomBar_panel__icon");
 
     let spanElem = document.createElement("span");
     spanElem.classList.add("PWD-bottomBar_panel__span");
     spanElem.textContent = this.text;
 
-    let closeElem = document.createElement("div");
+    let closeElem = document.createElement("a");
+    closeElem.href = "#";
     closeElem.classList.add("PWD-bottomBar_panel__close");
     closeElem.classList.add("ion-close-round");
 

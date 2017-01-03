@@ -40,16 +40,19 @@ function Window(settings = {}) {
     let windowTopBarSpan = document.createElement("span");
     windowTopBarSpan.textContent = this.topBarText;
 
-    let windowMinimizeDiv = document.createElement("div");
-    windowMinimizeDiv.classList.add("PWD-window_minimize");
-    windowMinimizeDiv.classList.add("ion-minus-round");
+    let windowMinimizeElem = document.createElement("a");
+    windowMinimizeElem.href = "#";
+    windowMinimizeElem.classList.add("PWD-window_minimize");
+    windowMinimizeElem.classList.add("ion-minus-round");
 
-    this.windowResizeDiv = document.createElement("div");
-    this.windowResizeDiv.classList.add("PWD-window_resize");
+    this.windowResizeElem = document.createElement("a");
+    this.windowResizeElem.href = "#";
+    this.windowResizeElem.classList.add("PWD-window_resize");
 
-    let windowCloseDiv = document.createElement("div");
-    windowCloseDiv.classList.add("PWD-window_close");
-    windowCloseDiv.classList.add("ion-close-round");
+    let windowCloseElem = document.createElement("a");
+    windowCloseElem.href = "#";
+    windowCloseElem.classList.add("PWD-window_close");
+    windowCloseElem.classList.add("ion-close-round");
 
     let windowContent = document.createElement("div");
     windowContent.classList.add("PWD-window_content");
@@ -65,9 +68,9 @@ function Window(settings = {}) {
     windowTopBar.appendChild(windowTopBarSpan);
 
     windowTopBarWrapper.appendChild(windowTopBar);
-    windowTopBarWrapper.appendChild(windowMinimizeDiv);
-    windowTopBarWrapper.appendChild(this.windowResizeDiv);
-    windowTopBarWrapper.appendChild(windowCloseDiv);
+    windowTopBarWrapper.appendChild(windowMinimizeElem);
+    windowTopBarWrapper.appendChild(this.windowResizeElem);
+    windowTopBarWrapper.appendChild(windowCloseElem);
 
     this.container.appendChild(windowTopBarWrapper);
     this.container.appendChild(windowContent);
@@ -76,24 +79,24 @@ function Window(settings = {}) {
         /**
          * Remove all classes
          */
-        this.windowResizeDiv.classList.remove("ion-arrow-expand");
-        this.windowResizeDiv.classList.remove("ion-arrow-shrink");
+        this.windowResizeElem.classList.remove("ion-arrow-expand");
+        this.windowResizeElem.classList.remove("ion-arrow-shrink");
 
         switch (this.windowSize) {
             case "small":
                 this.width = 200;
                 this.height = 300;
-                this.windowResizeDiv.classList.add("ion-arrow-expand");
+                this.windowResizeElem.classList.add("ion-arrow-expand");
                 break;
             case "medium":
                 this.width = 300;
                 this.height = 450;
-                this.windowResizeDiv.classList.add("ion-arrow-expand");
+                this.windowResizeElem.classList.add("ion-arrow-expand");
                 break;
             case "big":
                 this.width = 400;
                 this.height = 600;
-                this.windowResizeDiv.classList.add("ion-arrow-shrink");
+                this.windowResizeElem.classList.add("ion-arrow-shrink");
                 break;
         }
 
@@ -117,9 +120,15 @@ Window.prototype.setMinimized = function(value) {
     this.minimized = value;
 
     if (this.minimized) {
-        this.container.classList.add("PWD-window--minimized");
+        this.container.classList.remove("PWD-window--maximize");
+        this.container.classList.add("PWD-window--minimize");
     } else {
-        this.container.classList.remove("PWD-window--minimized");
+        this.container.classList.remove("PWD-window--minimize");
+        this.container.classList.add("PWD-window--maximize");
+
+        setTimeout(e => {
+            this.container.classList.remove("PWD-window--maximize");
+        }, 500);
     }
 }
 

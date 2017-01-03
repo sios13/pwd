@@ -7,7 +7,9 @@ main {
     position:relative;
     width:1300px;
     height:700px;
-    background-color:#EEEEEE;
+    /* background-color:#EEEEEE; */
+    background-image:url("../image/background.jpg");
+    background-size:100% 100%;
     border:2px solid black;
     border-bottom:0;
 }
@@ -18,7 +20,7 @@ main {
     top:660px;
     height:40px;
     width:100%;
-    background-color:black;
+    background-color:rgba(0,0,0,0.8);
 }
 .PWD-bottomBar_panel {
     float:left;
@@ -27,18 +29,18 @@ main {
     box-shadow:inset 0 -4px 0 0 rgb(118,185,237);
     margin:0px 4px;
     line-height:38px;
-    font-size:14px;
     color:white;
     background-color:black;
+    transition:background-color 0.3s;
 }
 .PWD-bottomBar_panel:hover {
-    background-color:rgb(25,30,35);
+    background-color:rgba(255,255,255,0.1);
 }
 .PWD-bottomBar_panel.selected {
-    background-color:rgb(51,54,58);
+    background-color:rgba(255,255,255,0.2);
 }
 .PWD-bottomBar_panel.selected:hover {
-    background-color:rgb(71,74,77);
+    background-color:rgba(255,255,255,0.3);
 }
 .PWD-bottomBar_panel__icon {
     float:left;
@@ -50,7 +52,9 @@ main {
     float:left;
     width:111px;
     height:100%;
+    font-size:13px;
     padding-left:2px;
+    text-shadow:0.1em 0.1em black;
     overflow:hidden;
     white-space:nowrap;
     text-overflow:ellipsis;
@@ -63,10 +67,11 @@ main {
     margin:6px 3px;
     text-align:center;
     color:grey;
+    transition:background-color 0.3s, color 0.3s;
 }
 .PWD-bottomBar_panel__close:hover {
-    background-color:rgb(232,17,35);
     color:white;
+    background-color:rgb(232,17,35);
 }
 
 .PWD-window {
@@ -99,8 +104,16 @@ main {
     width:400px;
     height:600px;
 }
-.PWD-window--minimized {
-    display:none;
+.PWD-window--minimize {
+    top:800px !important;
+    left:0;
+    opacity:0;
+    height:0;
+    width:0;
+    transition:all 0.7s, opacity 0.3s;
+}
+.PWD-window--maximize {
+    transition:all 0.3s, opacity 0.7s;
 }
 
 .PWD-window_topbar_wrapper {
@@ -113,7 +126,7 @@ main {
     float:left;
     width:calc(100% - 90px);
     height:35px;
-    background:white;
+    background-color:white;
 }
 .PWD-window_topbar img {
     float:left;
@@ -125,7 +138,9 @@ main {
     width:calc(100% - 35px);
     height:calc(100% - 5px);
     padding:3px 0;
+    cursor:default;
     line-height:30px;
+    font-size:15px;
     overflow:hidden;
     white-space:nowrap;
     text-overflow:ellipsis;
@@ -137,9 +152,18 @@ main {
     line-height:25px;
     font-size:20px;
     text-align:center;
+    color:rgb(155,156,156);
+    background-color:white;
+    transition:background-color 0.3s;
 }
 .PWD-window_minimize {}
+.PWD-window.selected .PWD-window_minimize {
+    color:black;
+}
 .PWD-window_resize {}
+.PWD-window.selected .PWD-window_resize {
+    color:black;
+}
 .PWD-window_resize:hover, .PWD-window_minimize:hover {
     background-color:rgb(229,229,229);
 }
@@ -150,10 +174,16 @@ main {
     line-height:35px;
     font-size:20px;
     text-align:center;
+    color:rgb(155,156,156);
+    background-color:white;
+    transition:background-color 0.3s, color 0.3s;
 }
 .PWD-window_close:hover {
     background-color:rgb(232,17,35);
     color:white;
+}
+.PWD-window.selected .PWD-window_close {
+    color:black;
 }
 
 .PWD-window_content {
@@ -171,15 +201,16 @@ main {
     text-decoration:none;
 }
 .PWD-icon:hover {
-    background:#ADD8E6;
+    background-color:rgba(255,255,255,0.2);
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,0.5);
 }
 .PWD-icon.selected {
-    background:#D7ECF3;
-    box-shadow:inset 0 0 0 1px rgb(87,111,136);
+    background-color:rgba(255,255,255,0.3);
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,0.5);
 }
 .PWD-icon.selected:hover {
-    background:#C3E3ED;
-    box-shadow:inset 0 0 0 1px rgb(83,128,159);
+    background-color:rgba(255,255,255,0.4);
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,0.5);
 }
 .PWD-icon.dragging {
     z-index:2;
@@ -195,9 +226,9 @@ main {
 .PWD-icon span {
     display:block;
     line-height:18px;
-    color:black;
+    color:white;
+    text-shadow:0.1em 0.1em black;
     font-size:13px;
-    font-weight:bold;
 }
 
 /**
