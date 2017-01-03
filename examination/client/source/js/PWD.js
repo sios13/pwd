@@ -17,8 +17,13 @@ function PWD(settings = {}) {
          */
         this.container = document.createElement("main");
 
+        this.startButton = document.createElement("div");
+        this.startButton.classList.add("PWD-bottomBar_startButton");
+
         this.bottomBar = document.createElement("div");
         this.bottomBar.classList.add("PWD-bottomBar");
+
+        this.bottomBar.appendChild(this.startButton);
 
         this.container.appendChild(this.bottomBar);
 

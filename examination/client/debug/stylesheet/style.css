@@ -9,7 +9,7 @@ main {
     height:700px;
     /* background-color:#EEEEEE; */
     background-image:url("../image/background.jpg");
-    background-size:100% 100%;
+    background-size:100%;
     border:2px solid black;
     border-bottom:0;
 }
@@ -22,6 +22,7 @@ main {
     width:100%;
     background-color:rgba(0,0,0,0.8);
 }
+
 .PWD-bottomBar_panel {
     float:left;
     width:180px;
@@ -72,6 +73,20 @@ main {
 .PWD-bottomBar_panel__close:hover {
     color:white;
     background-color:rgb(232,17,35);
+}
+
+.PWD-bottomBar_startButton {
+    float:left;
+    width:26px;
+    height:26px;
+    margin:7px;
+    background-image:url("../image/startIcon.png");
+    background-size:100%;
+    background-repeat:no-repeat;
+    background-color:black;
+}
+.PWD-bottomBar_startButton:hover {
+    background-color:rgba(255,255,255,0.1);
 }
 
 .PWD-window {
