@@ -48,12 +48,24 @@ function PWD(settings = {}) {
 
         setInterval(updateClock, 30000);
 
+        this.clockBig = document.createElement("div");
+        this.clockBig.classList.add("PWD-clock");
+
+        function updateClockBig() {
+            let d = new Date();
+
+            this.clockBig.textContent = d.getHours() + ":" + (d.getMinutes() < 10 ? "0" + d.getMinutes() : d.getMinutes()) + ":" + (d.getSeconds() < 10 ? "0" + d.getSeconds() : d.getSeconds());
+        }
+
+        setInterval(updateClockBig, 1000);
+
         this.bottomBar = document.createElement("div");
         this.bottomBar.classList.add("PWD-bottomBar");
 
         this.bottomBar.appendChild(this.startButton);
         this.bottomBar.appendChild(this.clock);
 
+        this.container.appendChild(this.clockBig);
         this.container.appendChild(this.bottomBar);
         this.container.style.width = this.pwdWidth;
         this.container.style.height = this.pwdHeight;
@@ -133,6 +145,10 @@ function PWD(settings = {}) {
          * For every mousedown event we will attempt to find a new target
          */
         this.target = findTarget(e.target);
+
+        if (this.target !== "clock") {
+            
+        }
 
         /**
          * If target is a window
@@ -273,7 +289,7 @@ function PWD(settings = {}) {
         }
 
         if (this.target === "clock") {
-            alert("asd");
+            this.clockBig.classList.toggle("PWD-clock--hide");
         }
 
         console.log("up");
@@ -403,9 +419,10 @@ function PWD(settings = {}) {
             }
 
             /**
-             * The bottom bar should always have the highest z-index
+             * The bottom bar and clock should always have the highest z-index
              */
-            this.bottomBar.style.zIndex = this.windows.length + this.icons.length + 1;
+            this.clockBig.style.zIndex = this.windows.length + this.icons.length + 1;
+            this.bottomBar.style.zIndex = this.windows.length + this.icons.length + 2;
         } else {
             error("selectEntity. Entity does not exist in array.");
         }
@@ -478,6 +495,10 @@ function PWD(settings = {}) {
             if (this.icons[i].getContainer().contains(target)) {
                 return this.icons[i];
             }
+        }
+
+        if (this.clock.contains(target)) {
+            return "clock";
         }
 
         /**
