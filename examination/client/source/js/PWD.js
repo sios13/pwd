@@ -35,6 +35,9 @@ function PWD(settings = {}) {
         this.startButton = document.createElement("a");
         this.startButton.classList.add("PWD-bottomBar_startButton");
 
+        this.start = document.createElement("div");
+        this.start.classList.add("PWD-start");
+
         this.clock = document.createElement("a");
         this.clock.classList.add("PWD-bottomBar_clock");
 
@@ -50,11 +53,25 @@ function PWD(settings = {}) {
 
         this.clockBig = document.createElement("div");
         this.clockBig.classList.add("PWD-clock");
+        this.clockBig.classList.add("PWD-clock--hide");
+
+        this.clockBig_bigClock = document.createElement("span");
+        this.clockBig_bigClock.classList.add("PWD-clock__bigTime");
+
+        this.clockBig_date = document.createElement("span");
+        this.clockBig_date.classList.add("PWD-clock__date");
+
+        this.clockBig.appendChild(this.clockBig_bigClock);
+        this.clockBig.appendChild(this.clockBig_date);
 
         function updateClockBig() {
             let d = new Date();
 
-            this.clockBig.textContent = d.getHours() + ":" + (d.getMinutes() < 10 ? "0" + d.getMinutes() : d.getMinutes()) + ":" + (d.getSeconds() < 10 ? "0" + d.getSeconds() : d.getSeconds());
+            this.clockBig_bigClock.textContent = d.getHours() + ":" + (d.getMinutes() < 10 ? "0" + d.getMinutes() : d.getMinutes()) + ":" + (d.getSeconds() < 10 ? "0" + d.getSeconds() : d.getSeconds());
+
+            let monthNames = ["Januari", "Februari", "Mars", "April", "Maj", "Juni", "July", "Augusti", "September", "Oktober", "November", "December"];
+
+            this.clockBig_date.textContent = "den " + d.getDate() + " " + monthNames[d.getMonth()] + " " + d.getFullYear();
         }
 
         setInterval(updateClockBig, 1000);
@@ -146,10 +163,6 @@ function PWD(settings = {}) {
          */
         this.target = findTarget(e.target);
 
-        if (this.target !== "clock") {
-            
-        }
-
         /**
          * If target is a window
          */
@@ -221,8 +234,9 @@ function PWD(settings = {}) {
     }
 
     function mouseupEvent(e) {
-        let test = findTarget(e.target);
-        if (test === undefined) {
+        let targetTemp = findTarget(e.target);
+
+        if (targetTemp === undefined) {
             /**
              * Deselect everything
              */
@@ -234,6 +248,10 @@ function PWD(settings = {}) {
 
             if (this.icons[0]) {
                 this.icons[0].setIsSelected(false);
+            }
+
+            if (!this.clockBig.classList.contains("PWD-clock--hide")) {
+                this.clockBig.classList.add("PWD-clock--hide");
             }
 
             return;
@@ -288,14 +306,16 @@ function PWD(settings = {}) {
             this.target.correctGridPosition();
         }
 
-        if (this.target === "clock") {
-            this.clockBig.classList.toggle("PWD-clock--hide");
-        }
-
         console.log("up");
     }
 
     function clickEvent(e) {
+        if (this.target === "clock") {
+            this.clockBig.classList.toggle("PWD-clock--hide");
+
+            return;
+        }
+
         if (this.target instanceof Window) {
             /**
              * If a click has been made on the close button
@@ -419,10 +439,11 @@ function PWD(settings = {}) {
             }
 
             /**
-             * The bottom bar and clock should always have the highest z-index
+             * The bottom bar, start and clock should always have the highest z-index
              */
-            this.clockBig.style.zIndex = this.windows.length + this.icons.length + 1;
             this.bottomBar.style.zIndex = this.windows.length + this.icons.length + 2;
+            this.start.style.zIndex = this.windows.length + this.icons.length + 1;
+            this.clockBig.style.zIndex = this.windows.length + this.icons.length + 1;
         } else {
             error("selectEntity. Entity does not exist in array.");
         }
@@ -461,6 +482,14 @@ function PWD(settings = {}) {
      * Check if a given target exists in a window, panel or icon
      */
     function findTarget(target) {
+        if (this.clock.contains(target)) {
+            return "clock";
+        }
+
+        if (this.clockBig.contains(target)) {
+            return "clockBig";
+        }
+
         /**
          * Iterate the windows
          */
@@ -495,10 +524,6 @@ function PWD(settings = {}) {
             if (this.icons[i].getContainer().contains(target)) {
                 return this.icons[i];
             }
-        }
-
-        if (this.clock.contains(target)) {
-            return "clock";
         }
 
         /**
