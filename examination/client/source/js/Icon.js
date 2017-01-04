@@ -4,6 +4,7 @@ function Icon(settings = {}) {
     Entity.call(this, {
         "xPos": settings.xPos,
         "yPos": settings.yPos,
+        "zIndex": settings.zIndex,
         "isSelected": settings.isSelected,
         "isDragging": settings.isDragging
     });
@@ -20,7 +21,7 @@ function Icon(settings = {}) {
 
     this.windowSize      = settings.windowSize ? settings.windowSize : "small";
 
-    this. backgroundColor = settings.backgroundColor ? settings.backgroundColor : "";
+    this.backgroundColor = settings.backgroundColor ? settings.backgroundColor : "";
 
     this.container       = initializeContainer.bind(this)();
 
@@ -32,6 +33,7 @@ function Icon(settings = {}) {
         container.classList.add("PWD-icon");
         container.style.left = this.xPos + "px";
         container.style.top = this.yPos + "px";
+        container.style.zIndex = this.zIndex;
 
         let iconImageElem = document.createElement("img");
         iconImageElem.src = "./image/" + this.iconImage;

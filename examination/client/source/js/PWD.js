@@ -114,22 +114,33 @@ function PWD(settings = {}) {
          */
         this.target = findTarget(e.target);
 
-        /**
-         * Deselect everything
-         */
-        for (let i = 0; i < this.windows.length; i++) {
-            this.windows[i].setIsSelected(false);
-        }
-
-        for (let i = 0; i < this.panels.length; i++) {
-            this.panels[i].setIsSelected(false);
-        }
-
-        for (let i = 0; i < this.icons.length; i++) {
-            this.icons[i].setIsSelected(false);
-        }
-
         if (this.target === undefined) {
+            /**
+             * Deselect everything
+             */
+            /*
+            for (let i = 0; i < this.windows.length; i++) {
+                this.windows[i].setIsSelected(false);
+            }
+
+            for (let i = 0; i < this.panels.length; i++) {
+                this.panels[i].setIsSelected(false);
+            }
+
+            for (let i = 0; i < this.icons.length; i++) {
+                this.icons[i].setIsSelected(false);
+            }
+            */
+            if (this.windows[0]) {
+                this.windows[0].setIsSelected(false);
+
+                this.panels[0].setIsSelected(false);
+            }
+
+            if (this.icons[0]) {
+                this.icons[0].setIsSelected(false);
+            }
+
             return;
         }
 
@@ -150,6 +161,13 @@ function PWD(settings = {}) {
             selectEntity(this.windows[index], this.windows);
 
             /**
+             * Deselect icon
+             */
+            if (this.icons[0]) {
+                this.icons[0].setIsSelected(false);
+            }
+
+            /**
              * If target is the window top bar -> add mousemove listener
              */
             let windowTopBarElem = this.target.getContainer().querySelector(".PWD-window_topbar");
@@ -167,37 +185,36 @@ function PWD(settings = {}) {
          * If target is a panel
          */
         if (this.target instanceof Panel) {
-            let index = this.panels.indexOf(this.target);
+            if (this.target.getIsSelected()) {
+                this.windows[0].setMinimized(true);
 
-            /**
-             * Set the panel as selected
-             */
-            selectEntity(this.panels[index], this.panels);
-
-            /**
-             * Set the associated window as selected
-             */
-            selectEntity(this.windows[index], this.windows);
-
-            if (this.windows[0].getIsMinimized()) {
-                /**
-                 * Bring up the window
-                 */
-                this.windows[0].setMinimized(false);
-            } else {
-                /**
-                 * Bring down the window
-                 */
-                /*
-                this.windows[index].setMinimized(true);
-
-                this.windows[index].setIsSelected(false);
+                this.windows[0].setIsSelected(false);
 
                 this.target.setIsSelected(false);
-                */
-            }
+            } else {
+                if (this.windows[0].getIsMinimized()) {
+                    this.windows[0].setMinimized(false);
+                }
 
-            return;
+                let index = this.panels.indexOf(this.target);
+
+                /**
+                 * Set the panel as selected
+                 */
+                selectEntity(this.panels[index], this.panels);
+
+                /**
+                 * Set the associated window as selected
+                 */
+                selectEntity(this.windows[index], this.windows);
+
+                /**
+                 * Deselect icon
+                 */
+                if (this.icons[0]) {
+                    this.icons[0].setIsSelected(false);
+                }
+            }
         }
 
         /**
@@ -208,6 +225,15 @@ function PWD(settings = {}) {
              * Set the icon as selected
              */
             selectEntity(this.target, this.icons);
+
+            /**
+             * Deselect the window and associated panel
+             */
+            if (this.windows[0]) {
+                this.windows[0].setIsSelected(false);
+
+                this.panels[0].setIsSelected(false);
+            }
 
             window.addEventListener("mousemove", entityMoveEvent);
 
@@ -341,19 +367,33 @@ function PWD(settings = {}) {
              */
             arr.unshift(entity);
 
+            /**
+             * Deselect the last active entity
+             */
+            if (arr[1]) {
+                arr[1].setIsSelected(false);
+            }
+
+            /**
+             * Select the new entity
+             */
             arr[0].setIsSelected(true);
 
             /**
              * The entities are given z-index
              */
             for (let i = 0; i < arr.length; i++) {
-                arr[i].getContainer().style.zIndex = "" + arr.length - i;
+                if (arr[i] instanceof Icon) {
+                    arr[i].getContainer().style.zIndex = arr.length - i;
+                } else {
+                    arr[i].getContainer().style.zIndex = this.icons.length + arr.length - i;
+                }
             }
 
             /**
              * The bottom bar should always have the highest z-index
              */
-            this.bottomBar.style.zIndex = "" + this.windows.length + this.icons.length;
+            this.bottomBar.style.zIndex = this.windows.length + this.icons.length;
         } else {
             error("selectEntity. Entity does not exist in array.");
         }
@@ -445,6 +485,7 @@ function PWD(settings = {}) {
             "topBarIcon": iconObj.getIconImage(),
             "xPos": (100 + 15 * id),
             "yPos": (20 + 30 * id),
+            "zIndex": this.icons.length,
             "backgroundColor" : iconObj.getBackgroundColor()
         });
 

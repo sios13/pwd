@@ -11,6 +11,8 @@ function Entity(settings = {}) {
 
     this.yPos = settings.yPos ? settings.yPos : 100;
 
+    this.zIndex = settings.zIndex ? settings.zIndex : 0;
+
     this.isSelected = settings.isSelected ? settings.isSelected : false;
 
     this.isDragging = settings.isDragging ? settings.isDragging : false;

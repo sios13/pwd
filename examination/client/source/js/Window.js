@@ -7,6 +7,7 @@ function Window(settings = {}) {
     Entity.call(this, {
         "xPos": settings.xPos,
         "yPos": settings.yPos,
+        "zIndex": settings.zIndex,
         "isSelected": settings.isSelected,
         "isDragging": settings.isDragging
     });
