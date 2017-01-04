@@ -45,7 +45,7 @@ function PWD(settings = {}) {
         this.pwdHeight = 700;
 
         /**
-         * The target is...
+         * The target is a window, icon or panel
          */
         this.target = undefined;
 
@@ -129,21 +129,25 @@ function PWD(settings = {}) {
             this.icons[i].setIsSelected(false);
         }
 
+        if (this.target === undefined) {
+            return;
+        }
+
         /**
          * If target is a window
          */
         if (this.target instanceof Window) {
+            let index = this.windows.indexOf(this.target);
+
             /**
              * Set the window as selected
              */
-            this.target.setIsSelected(true);
+            selectEntity(this.panels[index], this.panels);
 
             /**
              * Mark the associated panel as selected
              */
-            let index = windows.indexOf(this.target);
-
-            this.panels[index].setIsSelected(true);
+            selectEntity(this.windows[index], this.windows);
 
             /**
              * If target is the window top bar -> add mousemove listener
@@ -163,28 +167,34 @@ function PWD(settings = {}) {
          * If target is a panel
          */
         if (this.target instanceof Panel) {
+            let index = this.panels.indexOf(this.target);
+
             /**
              * Set the panel as selected
              */
-            this.target.setIsSelected(true);
+            selectEntity(this.panels[index], this.panels);
 
             /**
              * Set the associated window as selected
              */
-            let index = panels.indexOf(this.target);
+            selectEntity(this.windows[index], this.windows);
 
-            this.windows[index].setIsSelected(true);
-
-            if (this.windows[index].getIsMinimized()) {
+            if (this.windows[0].getIsMinimized()) {
                 /**
                  * Bring up the window
                  */
-                this.windows[index].setMinimized(false);
+                this.windows[0].setMinimized(false);
             } else {
                 /**
                  * Bring down the window
                  */
-                //this.windows[index].setMinimized(true);
+                /*
+                this.windows[index].setMinimized(true);
+
+                this.windows[index].setIsSelected(false);
+
+                this.target.setIsSelected(false);
+                */
             }
 
             return;
@@ -197,7 +207,7 @@ function PWD(settings = {}) {
             /**
              * Set the icon as selected
              */
-            this.target.setIsSelected(true);
+            selectEntity(this.target, this.icons);
 
             window.addEventListener("mousemove", entityMoveEvent);
 
@@ -306,6 +316,49 @@ function PWD(settings = {}) {
         }
     }
 
+    function error(message) {
+        console.log("ERROR! " + message);
+    }
+
+    /**
+     * Selects a window, panel or icon
+     * Brings it to the front of its array (position 0)
+     */
+    function selectEntity(entity, arr) {
+        let index = arr.indexOf(entity);
+
+        /**
+         * If the entity exists in the array
+         */
+        if (index > -1) {
+            /**
+             * Remove the entity from the array
+             */
+            arr.splice(index, 1);
+
+            /**
+             * Add it to the front of the array
+             */
+            arr.unshift(entity);
+
+            arr[0].setIsSelected(true);
+
+            /**
+             * The entities are given z-index
+             */
+            for (let i = 0; i < arr.length; i++) {
+                arr[i].getContainer().style.zIndex = "" + arr.length - i;
+            }
+
+            /**
+             * The bottom bar should always have the highest z-index
+             */
+            this.bottomBar.style.zIndex = "" + this.windows.length + this.icons.length;
+        } else {
+            error("selectEntity. Entity does not exist in array.");
+        }
+    }
+
     /**
      * CLose a window with a given index
      */
@@ -397,6 +450,8 @@ function PWD(settings = {}) {
 
         this.windows.push(pwdWindow);
 
+        selectEntity(pwdWindow, this.windows);
+
         this.container.appendChild(pwdWindow.getContainer());
 
         /**
@@ -408,6 +463,8 @@ function PWD(settings = {}) {
         });
 
         this.panels.push(pwdPanel);
+
+        selectEntity(pwdPanel, this.panels);
 
         this.bottomBar.appendChild(pwdPanel.getContainer());
 
