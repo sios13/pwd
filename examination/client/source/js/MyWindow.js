@@ -105,6 +105,19 @@ function MyWindow(settings = {}) {
     }
 
     this.update();
+
+    this.correctPosition = function() {
+        let test = this.id < 10 ? "0" : "";
+        test += this.id;
+
+        this.xPos = (100+200*test[0] + 15 * this.id);
+        this.yPos = (20 + 30 * (this.id - test[0]*10));
+
+        this.container.style.left = this.xPos + "px";
+        this.container.style.top = this.yPos + "px";
+    }
+
+    this.correctPosition();
 }
 
 /**

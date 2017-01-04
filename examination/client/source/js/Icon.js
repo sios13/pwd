@@ -63,8 +63,8 @@ Icon.prototype.getApplicationName = function() {
  * This function corrects the x and y coordinates of the icon, making it align to the nearest grid
  */
 Icon.prototype.correctGridPosition = function() {
-    this.xPos = 10 + this.xPos - this.xPos % 100;
-    this.yPos = 10 + this.yPos - this.yPos % 100;
+    this.xPos = this.xPos - this.xPos % 100;
+    this.yPos = 5 + this.yPos - this.yPos % 100;
 
     this.container.style.left = this.xPos + "px";
     this.container.style.top = this.yPos + "px";

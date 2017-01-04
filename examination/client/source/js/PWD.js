@@ -146,7 +146,7 @@ function PWD(settings = {}) {
             this.container.appendChild(this.icons[i].getContainer());
         }
 
-        for (let i = 0; i < 8; i++) {
+        for (let i = 0; i < 35; i++) {
             launchApplication(this.icons[1]);
         }
 
@@ -582,8 +582,6 @@ function PWD(settings = {}) {
             "windowSize": iconObj.getWindowSize(),
             "topBarText": iconObj.getIconText(),
             "topBarIcon": iconObj.getIconImage(),
-            "xPos": (100 + 15 * id),
-            "yPos": (20 + 30 * id),
             "zIndex": this.icons.length,
             "backgroundColor" : iconObj.getBackgroundColor()
         });
