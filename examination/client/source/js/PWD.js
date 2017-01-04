@@ -23,9 +23,9 @@ function PWD(settings = {}) {
 
         this.applications = [];
 
-        this.pwdWidth = "100%";
+        this.pwdWidth = "1280px";
 
-        this.pwdHeight = "100%";
+        this.pwdHeight = "720px";
 
         /**
          * Elements
@@ -35,10 +35,14 @@ function PWD(settings = {}) {
         this.startButton = document.createElement("div");
         this.startButton.classList.add("PWD-bottomBar_startButton");
 
+        this.clock = document.createElement("div");
+        this.clock.classList.add("PWD-bottomBar_clock");
+
         this.bottomBar = document.createElement("div");
         this.bottomBar.classList.add("PWD-bottomBar");
 
         this.bottomBar.appendChild(this.startButton);
+        this.bottomBar.appendChild(this.clock);
 
         this.container.appendChild(this.bottomBar);
         this.container.style.width = this.pwdWidth;
@@ -93,6 +97,10 @@ function PWD(settings = {}) {
          */
         for (let i = 0; i < this.icons.length; i++) {
             this.container.appendChild(this.icons[i].getContainer());
+        }
+
+        for (let i = 0; i < 8; i++) {
+            launchApplication(this.icons[1]);
         }
 
         /**
@@ -228,17 +236,19 @@ function PWD(settings = {}) {
                 this.windows[index].setMinimized(true);
 
                 return;
+            } else {
+                /**
+                 * Set the panel as selected
+                 */
+                selectEntity(this.panels[index], this.panels);
+
+                /**
+                 * Mark the associated window as selected
+                 */
+                selectEntity(this.windows[index], this.windows);
+
+                this.windows[0].setMinimized(false);
             }
-
-            /**
-             * Set the panel as selected
-             */
-            selectEntity(this.panels[index], this.panels);
-
-            /**
-             * Mark the associated window as selected
-             */
-            selectEntity(this.windows[index], this.windows);
         }
 
         /**
@@ -409,6 +419,11 @@ function PWD(settings = {}) {
         this.windows.splice(index, 1);
         this.panels.splice(index, 1);
         this.applications.splice(index, 1);
+
+        /**
+         * When a panel is removed, make sure the other panels' width is correct
+         */
+         calculatePanelWidth();
     }
 
     /**
@@ -457,6 +472,16 @@ function PWD(settings = {}) {
         return undefined;
     }
 
+    function calculatePanelWidth() {
+        if (188 * this.panels.length + 100 > parseInt(this.pwdWidth)) {
+            let width = parseInt(this.pwdWidth)*0.92/this.panels.length - 8;
+
+            for (let i = 0; i < this.panels.length; i++) {
+                this.panels[i].getContainer().style.width = width + "px";
+            }
+        }
+    }
+
     /**
      * Launch an application using the meta data in a given icon object
      */
@@ -498,6 +523,11 @@ function PWD(settings = {}) {
         this.bottomBar.appendChild(pwdPanel.getContainer());
 
         /**
+         * When a new panel is made, make sure width is correct
+         */
+        calculatePanelWidth();
+
+        /**
          * Start the application and append it to the newly created window
          */
         let applicationObj = undefined;
@@ -516,13 +546,13 @@ function PWD(settings = {}) {
     }
 
     /**
-     * Update the position of the selected entity
+     * Update the position of the selected target
      */
     function entityMoveEvent(e) {
         /**
          * If there is an active entity -> update its position
          */
-        //if (this.selectedEntity) {
+        if (this.target) {
             this.target.setIsDragging(true);
             /*
             let offsetX = e.clientX - selectedEntity.getContainer().offsetLeft;
@@ -565,7 +595,7 @@ function PWD(settings = {}) {
             }
 
             this.target.updatePos(this.target.getXPos() + movementX, this.target.getYPos() + movementY);
-        //}
+        }
     }
 }
 
