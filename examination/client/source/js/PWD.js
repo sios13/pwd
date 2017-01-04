@@ -37,41 +37,48 @@ function PWD(settings = {}) {
 
         this.start = document.createElement("div");
         this.start.classList.add("PWD-start");
+        this.start.classList.add("PWD-start--hide");
 
-        this.clock = document.createElement("a");
-        this.clock.classList.add("PWD-bottomBar_clock");
+        this.start_message = document.createElement("span");
+        this.start_message.classList.add("PWD-start__message");
+        this.start_message.textContent = "Hej!";
 
-        function updateClock() {
+        this.start.appendChild(this.start_message);
+
+        this.clockButton = document.createElement("a");
+        this.clockButton.classList.add("PWD-bottomBar_clockButton");
+
+        function updateClockButton() {
             let d = new Date();
 
-            this.clock.textContent = d.getHours() + ":" + (d.getMinutes() < 10 ? "0" + d.getMinutes() : d.getMinutes());
+            this.clockButton.textContent = d.getHours() + ":" + (d.getMinutes() < 10 ? "0" + d.getMinutes() : d.getMinutes());
         }
 
-        updateClock();
+        updateClockButton();
 
-        setInterval(updateClock, 30000);
+        setInterval(updateClockButton, 30000);
 
-        this.clockBig = document.createElement("div");
-        this.clockBig.classList.add("PWD-clock");
-        this.clockBig.classList.add("PWD-clock--hide");
+        this.clock = document.createElement("div");
+        this.clock.classList.add("PWD-clock");
+        this.clock.classList.add("PWD-clock--hide");
 
-        this.clockBig_bigClock = document.createElement("span");
-        this.clockBig_bigClock.classList.add("PWD-clock__bigTime");
+        this.clock_bigClock = document.createElement("span");
+        this.clock_bigClock.classList.add("PWD-clock__bigTime");
 
-        this.clockBig_date = document.createElement("span");
-        this.clockBig_date.classList.add("PWD-clock__date");
+        this.clock_date = document.createElement("span");
+        this.clock_date.classList.add("PWD-clock__date");
 
-        this.clockBig.appendChild(this.clockBig_bigClock);
-        this.clockBig.appendChild(this.clockBig_date);
+        this.clock.appendChild(this.clock_bigClock);
+        this.clock.appendChild(this.clock_date);
 
         function updateClockBig() {
             let d = new Date();
 
-            this.clockBig_bigClock.textContent = d.getHours() + ":" + (d.getMinutes() < 10 ? "0" + d.getMinutes() : d.getMinutes()) + ":" + (d.getSeconds() < 10 ? "0" + d.getSeconds() : d.getSeconds());
+            this.clock_bigClock.textContent = d.getHours() + ":" + (d.getMinutes() < 10 ? "0" + d.getMinutes() : d.getMinutes()) + ":" + (d.getSeconds() < 10 ? "0" + d.getSeconds() : d.getSeconds());
 
             let monthNames = ["Januari", "Februari", "Mars", "April", "Maj", "Juni", "July", "Augusti", "September", "Oktober", "November", "December"];
 
-            this.clockBig_date.textContent = "den " + d.getDate() + " " + monthNames[d.getMonth()] + " " + d.getFullYear();
+            this.clock_date.textContent = "den " + d.getDate() + " " + monthNames[d.getMonth()] + " " + d.getFullYear();
         }
 
         setInterval(updateClockBig, 1000);
@@ -80,9 +87,10 @@ function PWD(settings = {}) {
         this.bottomBar.classList.add("PWD-bottomBar");
 
         this.bottomBar.appendChild(this.startButton);
-        this.bottomBar.appendChild(this.clock);
+        this.bottomBar.appendChild(this.clockButton);
 
-        this.container.appendChild(this.clockBig);
+        this.container.appendChild(this.start);
+        this.container.appendChild(this.clock);
         this.container.appendChild(this.bottomBar);
         this.container.style.width = this.pwdWidth;
         this.container.style.height = this.pwdHeight;
@@ -250,8 +258,12 @@ function PWD(settings = {}) {
                 this.icons[0].setIsSelected(false);
             }
 
-            if (!this.clockBig.classList.contains("PWD-clock--hide")) {
-                this.clockBig.classList.add("PWD-clock--hide");
+            if (!this.clock.classList.contains("PWD-clock--hide")) {
+                this.clock.classList.add("PWD-clock--hide");
+            }
+
+            if (!this.start.classList.contains("PWD-start--hide")) {
+                this.start.classList.add("PWD-start--hide");
             }
 
             return;
@@ -310,8 +322,14 @@ function PWD(settings = {}) {
     }
 
     function clickEvent(e) {
-        if (this.target === "clock") {
-            this.clockBig.classList.toggle("PWD-clock--hide");
+        if (this.target === "startButton") {
+            this.start.classList.toggle("PWD-start--hide");
+
+            return;
+        }
+
+        if (this.target === "clockButton") {
+            this.clock.classList.toggle("PWD-clock--hide");
 
             return;
         }
@@ -443,7 +461,7 @@ function PWD(settings = {}) {
              */
             this.bottomBar.style.zIndex = this.windows.length + this.icons.length + 2;
             this.start.style.zIndex = this.windows.length + this.icons.length + 1;
-            this.clockBig.style.zIndex = this.windows.length + this.icons.length + 1;
+            this.clock.style.zIndex = this.windows.length + this.icons.length + 1;
         } else {
             error("selectEntity. Entity does not exist in array.");
         }
@@ -482,12 +500,20 @@ function PWD(settings = {}) {
      * Check if a given target exists in a window, panel or icon
      */
     function findTarget(target) {
-        if (this.clock.contains(target)) {
-            return "clock";
+        if (this.startButton.contains(target)) {
+            return "startButton";
         }
 
-        if (this.clockBig.contains(target)) {
-            return "clockBig";
+        if (this.start.contains(target)) {
+            return "start";
+        }
+
+        if (this.clockButton.contains(target)) {
+            return "clockButton";
+        }
+
+        if (this.clock.contains(target)) {
+            return "clock";
         }
 
         /**
