@@ -32,11 +32,21 @@ function PWD(settings = {}) {
          */
         this.container = document.createElement("main");
 
-        this.startButton = document.createElement("div");
+        this.startButton = document.createElement("a");
         this.startButton.classList.add("PWD-bottomBar_startButton");
 
-        this.clock = document.createElement("div");
+        this.clock = document.createElement("a");
         this.clock.classList.add("PWD-bottomBar_clock");
+
+        function updateClock() {
+            let d = new Date();
+
+            this.clock.textContent = d.getHours() + ":" + (d.getMinutes() < 10 ? "0" + d.getMinutes() : d.getMinutes());
+        }
+
+        updateClock();
+
+        setInterval(updateClock, 30000);
 
         this.bottomBar = document.createElement("div");
         this.bottomBar.classList.add("PWD-bottomBar");
@@ -260,6 +270,10 @@ function PWD(settings = {}) {
             window.removeEventListener("mousemove", entityMoveEvent);
 
             this.target.correctGridPosition();
+        }
+
+        if (this.target === "clock") {
+            alert("asd");
         }
 
         console.log("up");
