@@ -31,6 +31,12 @@ main {
     background-color:rgba(0,0,0,0.8);
 }
 
+.PWD-bottomBar_panelsWrapper {
+    float:left;
+    position:relative;
+    width:calc(100% - 100px);
+}
+
 .PWD-bottomBar_panel {
     float:left;
     position:relative;
@@ -67,10 +73,10 @@ main {
 }
 .PWD-bottomBar_panel__span {
     float:left;
-    width:calc(100% - 60px);
+    width:calc(100% - 61px);
     height:100%;
     font-size:13px;
-    padding-left:30px;
+    padding-left:31px;
     text-shadow:0.1em 0.1em black;
     overflow:hidden;
     white-space:nowrap;

@@ -1,3 +1,4 @@
+const Application = require("../../Application.js");
 const MemoryGameBoard = require("./MemoryGameBoard.js");
 
 function MemoryGame(settings) {
@@ -74,6 +75,9 @@ function MemoryGame(settings) {
         new MemoryGameBoard(settings);
     }
 }
+
+MemoryGame.prototype = Object.create(Application.prototype);
+MemoryGame.prototype.constructor = MemoryGame;
 
 MemoryGame.prototype.close = function() {}
 

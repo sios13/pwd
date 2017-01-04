@@ -23,14 +23,16 @@ function PWD(settings = {}) {
 
         this.applications = [];
 
-        this.pwdWidth = "1280px";
+        this.pwdWidth = "1600px";
 
-        this.pwdHeight = "720px";
+        this.pwdHeight = "900px";
 
         /**
          * Elements
          */
         this.container = document.createElement("main");
+        this.container.style.width = this.pwdWidth;
+        this.container.style.height = this.pwdHeight;
 
         this.startButton = document.createElement("a");
         this.startButton.classList.add("PWD-bottomBar_startButton");
@@ -83,17 +85,19 @@ function PWD(settings = {}) {
 
         setInterval(updateClockBig, 1000);
 
+        this.panelsWrapper = document.createElement("div");
+        this.panelsWrapper.classList.add("PWD-bottomBar_panelsWrapper");
+
         this.bottomBar = document.createElement("div");
         this.bottomBar.classList.add("PWD-bottomBar");
 
         this.bottomBar.appendChild(this.startButton);
+        this.bottomBar.appendChild(this.panelsWrapper);
         this.bottomBar.appendChild(this.clockButton);
 
         this.container.appendChild(this.start);
         this.container.appendChild(this.clock);
         this.container.appendChild(this.bottomBar);
-        this.container.style.width = this.pwdWidth;
-        this.container.style.height = this.pwdHeight;
 
         document.querySelector(settings.container).appendChild(this.container);
 
@@ -146,7 +150,7 @@ function PWD(settings = {}) {
             this.container.appendChild(this.icons[i].getContainer());
         }
 
-        for (let i = 0; i < 35; i++) {
+        for (let i = 0; i < 4; i++) {
             launchApplication(this.icons[1]);
         }
 
@@ -244,6 +248,27 @@ function PWD(settings = {}) {
     function mouseupEvent(e) {
         let targetTemp = findTarget(e.target);
 
+        if (this.target !== "clock" && this.target !== "clockButton") {
+            if (!this.clock.classList.contains("PWD-clock--hide")) {
+                this.clock.classList.add("PWD-clock--hide");
+            }
+        }
+
+        if (this.target !== "start" && this.target !== "startButton") {
+            if (!this.start.classList.contains("PWD-start--hide")) {
+                this.start.classList.add("PWD-start--hide");
+            }
+        }
+
+        /**
+         * If target is a window
+         */
+        if (this.target instanceof Window) {
+            this.target.setIsDragging(false);
+
+            window.removeEventListener("mousemove", entityMoveEvent);
+        }
+
         if (targetTemp === undefined) {
             /**
              * Deselect everything
@@ -258,24 +283,7 @@ function PWD(settings = {}) {
                 this.icons[0].setIsSelected(false);
             }
 
-            if (!this.clock.classList.contains("PWD-clock--hide")) {
-                this.clock.classList.add("PWD-clock--hide");
-            }
-
-            if (!this.start.classList.contains("PWD-start--hide")) {
-                this.start.classList.add("PWD-start--hide");
-            }
-
             return;
-        }
-
-        /**
-         * If target is a window
-         */
-        if (this.target instanceof Window) {
-            this.target.setIsDragging(false);
-
-            window.removeEventListener("mousemove", entityMoveEvent);
         }
 
         /**
@@ -560,10 +568,8 @@ function PWD(settings = {}) {
 
     function calculatePanelWidth() {
         if (188 * this.panels.length + 100 > parseInt(this.pwdWidth)) {
-            let width = parseInt(this.pwdWidth)*0.92/this.panels.length - 8;
-
             for (let i = 0; i < this.panels.length; i++) {
-                this.panels[i].getContainer().style.width = width + "px";
+                this.panels[i].getContainer().style.width = this.panelsWrapper.offsetWidth / this.panels.length - 8 + "px";
             }
         }
     }
@@ -604,7 +610,7 @@ function PWD(settings = {}) {
 
         selectEntity(pwdPanel, this.panels);
 
-        this.bottomBar.appendChild(pwdPanel.getContainer());
+        this.panelsWrapper.appendChild(pwdPanel.getContainer());
 
         /**
          * When a new panel is made, make sure width is correct

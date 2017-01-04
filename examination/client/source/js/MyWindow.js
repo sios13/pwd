@@ -124,7 +124,7 @@ function MyWindow(settings = {}) {
  * Window inherits from Entity
  */
 MyWindow.prototype = Object.create(Entity.prototype);
-MyWindow.prototype.constructor = Window;
+MyWindow.prototype.constructor = MyWindow;
 
 MyWindow.prototype.getMinimized = function() {
     return this.minimized;
