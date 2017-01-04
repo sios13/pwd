@@ -1,6 +1,6 @@
 const Entity = require("./Entity.js");
 
-function Window(settings = {}) {
+function MyWindow(settings = {}) {
     /**
      * Properties
      */
@@ -110,14 +110,14 @@ function Window(settings = {}) {
 /**
  * Window inherits from Entity
  */
-Window.prototype = Object.create(Entity.prototype);
-Window.prototype.constructor = Window;
+MyWindow.prototype = Object.create(Entity.prototype);
+MyWindow.prototype.constructor = Window;
 
-Window.prototype.getIsMinimized = function() {
+MyWindow.prototype.getMinimized = function() {
     return this.minimized;
 }
 
-Window.prototype.setMinimized = function(value) {
+MyWindow.prototype.setMinimized = function(value) {
     this.minimized = value;
 
     if (this.minimized) {
@@ -133,7 +133,7 @@ Window.prototype.setMinimized = function(value) {
     }
 }
 
-Window.prototype.resize = function() {
+MyWindow.prototype.resize = function() {
     this.container.classList.remove("PWD-window--" + this.windowSize);
 
     switch(this.windowSize) {
@@ -151,12 +151,12 @@ Window.prototype.resize = function() {
     this.update();
 }
 
-Window.prototype.close = function() {
+MyWindow.prototype.close = function() {
     this.applicationObj.close();
 }
 
-Window.prototype.getId = function() {
+MyWindow.prototype.getId = function() {
     return this.id;
 }
 
-module.exports = Window;
+module.exports = MyWindow;
