@@ -11,8 +11,4 @@ MyAPI.prototype.setPwdBackground = function(index) {
     this.pwdContainer.classList.add("main--background-" + index);
 }
 
-MyAPI.prototype.test = function() {
-    console.log("api test");
-}
-
 module.exports = MyAPI;
