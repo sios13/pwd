@@ -362,6 +362,29 @@ main {
     background-color:lightgray;
 }
 
+.settingsBackgroundForm {
+    width:90%;
+    margin:10px auto;
+}
+
+.settingsBackgroundForm label {
+    float:left;
+    width:33%;
+    position:relative;
+}
+
+.settingsBackgroundForm input {
+    display:none;
+}
+
+.settingsBackgroundForm img {
+    width:100%;
+}
+
+.settingsBackgroundForm input:checked + img {
+    box-shadow:inset 0px 0px 0px 2px green;
+}
+
 /**
  * CHAT
  */
