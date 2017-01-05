@@ -26,18 +26,14 @@ function PWD(settings = {}) {
 
         this.applications = [];
 
-        this.pwdWidth = "1600px";
-
-        this.pwdHeight = "900px";
-
         this.api = undefined;
 
         /**
          * Elements
          */
         this.container = document.createElement("main");
-        this.container.style.width = this.pwdWidth;
-        this.container.style.height = this.pwdHeight;
+        this.container.classList.add("main--background-3");
+        this.container.classList.add("main--displayRes-0");
 
         this.startButton = document.createElement("a");
         this.startButton.classList.add("PWD-bottomBar_startButton");
@@ -46,10 +42,15 @@ function PWD(settings = {}) {
         this.start.classList.add("PWD-start");
         this.start.classList.add("PWD-start--hide");
 
+        this.start_title = document.createElement("span");
+        this.start_title.classList.add("PWD-start__title");
+        this.start_title.textContent = "Hej!";
+
         this.start_message = document.createElement("span");
         this.start_message.classList.add("PWD-start__message");
-        this.start_message.textContent = "Hej!";
+        this.start_message.textContent = "Made by Simon Österdahl";
 
+        this.start.appendChild(this.start_title);
         this.start.appendChild(this.start_message);
 
         this.clockButton = document.createElement("a");
@@ -681,6 +682,9 @@ function PWD(settings = {}) {
          */
         if (this.target) {
             this.target.setIsDragging(true);
+
+            let pwdWidth = this.container.offsetWidth;
+            let pwdHeight = this.container.offsetHeight;
             /*
             let offsetX = e.clientX - selectedEntity.getContainer().offsetLeft;
             let offsetY = e.clientY - selectedEntity.getContainer().offsetTop;
@@ -698,14 +702,14 @@ function PWD(settings = {}) {
             /**
              * If mouse pointer is outside window -> do not update the position
              */
-            if (e.clientX < 0 || e.clientX > this.pwdWidth || e.clientY < 0 || e.clientY > this.pwdHeight) {
+            if (e.clientX < 0 || e.clientX > pwdWidth || e.clientY < 0 || e.clientY > pwdHeight) {
                 return;
             }
 
             let movementX = e.movementX;
             let movementY = e.movementY;
 
-            if ((this.target.getXPos() + movementX + this.target.getWidth()) > this.pwdWidth && movementX > 0) {
+            if ((this.target.getXPos() + movementX + this.target.getWidth()) > pwdWidth && movementX > 0) {
                 movementX = 0;
             }
 
@@ -713,7 +717,7 @@ function PWD(settings = {}) {
                 movementX = 0;
             }
 
-            if ((this.target.getYPos() + movementY + this.target.getHeight()) > this.pwdHeight && movementY > 0) {
+            if ((this.target.getYPos() + movementY + this.target.getHeight()) > pwdHeight && movementY > 0) {
                 movementY = 0;
             }
 

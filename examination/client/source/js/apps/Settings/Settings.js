@@ -13,8 +13,6 @@ function Settings(settings = {}) {
     this.windowDiv = document.querySelector(this.container);
     this.windowDiv.classList.add("settingsWrapper");
 
-    this.hr = document.createElement("hr");
-
     /**
      * Background
      */
@@ -50,6 +48,45 @@ function Settings(settings = {}) {
     this.backgroundWrapper.appendChild(this.backgroundForm);
 
     /**
+     * Display resolution
+     */
+    this.displayResWrapper = document.createElement("div");
+
+    this.displayResTitle = document.createElement("span");
+    this.displayResTitle.textContent = "Change Display Resolution";
+
+    this.displayResForm = document.createElement("form");
+    this.displayResForm.classList.add("settingsDisplayResForm");
+
+    for (let i = 0; i < 4; i++) {
+        let formLabel = document.createElement("label");
+        formLabel.setAttribute("for", "displayResForm" + this.container + i);
+
+        let formRadio = document.createElement("input");
+        formRadio.setAttribute("type", "radio");
+        formRadio.setAttribute("value", i);
+        formRadio.setAttribute("name", "displayRes");
+        formRadio.setAttribute("id", "displayResForm" + this.container + i);
+
+        let formSpan = document.createElement("span");
+        formSpan.textContent = "asdasdasdasd";
+
+        formLabel.appendChild(formRadio);
+        formLabel.appendChild(formSpan);
+
+        this.displayResForm.appendChild(formLabel);
+    };
+
+    this.displayResWrapper.appendChild(this.displayResTitle);
+    this.displayResWrapper.appendChild(this.displayResForm);
+
+    let spans = this.displayResWrapper.querySelectorAll("span");
+    spans[1].textContent = "1280x720";
+    spans[2].textContent = "1600x900";
+    spans[3].textContent = "1920x1080";
+    spans[4].textContent = "2460x1400";
+
+    /**
      * Save button
      */
     this.saveButton = document.createElement("button");
@@ -62,7 +99,9 @@ function Settings(settings = {}) {
     this.settings.classList.add("settings");
 
     this.settings.appendChild(this.backgroundWrapper);
-    this.settings.appendChild(this.hr);
+    this.settings.appendChild(document.createElement("hr"));
+    this.settings.appendChild(this.displayResWrapper);
+    this.settings.appendChild(document.createElement("hr"));
 
     this.windowDiv.appendChild(this.settings);
     this.windowDiv.appendChild(this.saveButton);
@@ -71,11 +110,19 @@ function Settings(settings = {}) {
         /**
          * Background
          */
-        let inputs = this.backgroundForm.querySelectorAll("input");
+        let backgroundInputs = this.backgroundForm.querySelectorAll("input");
 
-        for (let i = 0; i < inputs.length; i++) {
-            if (inputs[i].checked) {
+        for (let i = 0; i < backgroundInputs.length; i++) {
+            if (backgroundInputs[i].checked) {
                 this.api.setPwdBackground(i);
+            }
+        }
+
+        let displayResInputs = this.displayResForm.querySelectorAll("input");
+
+        for (let i = 0; i < displayResInputs.length; i++) {
+            if (displayResInputs[i].checked) {
+                this.api.setPwdDisplayResolution(i);
             }
         }
     }

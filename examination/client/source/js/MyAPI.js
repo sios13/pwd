@@ -6,9 +6,39 @@ function MyAPI(settings = {}) {
 }
 
 MyAPI.prototype.setPwdBackground = function(index) {
-    this.pwdContainer.className = "";
+    let prefix = "main--background-";
 
-    this.pwdContainer.classList.add("main--background-" + index);
+    MyAPI.prototype.removeClassesWithPrefix(prefix, this.pwdContainer);
+
+    this.pwdContainer.classList.add(prefix + index);
+}
+
+MyAPI.prototype.setPwdDisplayResolution = function(index) {
+    let prefix = "main--displayRes-";
+
+    MyAPI.prototype.removeClassesWithPrefix(prefix, this.pwdContainer);
+
+    this.pwdContainer.classList.add(prefix + index);
+}
+
+/**
+ * Remove classes with prefix
+ */
+MyAPI.prototype.removeClassesWithPrefix = function(prefix, elem) {
+    for (let i = 0; i < elem.classList.length; i++) {
+        if (elem.classList[i].indexOf(prefix) !== -1) {
+            elem.classList.remove(elem.classList[i]);
+            break;
+        }
+    }
+    /**
+     * http://stackoverflow.com/questions/28608587/remove-a-class-that-start-with
+     */
+    /*
+    let regx = new RegExp('\\b' + prefix + '.*?\\b', 'g');
+
+    elem.className = elem.className.replace(regx, '');
+    */
 }
 
 module.exports = MyAPI;
