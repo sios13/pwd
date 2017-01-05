@@ -1,6 +1,7 @@
+const Application = require("../../Application.js");
 const Chat = require("./Chat.js");
 
-function ChatStart(settings) {
+function ChatStart(settings = {}) {
     /**
      * Properties
      */
@@ -64,6 +65,9 @@ function ChatStart(settings) {
         this.chatObj = new Chat(settings);
     }
 }
+
+ChatStart.prototype = Object.create(Application.prototype);
+ChatStart.prototype.constructor = ChatStart;
 
 ChatStart.prototype.close = function() {
     if (this.chatObj) {

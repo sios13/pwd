@@ -1,7 +1,7 @@
 const Application = require("../../Application.js");
 const MemoryGameBoard = require("./MemoryGameBoard.js");
 
-function MemoryGame(settings) {
+function MemoryGame(settings = {}) {
     /**
      * Properties
      */

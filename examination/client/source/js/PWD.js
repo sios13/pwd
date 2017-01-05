@@ -1,8 +1,11 @@
 const Window = require("./MyWindow.js");
 const Icon = require("./Icon.js");
 const Panel = require("./Panel.js");
+const Application = require("./Application.js");
+const MyAPI = require("./MyAPI.js");
 const Memory = require("./apps/Memory/MemoryGame.js");
 const Chat = require("./apps/Chat/ChatStart.js");
+const Settings = require("./apps/Settings/Settings.js");
 
 function PWD(settings = {}) {
 
@@ -26,6 +29,8 @@ function PWD(settings = {}) {
         this.pwdWidth = "1600px";
 
         this.pwdHeight = "900px";
+
+        this.api = undefined;
 
         /**
          * Elements
@@ -142,6 +147,14 @@ function PWD(settings = {}) {
             "iconImage": "chat.png",
             "windowSize": "medium"
         }) );
+        this.icons.push( new Icon({
+            "iconText": "Settings",
+            "applicationName": "Settings",
+            "xPos": 10,
+            "yPos": 450,
+            "windowSize": "medium",
+            "backgroundColor": "lightgray"
+        }) );
 
         /**
          * Append the icons to the container
@@ -151,8 +164,10 @@ function PWD(settings = {}) {
         }
 
         for (let i = 0; i < 4; i++) {
-            launchApplication(this.icons[1]);
+            //launchApplication(this.icons[1]);
         }
+
+        launchApplication(this.icons[4]);
 
         /**
          * Add listeners
@@ -620,19 +635,40 @@ function PWD(settings = {}) {
         /**
          * Start the application and append it to the newly created window
          */
+        let applicationName = iconObj.getApplicationName();
+
         let applicationObj = undefined;
 
-        if (iconObj.getApplicationName() === "Memory") {
+        if (applicationName === "Memory") {
             applicationObj = new Memory({
                 "container": "#PWD-window_content-" + id
             });
-        } else if (iconObj.getApplicationName() === "Chat") {
+        } else if (applicationName === "Chat") {
             applicationObj = new Chat({
                 "container": "#PWD-window_content-" + id
             });
+        } else if (applicationName === "Settings") {
+            applicationObj = new Settings({
+                "container": "#PWD-window_content-" + id,
+                "api": getApi()
+            });
+        }
+
+        if (!applicationObj instanceof Application) {
+            error("The application is not an instance of Application.");
         }
 
         this.applications.push(applicationObj);
+    }
+
+    function getApi() {
+        if (this.api instanceof MyAPI) {
+            return this.api;
+        }
+
+        this.api = new MyAPI();
+
+        return this.api;
     }
 
     /**
