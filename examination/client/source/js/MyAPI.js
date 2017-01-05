@@ -1,12 +1,14 @@
 /**
  * The API is a way for applications to communicate with the PWD
  */
-function MyAPI() {
-    console.log("API constructor");
+function MyAPI(settings = {}) {
+    this.pwdContainer = settings.pwdContainer ? settings.pwdContainer : undefined;
 }
 
-MyAPI.prototype.changeBackground = function() {
-    
+MyAPI.prototype.setPwdBackground = function(index) {
+    this.pwdContainer.className = "";
+
+    this.pwdContainer.classList.add("main--background-" + index);
 }
 
 MyAPI.prototype.test = function() {

@@ -5,7 +5,14 @@ function Settings(settings = {}) {
        "api": settings.api
     });
 
-    this.api.test();
+    this.container = settings.container ? settings.container : undefined;
+
+    this.windowDiv = document.querySelector(this.container);
+    this.windowDiv.classList.add("settings");
+
+    this.api.setPwdBackground(0);
+    this.api.setPwdBackground(1);
+    this.api.setPwdBackground(2);
 }
 
 Settings.prototype = Object.create(Application.prototype);

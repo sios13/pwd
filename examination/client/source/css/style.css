@@ -14,12 +14,15 @@ body {
 main {
     position:relative;
     /* background-color:#EEEEEE; */
-    background-image:url("../image/background.jpg");
+    background:url("../image/background.jpg");
     background-size:100% 100%;
     background-repeat:no-repeat;
     border-bottom:0;
     overflow:hidden;
 }
+.main--background-0 {background:red;}
+.main--background-1 {background:green;}
+.main--background-2 {background:blue;}
 
 .PWD-bottomBar {
     position:absolute;
@@ -350,6 +353,13 @@ main {
     color:white;
     text-shadow:0.1em 0.1em black;
     font-size:13px;
+}
+
+/**
+ * SETTINGS
+ */
+.settings {
+    background-color:lightgray;
 }
 
 /**

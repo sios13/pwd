@@ -152,8 +152,7 @@ function PWD(settings = {}) {
             "applicationName": "Settings",
             "xPos": 10,
             "yPos": 450,
-            "windowSize": "medium",
-            "backgroundColor": "lightgray"
+            "windowSize": "medium"
         }) );
 
         /**
@@ -666,7 +665,9 @@ function PWD(settings = {}) {
             return this.api;
         }
 
-        this.api = new MyAPI();
+        this.api = new MyAPI({
+            "pwdContainer": this.container
+        });
 
         return this.api;
     }
