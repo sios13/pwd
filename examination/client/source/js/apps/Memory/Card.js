@@ -20,7 +20,7 @@ function Card(value) {
 
     // The coverImage is the question mark above the card image
     this.coverImage = this.cardElem.querySelector(".Memory-card_back");
-    this.coverImage.src = "image/" + this.value[0] + ".png";
+    this.coverImage.src = "image/Memory/" + this.value[0] + ".png";
 
     // The cardImage is the image of the memory card
     this.cardImage = this.cardElem.querySelector(".Memory-card_front");

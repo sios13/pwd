@@ -28,6 +28,8 @@ function PWD(settings = {}) {
 
         this.api = undefined;
 
+        this.dragTarget = undefined;
+
         /**
          * Elements
          */
@@ -36,6 +38,7 @@ function PWD(settings = {}) {
         this.container.classList.add("main--displayRes-0");
 
         this.startButton = document.createElement("a");
+        this.startButton.href = "#";
         this.startButton.classList.add("PWD-bottomBar_startButton");
 
         this.start = document.createElement("div");
@@ -54,6 +57,7 @@ function PWD(settings = {}) {
         this.start.appendChild(this.start_message);
 
         this.clockButton = document.createElement("a");
+        this.clockButton.href = "#";
         this.clockButton.classList.add("PWD-bottomBar_clockButton");
 
         function updateClockButton() {
@@ -106,11 +110,6 @@ function PWD(settings = {}) {
         this.container.appendChild(this.bottomBar);
 
         document.querySelector(settings.container).appendChild(this.container);
-
-        /**
-         * The target is a window, icon or panel
-         */
-        this.target = undefined;
 
         /**
          * Create the desktop icons
@@ -167,7 +166,7 @@ function PWD(settings = {}) {
             //launchApplication(this.icons[1]);
         }
 
-        launchApplication(this.icons[4]);
+        //launchApplication(this.icons[4]);
 
         /**
          * Add listeners
@@ -188,13 +187,15 @@ function PWD(settings = {}) {
         /**
          * For every mousedown event we will attempt to find a new target
          */
-        this.target = findTarget(e.target);
+        let target = findTarget(e.target);
 
         /**
          * If target is a window
          */
-        if (this.target instanceof Window) {
-            let index = this.windows.indexOf(this.target);
+        if (target instanceof Window) {
+            let pwdWindow = target;
+
+            let index = this.windows.indexOf(pwdWindow);
 
             /**
              * Set the window as selected
@@ -216,9 +217,11 @@ function PWD(settings = {}) {
             /**
              * If target is the window top bar -> add mousemove listener
              */
-            let windowTopBarElem = this.target.getContainer().querySelector(".PWD-window_topbar");
+            let windowTopBarElem = pwdWindow.getContainer().querySelector(".PWD-window_topbar");
 
             if (windowTopBarElem.contains(e.target)) {
+                this.dragTarget = pwdWindow;
+
                 window.addEventListener("mousemove", entityMoveEvent);
 
                 e.preventDefault();
@@ -230,18 +233,17 @@ function PWD(settings = {}) {
         /**
          * If target is a panel
          */
-        if (this.target instanceof Panel) {
-
-        }
+        if (target instanceof Panel) {}
 
         /**
          * If target is an icon
          */
-        if (this.target instanceof Icon) {
+        if (target instanceof Icon) {
+            let icon = target;
             /**
              * Set the icon as selected
              */
-            selectEntity(this.target, this.icons);
+            selectEntity(icon, this.icons);
 
             /**
              * Deselect the window and associated panel
@@ -252,6 +254,11 @@ function PWD(settings = {}) {
                 this.panels[0].setIsSelected(false);
             }
 
+            /**
+             * Add mousemove listener
+             */
+            this.dragTarget = icon;
+
             window.addEventListener("mousemove", entityMoveEvent);
 
             e.preventDefault();
@@ -261,30 +268,42 @@ function PWD(settings = {}) {
     }
 
     function mouseupEvent(e) {
-        let targetTemp = findTarget(e.target);
-
-        if (this.target !== "clock" && this.target !== "clockButton") {
+        let target = findTarget(e.target);
+        /*
+        if (target !== "clock" && target !== "clockButton") {
             if (!this.clock.classList.contains("PWD-clock--hide")) {
                 this.clock.classList.add("PWD-clock--hide");
             }
+
+            return;
         }
 
-        if (this.target !== "start" && this.target !== "startButton") {
+        if (target !== "start" && target !== "startButton") {
             if (!this.start.classList.contains("PWD-start--hide")) {
                 this.start.classList.add("PWD-start--hide");
             }
-        }
 
+            return;
+        }
+        */
         /**
          * If target is a window
          */
-        if (this.target instanceof Window) {
-            this.target.setIsDragging(false);
+        if (target instanceof Window) {
+            let pwdWindow = target;
 
-            window.removeEventListener("mousemove", entityMoveEvent);
+            if (this.dragTarget) {
+                this.dragTarget = undefined;
+
+                pwdWindow.setIsDragging(false);
+
+                window.removeEventListener("mousemove", entityMoveEvent);
+            }
+
+            return;
         }
 
-        if (targetTemp === undefined) {
+        if (target === undefined) {
             /**
              * Deselect everything
              */
@@ -304,8 +323,16 @@ function PWD(settings = {}) {
         /**
          * If target is a panel
          */
-        if (this.target instanceof Panel) {
-            let index = this.panels.indexOf(this.target);
+        if (target instanceof Panel) {
+            let panel = target;
+
+            let index = this.panels.indexOf(panel);
+
+            if (index === -1) {
+                error("Panel was not found.");
+
+                return;
+            }
 
             if (this.panels[index].getIsSelected()) {
                 this.panels[index].setIsSelected(false);
@@ -333,38 +360,50 @@ function PWD(settings = {}) {
         /**
          * If target is an icon
          */
-        if (this.target instanceof Icon) {
-            this.target.setIsDragging(false);
+        if (target instanceof Icon) {
+            let icon = target;
 
-            window.removeEventListener("mousemove", entityMoveEvent);
+            if (this.dragTarget) {
+                this.dragTarget = undefined;
 
-            this.target.correctGridPosition();
+                icon.setIsDragging(false);
+
+                window.removeEventListener("mousemove", entityMoveEvent);
+
+                icon.correctGridPosition();
+            }
+
+            return;
         }
 
         console.log("up");
     }
 
     function clickEvent(e) {
-        if (this.target === "startButton") {
+        let target = findTarget(e.target);
+
+        if (target === "startButton") {
             this.start.classList.toggle("PWD-start--hide");
 
             return;
         }
 
-        if (this.target === "clockButton") {
+        if (target === "clockButton") {
             this.clock.classList.toggle("PWD-clock--hide");
 
             return;
         }
 
-        if (this.target instanceof Window) {
+        if (target instanceof Window) {
+            let pwdWindow = target;
+
             /**
              * If a click has been made on the close button
              */
-            let windowCloseDiv = this.target.getContainer().querySelector(".PWD-window_close");
+            let windowCloseDiv = pwdWindow.getContainer().querySelector(".PWD-window_close");
 
             if (windowCloseDiv.contains(e.target)) {
-                let index = this.windows.indexOf(this.target);
+                let index = this.windows.indexOf(pwdWindow);
 
                 closeWindow(index);
 
@@ -374,10 +413,10 @@ function PWD(settings = {}) {
             /**
              * If a click has been made on the resize button -> resize the window
              */
-            let windowResizeDiv = this.target.getContainer().querySelector(".PWD-window_resize");
+            let windowResizeDiv = pwdWindow.getContainer().querySelector(".PWD-window_resize");
 
             if (windowResizeDiv.contains(e.target)) {
-                this.target.resize();
+                pwdWindow.resize();
 
                 return;
             }
@@ -385,14 +424,14 @@ function PWD(settings = {}) {
             /**
              * If a click has been made on the minimize button
              */
-            let windowMinimizeDiv = this.target.getContainer().querySelector(".PWD-window_minimize");
+            let windowMinimizeDiv = pwdWindow.getContainer().querySelector(".PWD-window_minimize");
 
             if (windowMinimizeDiv.contains(e.target)) {
-                this.target.setMinimized(true);
+                pwdWindow.setMinimized(true);
 
-                this.target.setIsSelected(false);
+                pwdWindow.setIsSelected(false);
 
-                let index = windows.indexOf(this.target);
+                let index = windows.indexOf(pwdWindow);
 
                 this.panels[index].setIsSelected(false);
 
@@ -403,13 +442,15 @@ function PWD(settings = {}) {
         /**
          * If target is an icon
          */
-        if (this.target instanceof Panel) {
-            let index = panels.indexOf(this.target);
+        if (target instanceof Panel) {
+            let panel = target;
+
+            let index = panels.indexOf(panel);
 
             /**
              * If a click has been made on the close button
              */
-            if (this.target.getContainer().querySelector(".PWD-bottomBar_panel__close").contains(e.target)) {
+            if (panel.getContainer().querySelector(".PWD-bottomBar_panel__close").contains(e.target)) {
                 closeWindow(index);
 
                 return;
@@ -418,14 +459,18 @@ function PWD(settings = {}) {
     }
 
     function dblclickEvent(e) {
+        let target = findTarget(e.target);
+
         /**
          * If target is an icon
          */
-        if (this.target instanceof Icon) {
+        if (target instanceof Icon) {
+            let icon = target;
+
             /**
              * Launch the application associated with the icon
              */
-            launchApplication(this.target);
+            launchApplication(icon);
 
             return;
         }
@@ -680,11 +725,19 @@ function PWD(settings = {}) {
         /**
          * If there is an active entity -> update its position
          */
-        if (this.target) {
-            this.target.setIsDragging(true);
+        if (this.dragTarget) {
+            let dragTarget = this.dragTarget;
 
             let pwdWidth = this.container.offsetWidth;
             let pwdHeight = this.container.offsetHeight;
+
+            let cursorX = e.clientX;
+            let cursorY = e.clientY;
+
+            let movementX = e.movementX;
+            let movementY = e.movementY;
+
+            dragTarget.setIsDragging(true);
             /*
             let offsetX = e.clientX - selectedEntity.getContainer().offsetLeft;
             let offsetY = e.clientY - selectedEntity.getContainer().offsetTop;
@@ -702,30 +755,36 @@ function PWD(settings = {}) {
             /**
              * If mouse pointer is outside window -> do not update the position
              */
-            if (e.clientX < 0 || e.clientX > pwdWidth || e.clientY < 0 || e.clientY > pwdHeight) {
+            let target = findTarget(e.target);
+            if (target === undefined) {
+                this.dragTarget = undefined;
+
+                dragTarget.setIsDragging(false);
+
+                if (dragTarget instanceof Icon) {
+                    dragTarget.correctGridPosition();
+                }
+
                 return;
             }
 
-            let movementX = e.movementX;
-            let movementY = e.movementY;
-
-            if ((this.target.getXPos() + movementX + this.target.getWidth()) > pwdWidth && movementX > 0) {
+            if ((dragTarget.getXPos() + movementX + dragTarget.getWidth()) > pwdWidth) {
                 movementX = 0;
             }
 
-            if (this.target.getXPos() + movementX < 0) {
+            if (dragTarget.getXPos() + movementX < 0) {
                 movementX = 0;
             }
 
-            if ((this.target.getYPos() + movementY + this.target.getHeight()) > pwdHeight && movementY > 0) {
+            if ((dragTarget.getYPos() + movementY + dragTarget.getHeight()) > pwdHeight) {
                 movementY = 0;
             }
 
-            if (this.target.getYPos() + movementY < 0) {
+            if (dragTarget.getYPos() + movementY < 0) {
                 movementY = 0;
             }
 
-            this.target.updatePos(this.target.getXPos() + movementX, this.target.getYPos() + movementY);
+            dragTarget.updatePos(dragTarget.getXPos() + movementX, dragTarget.getYPos() + movementY);
         }
     }
 }

@@ -1,0 +1,123 @@
+#memoryPairForm {
+    margin:10px auto;
+    width:100%;
+}
+#memoryPairForm label {
+    display:inline-block;
+    width:calc(50% - 16px);
+    padding:10px 5px;
+    margin:3px 3px;
+    text-align:center;
+    background:#eee;
+}
+#memoryPairForm label:hover {
+    background:#ddd;
+}
+#memoryPairForm button {
+    font-family:inherit;
+    font-size:inherit;
+    display:block;
+    margin:0 auto;
+    margin-top:10px;
+    padding:10px 20px;
+    border:0;
+    background:#eee;
+}
+#memoryPairForm button:hover {
+    background:#ddd;
+}
+
+.Memory-wrapper {
+    width:100%;
+    height:inherit;
+    font-family:"Raleway", sans-serif;
+}
+
+.Memory-panel {
+    width:100%;
+    display:block;
+    text-align:center;
+    font-size:1vw;;
+    height:50px;
+}
+
+.memoryHeader {
+    padding-top:10px;
+    padding-bottom:20px;
+    text-align:center;
+    font-size:32px;
+}
+
+.Memory-panel span {
+    display:block;
+    font-size:16px;
+}
+.memoryPanelAttemptsSpan {}
+.memoryPanelSpanPlan {}
+.memoryPanelMessage {}
+
+.Memory-cards {
+    width:100%;
+    display:block;
+    margin:0 auto;
+    padding:20px 0;
+}
+.Memory-cards--width-240 {width:240px;}
+.Memory-cards--width-360 {width:360px;}
+.Memory-cards--width-480 {width:480px;}
+.Memory-cards--width-600 {width:600px;}
+
+.Memory-card {
+    float:left;
+    width:25%;
+    padding-top:25%;
+    position:relative;
+}
+
+.Memory-card img {
+    width:100%;
+}
+
+.Memory-card--correct {
+    box-shadow:inset 0px 0px 0px 5px green;
+}
+
+.Memory-card_front, .Memory-card_back {
+    position:absolute;
+    top:0;
+    left:0;
+}
+
+.Memory-card_front {
+    z-index:2;
+    transform:rotateY(0deg);
+    backface-visibility:hidden;
+}
+
+.Memory-card_back {
+    transform:rotateY(180deg);
+}
+
+@keyframes memoryCardFlipAnimation {
+    0% {transform:rotateY(0deg);}
+    50% {}
+    100% {transform:rotateY(180deg);}
+}
+
+.Memory-card--flip {
+    animation-name:memoryCardFlipAnimation;
+    animation-duration:2s;
+    animation-fill-mode:forwards;
+}
+
+@keyframes memoryCardBackflipAnimation {
+    0% {transform:rotateY(180deg);}
+    50% {}
+    100% {transform:rotateY(0deg);}
+}
+
+.Memory-card--backflip {
+    animation-name:memoryCardBackflipAnimation;
+    animation-duration:2s;
+    animation-fill-mode:forwards;
+}

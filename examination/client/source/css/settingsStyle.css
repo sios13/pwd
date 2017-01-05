@@ -1,0 +1,97 @@
+.settingsWrapper {
+   font-family:"Open sans", sans-serif;
+   background-color:lightgray;
+   position:relative;
+   overflow:hidden;
+}
+
+.settingsButton {
+   position:absolute;
+   bottom:0;
+   left:0;
+   width:100%;
+   height:40px;
+}
+
+.settings {
+   position:absolute;
+   top:0;
+   left:0;
+   width:100%;
+   height:calc(100% - 40px);
+   overflow:auto;
+}
+
+.settings span {
+   float:left;
+   width:100%;
+   margin:10px 0;
+   text-align:center;
+   font-size:18px;
+}
+
+.settings hr {
+   float:left;
+   width:calc(100% - 4px - 20px);
+   margin:10px auto;
+   margin-left:10px;
+   border:2px solid white;
+}
+
+/**
+ * Background
+ */
+.settingsBackgroundForm {
+   float:left;
+   width:calc(100% - 20px);
+   margin:0px auto;
+   padding:0 10px;
+}
+.settingsBackgroundForm label {
+   float:left;
+   position:relative;
+   width:calc(33% - 10px);
+   height:calc(100% - 20px;);
+   margin:5px;
+}
+.settingsBackgroundForm input {
+    width:0;
+    height:0;
+    margin:0;
+    border:0;
+}
+.settingsBackgroundForm img {
+   width:100%;
+}
+.settingsBackgroundForm input:checked + img {
+   box-shadow:0px 0px 8px 4px rgba(0,0,0,0.5);
+}
+
+/**
+ * Display resolution
+ */
+.settingsDisplayResForm {
+   float:left;
+   width:calc(80%);
+   margin-left:10%;
+   margin-right:10%;
+}
+.settingsDisplayResForm label {
+}
+.settingsDisplayResForm input {
+   display:none;
+}
+.settingsDisplayResForm span {
+   float:left;
+   width:calc(50% - 14px);
+   border:2px dashed rgba(0,0,0,0.3);
+   margin:5px;
+   padding:10px 0;
+   overflow:hidden;
+   white-space:nowrap;
+   text-overflow:ellipsis;
+}
+.settingsDisplayResForm input:checked + span {
+   border:2px dashed rgba(0,0,0,0.8);
+   background-color:rgba(255,255,255,0.4);
+}

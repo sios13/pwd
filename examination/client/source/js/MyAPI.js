@@ -31,14 +31,6 @@ MyAPI.prototype.removeClassesWithPrefix = function(prefix, elem) {
             break;
         }
     }
-    /**
-     * http://stackoverflow.com/questions/28608587/remove-a-class-that-start-with
-     */
-    /*
-    let regx = new RegExp('\\b' + prefix + '.*?\\b', 'g');
-
-    elem.className = elem.className.replace(regx, '');
-    */
 }
 
 module.exports = MyAPI;
