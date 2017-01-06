@@ -346,6 +346,8 @@ function PWD(settings = {}) {
                 selectEntity(this.applications[index], this.applications);
 
                 this.windows[0].setMinimized(false);
+
+                return;
             }
         }
 
@@ -556,7 +558,7 @@ function PWD(settings = {}) {
              */
             arr.unshift(entity);
 
-            if (entity instanceof MyWindow || entity instanceof Icon) {
+            if (entity instanceof MyWindow || entity instanceof Panel) {
                 /**
                  * Deselect the last active entity
                  */
