@@ -17,7 +17,7 @@ function Icon(settings = {}) {
 
     this.applicationName = settings.applicationName ? settings.applicationName : "";
 
-    this.iconImage       = settings.iconImage ? settings.iconImage : "defaultIcon.ico";
+    this.iconImage       = settings.iconImage ? settings.iconImage : "defaultIcon.png";
 
     this.windowSize      = settings.windowSize ? settings.windowSize : "small";
 

@@ -32,7 +32,7 @@ function ChatStart(settings = {}) {
         e.stopPropagation();
         this.click();
     });
-    chatNameInput.setAttribute("placeholder", "Enter name!!!");
+    chatNameInput.setAttribute("placeholder", "Enter name!");
     chatNameInput.classList.add("chatStartNameInput");
     chatWrapperDiv.appendChild(chatNameInput);
 
@@ -41,7 +41,7 @@ function ChatStart(settings = {}) {
     chatNameButton.addEventListener("click", buttonEvent.bind(this));
     chatNameButton.classList.add("chatStartNameButton");
     chatNameButton.setAttribute("type", "button");
-    chatNameButton.textContent = "Start chatting!!!!!!!!";
+    chatNameButton.textContent = "Start chatting!";
     chatWrapperDiv.appendChild(chatNameButton);
 
     // Container div

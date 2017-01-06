@@ -146,7 +146,7 @@ function PWD(settings = {}) {
             "applicationName": "Chat",
             "xPos": 10,
             "yPos": 350,
-            "iconImage": "chat.png",
+            "iconImage": "chatIcon.png",
             "windowSize": "medium"
         }) );
         this.icons.push( new Icon({
@@ -154,6 +154,7 @@ function PWD(settings = {}) {
             "applicationName": "Settings",
             "xPos": 10,
             "yPos": 450,
+            "iconImage": "settingsIcon.png",
             "windowSize": "medium"
         }) );
 
