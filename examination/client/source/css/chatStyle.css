@@ -3,7 +3,7 @@
    width:100%;
    height:100%;
    position:relative;
-   background-color:rgb(183,222,177);
+   background-color:rgb(100,185,88);
 }
 
 /**
@@ -33,8 +33,11 @@
    padding:10px 15px;
    border:0;
    font-size:16px;
-   background-color:rgb(100,185,88);
-   color:white;
+   background-color:rgba(255,255,255,0.8);
+   color:black;
+}
+.chatStartNameButton:hover {
+    background-color:rgba(255,255,255,0.5);
 }
 
 /**
@@ -61,8 +64,11 @@
     height:100%;
     width:40%;
     border:0;
-    background-color:rgb(100,185,88);
-    color:white;
+    background-color:rgba(255,255,255,0.8);
+    color:black;
+}
+.chatNameChange button:hover {
+    background-color:rgba(255,255,255,0.5);
 }
 .chatNameChange input {
     float:left;
@@ -80,7 +86,7 @@
    margin:0 5px;
    overflow:auto;
    font-size:14px;
-   background-color:rgb(215,237,211);
+   background-color:rgba(255,255,255,0.8);
 }
 .chatMessage {
    display:block;
@@ -95,12 +101,14 @@
 }
 .chatInput_textarea {
    float:left;
-   min-width:calc(75% - 2px);
-   max-width:calc(75% - 2px);
-   min-height:calc(100% - 2px);
-   max-height:calc(100% - 2px);
-   padding:0;
+   min-width:calc(75% - 8px);
+   max-width:calc(75% - 8px);
+   min-height:calc(100% - 8px);
+   max-height:calc(100% - 8px);
+   padding:3px;
+   font-family:inherit;
    font-size:14px;
+   background-color:rgba(255,255,255,0.8);
 }
 .chatInput_button {
    float:left;
@@ -108,6 +116,9 @@
    height:calc(100%);
    border:0;
    margin-left:5px;
-   background-color:rgb(100,185,88);
-   color:white;
+   background-color:rgba(255,255,255,0.8);
+   color:black;
+}
+.chatInput_button:hover {
+    background-color:rgba(255,255,255,0.5);
 }

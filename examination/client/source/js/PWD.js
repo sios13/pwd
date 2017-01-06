@@ -122,7 +122,8 @@ function PWD(settings = {}) {
             "xPos": 10,
             "yPos": 10,
             "iconImage": "memoryIcon.png",
-            "windowSize": "small"
+            "windowSize": "small",
+            "backgroundColor": "rgb(193,154,107)"
         }) );
         this.icons.push( new Icon({
             "iconText": "Memory medium",
@@ -139,7 +140,8 @@ function PWD(settings = {}) {
             "xPos": 10,
             "yPos": 250,
             "iconImage": "memoryIcon.png",
-            "windowSize": "big"
+            "windowSize": "big",
+            "backgroundColor": "rgb(193,154,107)"
         }) );
         this.icons.push( new Icon({
             "iconText": "Chat",

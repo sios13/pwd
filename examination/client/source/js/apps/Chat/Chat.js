@@ -40,11 +40,7 @@ function Chat(settings) {
     // Textarea in the input div
     let inputDiv_textarea = document.createElement("textarea");
     inputDiv_textarea.classList.add("chatInput_textarea");
-    // fix to make textarea selectable
-    inputDiv_textarea.addEventListener("mousedown", function(e) {
-        e.stopPropagation();
-        this.click();
-    });
+    inputDiv_textarea.setAttribute("placeholder", "Enter message");
     inputDiv.appendChild(inputDiv_textarea);
 
     // Button in the input div
