@@ -199,17 +199,18 @@ function PWD(settings = {}) {
 
             let index = this.windows.indexOf(pwdWindow);
 
-            /**
-             * Set the window as selected
-             */
-            selectEntity(this.windows[index], this.windows);
-
-            /**
-             * Mark the associated panel as selected
-             */
-            selectEntity(this.panels[index], this.panels);
-
-            selectEntity(this.applications[index], this.applications);
+            // /**
+            //  * Set the window as selected
+            //  */
+            // selectEntity(this.windows[index], this.windows);
+            //
+            // /**
+            //  * Mark the associated panel as selected
+            //  */
+            // selectEntity(this.panels[index], this.panels);
+            //
+            // selectEntity(this.applications[index], this.applications);
+            selectWindowPanelApp(index);
 
             /**
              * Deselect icon
@@ -247,7 +248,10 @@ function PWD(settings = {}) {
             /**
              * Set the icon as selected
              */
-            selectEntity(icon, this.icons);
+            //selectEntity(icon, this.icons);
+            let index = icons.indexOf(icon);
+
+            selectIcon(index);
 
             /**
              * Deselect the window and associated panel
@@ -391,7 +395,9 @@ function PWD(settings = {}) {
              */
             if (this.windows[0]) {
                 this.windows[0].setIsSelected(false);
+            }
 
+            if (this.panels[0]) {
                 this.panels[0].setIsSelected(false);
             }
 
@@ -538,60 +544,82 @@ function PWD(settings = {}) {
     }
 
     /**
-     * Selects a window, panel or icon
-     * Brings it to the front of its array (position 0)
+     * Brings the icon with the given index to the front of their respective arrays
+     * Being in front of the array means "selected"
      */
-    function selectEntity(entity, arr) {
-        let index = arr.indexOf(entity);
+    function selectIcon(index) {
+        let iconTemp = this.icons[index];
+
+        this.icons.splice(index, 1);
+
+        this.icons.unshift(iconTemp);
+
+        if (this.icons[1]) {
+            this.icons[1].setIsSelected(false);
+        }
+
+        this.icons[0].setIsSelected(true);
+    }
+
+    /**
+     * Brings the window, panel and application with the given index to the front of their respective arrays
+     * Being in front of the array means "selected"
+     */
+    function selectWindowPanelApp(index) {
+        /**
+         * Application
+         */
+        let applicationTemp = this.applications[index];
+
+        this.applications.splice(index, 1);
+
+        this.applications.unshift(applicationTemp);
 
         /**
-         * If the entity exists in the array
+         * Window
          */
-        if (index > -1) {
-            /**
-             * Remove the entity from the array
-             */
-            arr.splice(index, 1);
+        let windowTemp = this.windows[index];
 
-            /**
-             * Add it to the front of the array
-             */
-            arr.unshift(entity);
+        this.windows.splice(index, 1);
 
-            if (entity instanceof MyWindow || entity instanceof Panel) {
-                /**
-                 * Deselect the last active entity
-                 */
-                if (arr[1]) {
-                    arr[1].setIsSelected(false);
-                }
+        this.windows.unshift(windowTemp);
 
-                /**
-                 * Select the new entity
-                 */
-                arr[0].setIsSelected(true);
-
-                /**
-                 * The entities are given z-index
-                 */
-                for (let i = 0; i < arr.length; i++) {
-                    if (arr[i] instanceof Icon) {
-                        arr[i].getContainer().style.zIndex = arr.length - i;
-                    } else {
-                        arr[i].getContainer().style.zIndex = this.icons.length + arr.length - i;
-                    }
-                }
-            }
-
-            /**
-             * The bottom bar, start and clock should always have the highest z-index
-             */
-            this.bottomBar.style.zIndex = this.windows.length + this.icons.length + 2;
-            this.start.style.zIndex = this.windows.length + this.icons.length + 1;
-            this.clock.style.zIndex = this.windows.length + this.icons.length + 1;
-        } else {
-            error("selectEntity. Entity does not exist in array.");
+        if (this.windows[1]) {
+            this.windows[1].setIsSelected(false);
         }
+
+        this.windows[0].setIsSelected(true);
+
+        /**
+         * Panel
+         */
+        let panelTemp = this.panels[index];
+
+        this.panels.splice(index, 1);
+
+        this.panels.unshift(panelTemp);
+
+        if (this.panels[1]) {
+            this.panels[1].setIsSelected(false);
+        }
+
+        this.panels[0].setIsSelected(true);
+
+        /**
+         * Give windows z-index
+         */
+        for (let i = 0; i < this.applications.length; i++) {
+            this.windows[i].getContainer().style.zIndex = this.icons.length + length - i;
+        }
+
+        /**
+         * Make sure start, clock and bottom bar always is on top
+         */
+        let topZIndex = this.applications.length + this.icons.length;
+
+        this.start.style.zIndex = topZIndex + 1;
+        this.clock.style.zIndex = topZIndex + 1;
+        this.bottomBar.style.zIndex = topZIndex + 2;
     }
 
     /**
@@ -688,7 +716,7 @@ function PWD(settings = {}) {
     /**
      * Updates the width of the panels
      */
-    function calculatePanelWidth() {
+    function calculatePanelsWidth() {
         let panelWidth = 188 * this.panels.length + 100;
 
         let pwdWidth = this.container.offsetWidth;
@@ -703,7 +731,7 @@ function PWD(settings = {}) {
     }
 
     /**
-     * Launch an application using the meta data in a given icon object
+     * Launch an application, window and panel using the meta data in a given icon object
      */
     function launchApplication(iconObj) {
         let id = this.windows.length;
@@ -722,8 +750,6 @@ function PWD(settings = {}) {
 
         this.windows.push(pwdWindow);
 
-        selectEntity(pwdWindow, this.windows);
-
         this.container.appendChild(pwdWindow.getContainer());
 
         /**
@@ -736,17 +762,15 @@ function PWD(settings = {}) {
 
         this.panels.push(pwdPanel);
 
-        selectEntity(pwdPanel, this.panels);
-
         this.panelsWrapper.appendChild(pwdPanel.getContainer());
 
         /**
          * When a new panel is made, make sure width is correct
          */
-        calculatePanelWidth();
+        calculatePanelsWidth();
 
         /**
-         * Start the application and append it to the newly created window
+         * Start the application
          */
         let applicationName = iconObj.getApplicationName();
 
@@ -773,7 +797,10 @@ function PWD(settings = {}) {
 
         this.applications.push(applicationObj);
 
-        selectEntity(applicationObj, this.applications);
+        /**
+         * When window, panel and application has now been made -> make them selected
+         */
+        selectWindowPanelApp(this.applications.length - 1);
 
         this.windowCounter++;
     }

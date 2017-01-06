@@ -141,6 +141,7 @@ function Chat(settings) {
 }
 
 Chat.prototype.close = function() {
+    debugger;
     this.socket.close();
 }
 
