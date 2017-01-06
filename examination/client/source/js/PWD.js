@@ -85,7 +85,7 @@ function PWD(settings = {}) {
         this.clock.appendChild(this.clock_bigClock);
         this.clock.appendChild(this.clock_date);
 
-        function updateClockBig() {
+        function updateClock() {
             let d = new Date();
 
             this.clock_bigClock.textContent = d.getHours() + ":" + (d.getMinutes() < 10 ? "0" + d.getMinutes() : d.getMinutes()) + ":" + (d.getSeconds() < 10 ? "0" + d.getSeconds() : d.getSeconds());
@@ -95,7 +95,7 @@ function PWD(settings = {}) {
             this.clock_date.textContent = "den " + d.getDate() + " " + monthNames[d.getMonth()] + " " + d.getFullYear();
         }
 
-        setInterval(updateClockBig, 1000);
+        setInterval(updateClock, 1000);
 
         this.panelsWrapper = document.createElement("div");
         this.panelsWrapper.classList.add("PWD-bottomBar_panelsWrapper");
@@ -164,11 +164,11 @@ function PWD(settings = {}) {
             this.container.appendChild(this.icons[i].getContainer());
         }
 
-        for (let i = 0; i < 5; i++) {
+        for (let i = 0; i < 20; i++) {
             launchApplication(this.icons[1]);
         }
 
-        launchApplication(this.icons[3]);
+        //launchApplication(this.icons[3]);
 
         /**
          * Add listeners
@@ -277,23 +277,25 @@ function PWD(settings = {}) {
 
     function mouseupEvent(e) {
         let target = findTarget(e.target);
-        /*
+
+        /**
+         * Hide clock if mouseup has been made outside clock and clockButton
+         */
         if (target !== "clock" && target !== "clockButton") {
             if (!this.clock.classList.contains("PWD-clock--hide")) {
                 this.clock.classList.add("PWD-clock--hide");
             }
-
-            return;
         }
 
+        /**
+         * Hide start if mouseup has been made outside start and startButton
+         */
         if (target !== "start" && target !== "startButton") {
             if (!this.start.classList.contains("PWD-start--hide")) {
                 this.start.classList.add("PWD-start--hide");
             }
-
-            return;
         }
-        */
+
         /**
          * If target is a window
          */
@@ -337,17 +339,7 @@ function PWD(settings = {}) {
 
                 return;
             } else {
-                /**
-                 * Set the panel as selected
-                 */
-                selectEntity(this.panels[index], this.panels);
-
-                /**
-                 * Mark the associated window as selected
-                 */
-                selectEntity(this.windows[index], this.windows);
-
-                selectEntity(this.applications[index], this.applications);
+                selectWindowPanelApp(index);
 
                 this.windows[0].setMinimized(false);
 
@@ -544,7 +536,7 @@ function PWD(settings = {}) {
     }
 
     /**
-     * Brings the icon with the given index to the front of their respective arrays
+     * Brings the icon with the given index to the front of the icons array
      * Being in front of the array means "selected"
      */
     function selectIcon(index) {
@@ -554,6 +546,9 @@ function PWD(settings = {}) {
 
         this.icons.unshift(iconTemp);
 
+        /**
+         * Deselect the last active icon
+         */
         if (this.icons[1]) {
             this.icons[1].setIsSelected(false);
         }
@@ -609,7 +604,7 @@ function PWD(settings = {}) {
          * Give windows z-index
          */
         for (let i = 0; i < this.applications.length; i++) {
-            this.windows[i].getContainer().style.zIndex = this.icons.length + length - i;
+            this.windows[i].getContainer().style.zIndex = this.icons.length + this.applications.length - i;
         }
 
         /**
@@ -714,7 +709,7 @@ function PWD(settings = {}) {
     }
 
     /**
-     * Updates the width of the panels
+     * Updates the width of the panels, making sure all panels fit in the bottom bar
      */
     function calculatePanelsWidth() {
         let panelWidth = 188 * this.panels.length + 100;

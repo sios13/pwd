@@ -33,7 +33,6 @@ function Icon(settings = {}) {
         container.classList.add("PWD-icon");
         container.style.left = this.xPos + "px";
         container.style.top = this.yPos + "px";
-        container.style.zIndex = this.zIndex;
 
         let iconImageElem = document.createElement("img");
         iconImageElem.src = "./image/" + this.iconImage;
