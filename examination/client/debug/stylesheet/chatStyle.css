@@ -5,6 +5,9 @@
    position:relative;
 }
 
+/**
+ * Chat start
+ */
 .chatStartHeader {
    text-align:center;
    padding:40px 0;
@@ -31,15 +34,39 @@
    padding:5px;
 }
 
+/**
+ * Chat
+ */
+.chatNameChange {
+    float:left;
+    height:calc(10% - 20px);
+    width:calc(100% - 20px);
+    padding:10px;
+}
+.chatNameChange span {
+    float:left;
+    height:100%;
+    width:60%;
+}
+.chatNameChange button {
+    float:left;
+    height:100%;
+    width:40%;
+}
+.chatNameChange input {
+    float:left;
+    height:100%;
+    width:calc(60% - 4px);
+}
+
 .chatMessages {
    float:left;
    padding:5px;
-   height:calc(85% - 10px);
+   height:calc(75% - 10px);
    width:calc(100% - 10px);
    overflow:auto;
    font-size:14px;
 }
-
 .chatMessage {
    display:block;
 }

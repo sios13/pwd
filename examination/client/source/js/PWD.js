@@ -166,7 +166,7 @@ function PWD(settings = {}) {
             launchApplication(this.icons[1]);
         }
 
-        //launchApplication(this.icons[4]);
+        launchApplication(this.icons[3]);
 
         /**
          * Add listeners
