@@ -1,4 +1,4 @@
-const Window = require("./MyWindow.js");
+const MyWindow = require("./MyWindow.js");
 const Icon = require("./Icon.js");
 const Panel = require("./Panel.js");
 const Application = require("./Application.js");
@@ -162,8 +162,8 @@ function PWD(settings = {}) {
             this.container.appendChild(this.icons[i].getContainer());
         }
 
-        for (let i = 0; i < 4; i++) {
-            //launchApplication(this.icons[1]);
+        for (let i = 0; i < 5; i++) {
+            launchApplication(this.icons[1]);
         }
 
         //launchApplication(this.icons[4]);
@@ -192,7 +192,7 @@ function PWD(settings = {}) {
         /**
          * If target is a window
          */
-        if (target instanceof Window) {
+        if (target instanceof MyWindow) {
             let pwdWindow = target;
 
             let index = this.windows.indexOf(pwdWindow);
@@ -222,7 +222,7 @@ function PWD(settings = {}) {
             if (windowTopBarElem.contains(e.target)) {
                 this.dragTarget = pwdWindow;
 
-                window.addEventListener("mousemove", entityMoveEvent);
+                window.addEventListener("mousemove", mousemoveEvent);
 
                 e.preventDefault();
             }
@@ -259,7 +259,7 @@ function PWD(settings = {}) {
              */
             this.dragTarget = icon;
 
-            window.addEventListener("mousemove", entityMoveEvent);
+            window.addEventListener("mousemove", mousemoveEvent);
 
             e.preventDefault();
 
@@ -289,32 +289,18 @@ function PWD(settings = {}) {
         /**
          * If target is a window
          */
-        if (target instanceof Window) {
+        if (target instanceof MyWindow) {
             let pwdWindow = target;
 
-            if (this.dragTarget) {
+            /**
+             * If a window is being dragged -> stop dragging
+             */
+            if (this.dragTarget instanceof MyWindow) {
                 this.dragTarget = undefined;
 
                 pwdWindow.setIsDragging(false);
 
-                window.removeEventListener("mousemove", entityMoveEvent);
-            }
-
-            return;
-        }
-
-        if (target === undefined) {
-            /**
-             * Deselect everything
-             */
-            if (this.windows[0]) {
-                this.windows[0].setIsSelected(false);
-
-                this.panels[0].setIsSelected(false);
-            }
-
-            if (this.icons[0]) {
-                this.icons[0].setIsSelected(false);
+                window.removeEventListener("mousemove", mousemoveEvent);
             }
 
             return;
@@ -363,12 +349,12 @@ function PWD(settings = {}) {
         if (target instanceof Icon) {
             let icon = target;
 
-            if (this.dragTarget) {
+            if (this.dragTarget instanceof Icon) {
                 this.dragTarget = undefined;
 
                 icon.setIsDragging(false);
 
-                window.removeEventListener("mousemove", entityMoveEvent);
+                window.removeEventListener("mousemove", mousemoveEvent);
 
                 icon.correctGridPosition();
             }
@@ -376,7 +362,37 @@ function PWD(settings = {}) {
             return;
         }
 
-        console.log("up");
+        if (target === undefined) {
+            /**
+             * If something is being dragged -> stop dragging
+             */
+            if (this.dragTarget) {
+                this.dragTarget.setIsDragging(false);
+
+                if (this.dragTarget instanceof Icon) {
+                    this.dragTarget.correctGridPosition();
+                }
+
+                this.dragTarget = undefined;
+
+                window.removeEventListener("mousemove", mousemoveEvent);
+            }
+
+            /**
+             * Deselect window, panel and icon
+             */
+            if (this.windows[0]) {
+                this.windows[0].setIsSelected(false);
+
+                this.panels[0].setIsSelected(false);
+            }
+
+            if (this.icons[0]) {
+                this.icons[0].setIsSelected(false);
+            }
+
+            return;
+        }
     }
 
     function clickEvent(e) {
@@ -394,7 +410,7 @@ function PWD(settings = {}) {
             return;
         }
 
-        if (target instanceof Window) {
+        if (target instanceof MyWindow) {
             let pwdWindow = target;
 
             /**
@@ -476,6 +492,39 @@ function PWD(settings = {}) {
         }
     }
 
+    function mousemoveEvent(e) {
+        /**
+         * If there is a drag target -> update its position
+         */
+        if (this.dragTarget) {
+            let dragTarget = this.dragTarget;
+
+            let pwdWidth = this.container.offsetWidth;
+            let pwdHeight = this.container.offsetHeight;
+
+            let cursorX = e.pageX;
+            let cursorY = e.pageY;
+
+            let movementX = e.movementX;
+            let movementY = e.movementY;
+
+            dragTarget.setIsDragging(true);
+
+            /**
+             * If mouse pointer is outside window -> do not update the position
+             */
+            if (cursorY + 10 < 0 || cursorY > pwdHeight - 40 - 10) {
+                movementY = 0;
+            }
+
+            if (cursorX + 10 < 0 || cursorX > pwdWidth - 10) {
+                movementX = 0;
+            }
+
+            dragTarget.updatePos(dragTarget.getXPos() + movementX, dragTarget.getYPos() + movementY);
+        }
+    }
+
     function error(message) {
         console.log("ERROR! " + message);
     }
@@ -536,7 +585,7 @@ function PWD(settings = {}) {
     }
 
     /**
-     * CLose a window with a given index
+     * Close a window with a given index
      */
     function closeWindow(index) {
         /**
@@ -626,10 +675,19 @@ function PWD(settings = {}) {
         return undefined;
     }
 
+    /**
+     * Updates the width of the panels
+     */
     function calculatePanelWidth() {
-        if (188 * this.panels.length + 100 > parseInt(this.pwdWidth)) {
+        let panelWidth = 188 * this.panels.length + 100;
+
+        let pwdWidth = this.container.offsetWidth;
+
+        if (panelWidth > pwdWidth) {
             for (let i = 0; i < this.panels.length; i++) {
-                this.panels[i].getContainer().style.width = this.panelsWrapper.offsetWidth / this.panels.length - 8 + "px";
+                let panelElem = this.panels[i].getContainer();
+
+                panelElem.style.width = this.panelsWrapper.offsetWidth / this.panels.length - 8 + "px";
             }
         }
     }
@@ -643,7 +701,7 @@ function PWD(settings = {}) {
         /**
          * Create a new window to launch the application in
          */
-        let pwdWindow = new Window({
+        let pwdWindow = new MyWindow({
             "id": this.windows.length,
             "windowSize": iconObj.getWindowSize(),
             "topBarText": iconObj.getIconText(),
@@ -716,76 +774,6 @@ function PWD(settings = {}) {
         });
 
         return this.api;
-    }
-
-    /**
-     * Update the position of the selected target
-     */
-    function entityMoveEvent(e) {
-        /**
-         * If there is an active entity -> update its position
-         */
-        if (this.dragTarget) {
-            let dragTarget = this.dragTarget;
-
-            let pwdWidth = this.container.offsetWidth;
-            let pwdHeight = this.container.offsetHeight;
-
-            let cursorX = e.clientX;
-            let cursorY = e.clientY;
-
-            let movementX = e.movementX;
-            let movementY = e.movementY;
-
-            dragTarget.setIsDragging(true);
-            /*
-            let offsetX = e.clientX - selectedEntity.getContainer().offsetLeft;
-            let offsetY = e.clientY - selectedEntity.getContainer().offsetTop;
-
-            console.log(selectedEntity.getXPos() + " : " + offsetX);
-            console.log(selectedEntity.getYPos() + " : " + offsetY);
-
-            selectedEntity.updatePos(selectedEntity.getXPos() + offsetX, selectedEntity.getYPos() + offsetY);
-            */
-            /*
-            if (!this.target.getContainer().querySelector(".PWD-window_topbar").contains(e.target)) {
-                return;
-            }
-            */
-            /**
-             * If mouse pointer is outside window -> do not update the position
-             */
-            let target = findTarget(e.target);
-            if (target === undefined) {
-                this.dragTarget = undefined;
-
-                dragTarget.setIsDragging(false);
-
-                if (dragTarget instanceof Icon) {
-                    dragTarget.correctGridPosition();
-                }
-
-                return;
-            }
-
-            if ((dragTarget.getXPos() + movementX + dragTarget.getWidth()) > pwdWidth) {
-                movementX = 0;
-            }
-
-            if (dragTarget.getXPos() + movementX < 0) {
-                movementX = 0;
-            }
-
-            if ((dragTarget.getYPos() + movementY + dragTarget.getHeight()) > pwdHeight) {
-                movementY = 0;
-            }
-
-            if (dragTarget.getYPos() + movementY < 0) {
-                movementY = 0;
-            }
-
-            dragTarget.updatePos(dragTarget.getXPos() + movementX, dragTarget.getYPos() + movementY);
-        }
     }
 }
 
