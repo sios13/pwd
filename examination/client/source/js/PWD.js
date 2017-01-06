@@ -164,8 +164,8 @@ function PWD(settings = {}) {
             this.container.appendChild(this.icons[i].getContainer());
         }
 
-        for (let i = 0; i < 20; i++) {
-            launchApplication(this.icons[1]);
+        for (let i = 0; i < 5; i++) {
+            //launchApplication(this.icons[1]);
         }
 
         //launchApplication(this.icons[3]);
@@ -192,24 +192,16 @@ function PWD(settings = {}) {
         let target = findTarget(e.target);
 
         /**
-         * If target is a window
+         * If a mousedown has been made on a window
          */
         if (target instanceof MyWindow) {
             let pwdWindow = target;
 
             let index = this.windows.indexOf(pwdWindow);
 
-            // /**
-            //  * Set the window as selected
-            //  */
-            // selectEntity(this.windows[index], this.windows);
-            //
-            // /**
-            //  * Mark the associated panel as selected
-            //  */
-            // selectEntity(this.panels[index], this.panels);
-            //
-            // selectEntity(this.applications[index], this.applications);
+            /**
+             * Select the window, panel and application
+             */
             selectWindowPanelApp(index);
 
             /**
@@ -220,7 +212,7 @@ function PWD(settings = {}) {
             }
 
             /**
-             * If target is the window top bar -> add mousemove listener
+             * If target is the window top bar -> set the window as dragTarget and add mousemove listener
              */
             let windowTopBarElem = pwdWindow.getContainer().querySelector(".PWD-window_topbar");
 
@@ -236,21 +228,21 @@ function PWD(settings = {}) {
         }
 
         /**
-         * If target is a panel
+         * If a mousedown has been made on a panel
          */
         if (target instanceof Panel) {}
 
         /**
-         * If target is an icon
+         * If a mouse down has been made on an icon
          */
         if (target instanceof Icon) {
             let icon = target;
+
+            let index = icons.indexOf(icon);
+
             /**
              * Set the icon as selected
              */
-            //selectEntity(icon, this.icons);
-            let index = icons.indexOf(icon);
-
             selectIcon(index);
 
             /**
@@ -258,12 +250,14 @@ function PWD(settings = {}) {
              */
             if (this.windows[0]) {
                 this.windows[0].setIsSelected(false);
+            }
 
+            if (this.panels[0]) {
                 this.panels[0].setIsSelected(false);
             }
 
             /**
-             * Add mousemove listener
+             * Set the icon as dragTarget and add mousemove listener
              */
             this.dragTarget = icon;
 
@@ -297,7 +291,7 @@ function PWD(settings = {}) {
         }
 
         /**
-         * If target is a window
+         * If a mouse up has been made on a window
          */
         if (target instanceof MyWindow) {
             let pwdWindow = target;
@@ -317,7 +311,7 @@ function PWD(settings = {}) {
         }
 
         /**
-         * If target is a panel
+         * If a mouseup has been made on a panel
          */
         if (target instanceof Panel) {
             let panel = target;
@@ -330,6 +324,9 @@ function PWD(settings = {}) {
                 return;
             }
 
+            /**
+             * If panel is selected -> deselect and minimize the associated window
+             */
             if (this.panels[index].getIsSelected()) {
                 this.panels[index].setIsSelected(false);
 
@@ -338,7 +335,12 @@ function PWD(settings = {}) {
                 this.windows[index].setMinimized(true);
 
                 return;
-            } else {
+            }
+
+            /**
+             * If panel is deselected -> select and bring up the associated window
+             */
+            if (!this.panels[index].getIsSelected()) {
                 selectWindowPanelApp(index);
 
                 this.windows[0].setMinimized(false);
@@ -348,12 +350,15 @@ function PWD(settings = {}) {
         }
 
         /**
-         * If target is an icon
+         * If a mouseup has been made on an icon
          */
         if (target instanceof Icon) {
             let icon = target;
 
-            if (this.dragTarget instanceof Icon) {
+            /**
+             * If the icon is being dragged -> stop dragging
+             */
+            if (this.dragTarget === icon) {
                 this.dragTarget = undefined;
 
                 icon.setIsDragging(false);
@@ -416,11 +421,14 @@ function PWD(settings = {}) {
             return;
         }
 
+        /**
+         * If a click has been made on a window
+         */
         if (target instanceof MyWindow) {
             let pwdWindow = target;
 
             /**
-             * If a click has been made on the close button
+             * If a click has been made on the close button -> close the window
              */
             let windowCloseDiv = pwdWindow.getContainer().querySelector(".PWD-window_close");
 
@@ -444,7 +452,7 @@ function PWD(settings = {}) {
             }
 
             /**
-             * If a click has been made on the minimize button
+             * If a click has been made on the minimize button -> minimize the window
              */
             let windowMinimizeDiv = pwdWindow.getContainer().querySelector(".PWD-window_minimize");
 
@@ -462,7 +470,7 @@ function PWD(settings = {}) {
         }
 
         /**
-         * If target is an icon
+         * If a click has been made on a panel
          */
         if (target instanceof Panel) {
             let panel = target;
@@ -484,7 +492,7 @@ function PWD(settings = {}) {
         let target = findTarget(e.target);
 
         /**
-         * If target is an icon
+         * If a dblclick has been made on an icon
          */
         if (target instanceof Icon) {
             let icon = target;
