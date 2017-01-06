@@ -158,6 +158,7 @@ main {
     color:white;
     text-align:center;
     font-weight:300;
+    z-index:1;
 }
 .PWD-clock--hide {
     bottom:-340px;
@@ -188,6 +189,7 @@ main {
     color:white;
     text-align:center;
     font-weight:300;
+    z-index:1;
 }
 .PWD-start--hide {
     bottom:-340px;
