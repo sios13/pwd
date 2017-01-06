@@ -13,7 +13,6 @@ function Chat(settings) {
     /**
      * Elements
      */
-
     // Name change div
     let nameChangeDiv = document.createElement("div");
     nameChangeDiv.classList.add("chatNameChange");
@@ -80,6 +79,10 @@ function Chat(settings) {
         let response = JSON.parse(e.data);
         console.log(response);
 
+        if (response.type === "heartbeat") {
+            return;
+        }
+
         let chatMessageSpan = document.createElement("span");
         chatMessageSpan.classList.add("chatMessage");
 
@@ -93,7 +96,6 @@ function Chat(settings) {
     }
 
     function nameChangeEvent(e) {
-        console.log("name change");
         nameChangeDiv.textContent = "";
 
         if (nameChangeInput.value === "") {
@@ -104,6 +106,8 @@ function Chat(settings) {
             nameChangeInput.value = this.username;
         } else {
             this.username = nameChangeInput.value;
+
+            localStorage.setItem("chatUsername", this.username);
 
             nameChangeInput.value = "";
 

@@ -49,6 +49,17 @@ function ChatStart(settings = {}) {
     containerDiv.appendChild(chatWrapperDiv);
 
     /**
+     * If a username exists in local storage -> start chat
+     */
+    if (localStorage.getItem("chatUsername")) {
+        settings.username = localStorage.getItem("chatUsername");
+
+        chatWrapperDiv.parentNode.removeChild(chatWrapperDiv);
+
+        this.chatObj = new Chat(settings);
+    }
+
+    /**
      * Functions
      */
     function buttonEvent() {
@@ -57,6 +68,8 @@ function ChatStart(settings = {}) {
         if (value === "") {
             console.log("Enter a name!");
         }
+
+        localStorage.setItem("chatUsername", value);
 
         settings.username = value;
 

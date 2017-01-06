@@ -30,6 +30,8 @@ function PWD(settings = {}) {
 
         this.dragTarget = undefined;
 
+        this.windowCounter = 0;
+
         /**
          * Elements
          */
@@ -702,13 +704,15 @@ function PWD(settings = {}) {
          * Create a new window to launch the application in
          */
         let pwdWindow = new MyWindow({
-            "id": this.windows.length,
+            "id": this.windowCounter,
             "windowSize": iconObj.getWindowSize(),
             "topBarText": iconObj.getIconText(),
             "topBarIcon": iconObj.getIconImage(),
             "zIndex": this.icons.length,
             "backgroundColor" : iconObj.getBackgroundColor()
         });
+
+        this.windowCounter++;
 
         this.windows.push(pwdWindow);
 
