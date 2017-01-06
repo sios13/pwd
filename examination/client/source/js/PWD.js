@@ -712,8 +712,6 @@ function PWD(settings = {}) {
             "backgroundColor" : iconObj.getBackgroundColor()
         });
 
-        this.windowCounter++;
-
         this.windows.push(pwdWindow);
 
         selectEntity(pwdWindow, this.windows);
@@ -748,15 +746,15 @@ function PWD(settings = {}) {
 
         if (applicationName === "Memory") {
             applicationObj = new Memory({
-                "container": "#PWD-window_content-" + id
+                "container": "#PWD-window_content-" + this.windowCounter
             });
         } else if (applicationName === "Chat") {
             applicationObj = new Chat({
-                "container": "#PWD-window_content-" + id
+                "container": "#PWD-window_content-" + this.windowCounter
             });
         } else if (applicationName === "Settings") {
             applicationObj = new Settings({
-                "container": "#PWD-window_content-" + id,
+                "container": "#PWD-window_content-" + this.windowCounter,
                 "api": getApi()
             });
         }
@@ -766,6 +764,8 @@ function PWD(settings = {}) {
         }
 
         this.applications.push(applicationObj);
+
+        this.windowCounter++;
     }
 
     function getApi() {
