@@ -630,7 +630,7 @@ function PWD(settings = {}) {
      */
     function closeWindow(index) {
         /**
-         * Call the close functionn implemented by every application
+         * Call the close function implemented by every application
          */
         this.applications[index].close();
 
@@ -651,7 +651,7 @@ function PWD(settings = {}) {
         /**
          * When a panel is removed, make sure the other panels' width is correct
          */
-         calculatePanelWidth();
+         calculatePanelsWidth();
     }
 
     /**
