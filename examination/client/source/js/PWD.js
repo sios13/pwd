@@ -209,6 +209,8 @@ function PWD(settings = {}) {
              */
             selectEntity(this.panels[index], this.panels);
 
+            selectEntity(this.applications[index], this.applications);
+
             /**
              * Deselect icon
              */
@@ -340,6 +342,8 @@ function PWD(settings = {}) {
                  * Mark the associated window as selected
                  */
                 selectEntity(this.windows[index], this.windows);
+
+                selectEntity(this.applications[index], this.applications);
 
                 this.windows[0].setMinimized(false);
             }
@@ -552,26 +556,28 @@ function PWD(settings = {}) {
              */
             arr.unshift(entity);
 
-            /**
-             * Deselect the last active entity
-             */
-            if (arr[1]) {
-                arr[1].setIsSelected(false);
-            }
+            if (entity instanceof MyWindow || entity instanceof Icon) {
+                /**
+                 * Deselect the last active entity
+                 */
+                if (arr[1]) {
+                    arr[1].setIsSelected(false);
+                }
 
-            /**
-             * Select the new entity
-             */
-            arr[0].setIsSelected(true);
+                /**
+                 * Select the new entity
+                 */
+                arr[0].setIsSelected(true);
 
-            /**
-             * The entities are given z-index
-             */
-            for (let i = 0; i < arr.length; i++) {
-                if (arr[i] instanceof Icon) {
-                    arr[i].getContainer().style.zIndex = arr.length - i;
-                } else {
-                    arr[i].getContainer().style.zIndex = this.icons.length + arr.length - i;
+                /**
+                 * The entities are given z-index
+                 */
+                for (let i = 0; i < arr.length; i++) {
+                    if (arr[i] instanceof Icon) {
+                        arr[i].getContainer().style.zIndex = arr.length - i;
+                    } else {
+                        arr[i].getContainer().style.zIndex = this.icons.length + arr.length - i;
+                    }
                 }
             }
 
@@ -764,6 +770,8 @@ function PWD(settings = {}) {
         }
 
         this.applications.push(applicationObj);
+
+        selectEntity(applicationObj, this.applications);
 
         this.windowCounter++;
     }
