@@ -36,8 +36,22 @@ function PWD(settings = {}) {
          * Elements
          */
         this.container = document.createElement("main");
-        this.container.classList.add("main--background-3");
-        this.container.classList.add("main--displayRes-0");
+        /**
+         * Look for background in local storage
+         */
+        if (localStorage.getItem("main_background")) {
+            this.container.classList.add(localStorage.getItem("main_background"));
+        } else {
+            this.container.classList.add("main--background-3");
+        }
+        /**
+         * Look for display resolution in local storage
+         */
+        if (localStorage.getItem("main_displayRes")) {
+            this.container.classList.add(localStorage.getItem("main_displayRes"));
+        } else {
+            this.container.classList.add("main--displayRes-0");
+        }
 
         this.startButton = document.createElement("a");
         this.startButton.href = "#";
@@ -412,6 +426,9 @@ function PWD(settings = {}) {
     function clickEvent(e) {
         let target = findTarget(e.target);
 
+        /**
+         * If a click has been made on the start button
+         */
         if (target === "startButton") {
             e.preventDefault();
 
@@ -420,6 +437,9 @@ function PWD(settings = {}) {
             return;
         }
 
+        /**
+         * If a click has been made on the clock button
+         */
         if (target === "clockButton") {
             e.preventDefault();
 
@@ -566,7 +586,7 @@ function PWD(settings = {}) {
     }
 
     /**
-     * Brings the icon with the given index to the front of the icons array
+     * Bring the icon with the given index to the front of the icons array
      * Being in front of the array means "selected"
      */
     function selectIcon(index) {
@@ -830,11 +850,17 @@ function PWD(settings = {}) {
         this.windowCounter++;
     }
 
+    /**
+     * The API is used by applications to communicate with the PWD
+     */
     function getApi() {
         if (this.api instanceof MyAPI) {
             return this.api;
         }
 
+        /**
+         * The API is provided some settings
+         */
         this.api = new MyAPI({
             "pwdContainer": this.container
         });

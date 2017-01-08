@@ -79,6 +79,8 @@ function MemoryGame(settings = {}) {
 MemoryGame.prototype = Object.create(Application.prototype);
 MemoryGame.prototype.constructor = MemoryGame;
 
-MemoryGame.prototype.close = function() {}
+MemoryGame.prototype.close = function() {
+    console.log("Closing Memory application...");
+}
 
 module.exports = MemoryGame;

@@ -34,6 +34,10 @@ function Settings(settings = {}) {
         formRadio.setAttribute("name", "background");
         formRadio.setAttribute("id", "backgroundForm" + this.container + i);
 
+        if (localStorage.getItem("main_background") === "main--background-" + i) {
+            formRadio.checked = true;
+        }
+
         let formImage = document.createElement("img");
         formImage.setAttribute("src", "./image/background" + i + "_small.jpg");
         formImage.setAttribute("alt", "Background");
@@ -68,8 +72,11 @@ function Settings(settings = {}) {
         formRadio.setAttribute("name", "displayRes");
         formRadio.setAttribute("id", "displayResForm" + this.container + i);
 
+        if (localStorage.getItem("main_displayRes") === "main--displayRes-" + i) {
+            formRadio.checked = true;
+        }
+
         let formSpan = document.createElement("span");
-        formSpan.textContent = "asdasdasdasd";
 
         formLabel.appendChild(formRadio);
         formLabel.appendChild(formSpan);
@@ -115,6 +122,8 @@ function Settings(settings = {}) {
         for (let i = 0; i < backgroundInputs.length; i++) {
             if (backgroundInputs[i].checked) {
                 this.api.setPwdBackground(i);
+
+                localStorage.setItem("main_background", "main--background-" + i);
             }
         }
 
@@ -123,6 +132,8 @@ function Settings(settings = {}) {
         for (let i = 0; i < displayResInputs.length; i++) {
             if (displayResInputs[i].checked) {
                 this.api.setPwdDisplayResolution(i);
+
+                localStorage.setItem("main_displayRes", "main--displayRes-" + i);
             }
         }
     }
@@ -130,5 +141,9 @@ function Settings(settings = {}) {
 
 Settings.prototype = Object.create(Application.prototype);
 Settings.prototype.constructor = Settings;
+
+Settings.prototype.close = function() {
+    console.log("Closing Settings application...");
+}
 
 module.exports = Settings;

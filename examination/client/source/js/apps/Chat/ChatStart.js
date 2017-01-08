@@ -83,6 +83,8 @@ ChatStart.prototype = Object.create(Application.prototype);
 ChatStart.prototype.constructor = ChatStart;
 
 ChatStart.prototype.close = function() {
+    console.log("Closing Chat application...");
+
     if (this.chatObj) {
         this.chatObj.close();
     }
