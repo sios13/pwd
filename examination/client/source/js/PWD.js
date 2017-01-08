@@ -32,6 +32,8 @@ function PWD(settings = {}) {
 
         this.windowCounter = 0;
 
+        this.isDblClick = false;
+
         /**
          * Elements
          */
@@ -43,6 +45,7 @@ function PWD(settings = {}) {
             this.container.classList.add(localStorage.getItem("main_background"));
         } else {
             this.container.classList.add("main--background-3");
+            localStorage.setItem("main_background", "main--background-3");
         }
         /**
          * Look for display resolution in local storage
@@ -51,6 +54,7 @@ function PWD(settings = {}) {
             this.container.classList.add(localStorage.getItem("main_displayRes"));
         } else {
             this.container.classList.add("main--displayRes-0");
+            localStorage.setItem("main_displayRes", "main--displayRes-0");
         }
 
         this.startButton = document.createElement("a");
@@ -84,7 +88,7 @@ function PWD(settings = {}) {
 
         updateClockButton();
 
-        setInterval(updateClockButton, 30000);
+        setInterval(updateClockButton, 60000);
 
         this.clock = document.createElement("div");
         this.clock.classList.add("PWD-clock");
@@ -136,8 +140,7 @@ function PWD(settings = {}) {
             "xPos": 10,
             "yPos": 10,
             "iconImage": "memoryIcon.png",
-            "windowSize": "small",
-            "backgroundColor": "rgb(193,154,107)"
+            "windowSize": "small"
         }) );
         this.icons.push( new Icon({
             "iconText": "Memory medium",
@@ -145,8 +148,7 @@ function PWD(settings = {}) {
             "xPos": 10,
             "yPos": 120,
             "iconImage": "memoryIcon.png",
-            "windowSize": "medium",
-            "backgroundColor": "rgb(193,154,107)"
+            "windowSize": "medium"
         }) );
         this.icons.push( new Icon({
             "iconText": "Memory big",
@@ -154,8 +156,7 @@ function PWD(settings = {}) {
             "xPos": 10,
             "yPos": 250,
             "iconImage": "memoryIcon.png",
-            "windowSize": "big",
-            "backgroundColor": "rgb(193,154,107)"
+            "windowSize": "big"
         }) );
         this.icons.push( new Icon({
             "iconText": "Chat",
@@ -195,8 +196,6 @@ function PWD(settings = {}) {
         window.addEventListener("mouseup", mouseupEvent);
 
         window.addEventListener("click", clickEvent);
-
-        window.addEventListener("dblclick", dblclickEvent);
     }
 
     /**
@@ -247,7 +246,9 @@ function PWD(settings = {}) {
         /**
          * If a mousedown has been made on a panel
          */
-        if (target instanceof Panel) {}
+        if (target instanceof Panel) {
+            return;
+        }
 
         /**
          * If a mouse down has been made on an icon
@@ -424,6 +425,12 @@ function PWD(settings = {}) {
     }
 
     function clickEvent(e) {
+        if (this.isDblClick) {
+            dblclickEvent(e);
+
+            return;
+        }
+
         let target = findTarget(e.target);
 
         /**
@@ -528,6 +535,15 @@ function PWD(settings = {}) {
         if (target instanceof Icon) {
             e.preventDefault();
         }
+
+        /**
+         * Start the double click timer
+         */
+        this.isDblClick = true;
+
+        setTimeout(function() {
+            this.isDblClick = false;
+        }, 500);
     }
 
     function dblclickEvent(e) {
@@ -537,6 +553,8 @@ function PWD(settings = {}) {
          * If a dblclick has been made on an icon
          */
         if (target instanceof Icon) {
+            e.preventDefault();
+
             let icon = target;
 
             /**

@@ -55,6 +55,9 @@
    margin:5px;
 }
 .settingsBackgroundForm input {
+    /**
+     * how to hide input in firefox? :(
+     */
     width:0;
     height:0;
     margin:0;
@@ -76,10 +79,15 @@
    margin-left:10%;
    margin-right:10%;
 }
-.settingsDisplayResForm label {
-}
+.settingsDisplayResForm label {}
 .settingsDisplayResForm input {
-   display:none;
+    /**
+     * how to hide input in firefox? :(
+     */
+    width:0;
+    height:0;
+    margin:0;
+    border:0;
 }
 .settingsDisplayResForm span {
    float:left;

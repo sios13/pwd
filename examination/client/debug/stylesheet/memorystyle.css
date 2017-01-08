@@ -32,6 +32,7 @@
 .memoryWrapper {
     width:100%;
     font-family:"Raleway", sans-serif;
+    background-color:rgb(193,154,107);
 }
 
 .memoryHeader {
