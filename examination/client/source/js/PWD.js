@@ -81,14 +81,14 @@ function PWD(settings = {}) {
         this.clockButton.classList.add("PWD-bottomBar_clockButton");
 
         function updateClockButton() {
-            let d = new Date();
+            let date = new Date();
 
-            this.clockButton.textContent = d.getHours() + ":" + (d.getMinutes() < 10 ? "0" + d.getMinutes() : d.getMinutes());
+            this.clockButton.textContent = date.getHours() + ":" + (date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes());
         }
 
         updateClockButton();
 
-        setInterval(updateClockButton, 60000);
+        setInterval(updateClockButton.bind(this), 60000);
 
         this.clock = document.createElement("div");
         this.clock.classList.add("PWD-clock");
@@ -104,16 +104,16 @@ function PWD(settings = {}) {
         this.clock.appendChild(this.clock_date);
 
         function updateClock() {
-            let d = new Date();
+            let date = new Date();
 
-            this.clock_bigClock.textContent = d.getHours() + ":" + (d.getMinutes() < 10 ? "0" + d.getMinutes() : d.getMinutes()) + ":" + (d.getSeconds() < 10 ? "0" + d.getSeconds() : d.getSeconds());
+            this.clock_bigClock.textContent = date.getHours() + ":" + (date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes()) + ":" + (date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds());
 
             let monthNames = ["Januari", "Februari", "Mars", "April", "Maj", "Juni", "July", "Augusti", "September", "Oktober", "November", "December"];
 
-            this.clock_date.textContent = "den " + d.getDate() + " " + monthNames[d.getMonth()] + " " + d.getFullYear();
+            this.clock_date.textContent = "den " + date.getDate() + " " + monthNames[date.getMonth()] + " " + date.getFullYear();
         }
 
-        setInterval(updateClock, 1000);
+        setInterval(updateClock.bind(this), 1000);
 
         this.panelsWrapper = document.createElement("div");
         this.panelsWrapper.classList.add("PWD-bottomBar_panelsWrapper");
@@ -196,6 +196,8 @@ function PWD(settings = {}) {
         window.addEventListener("mouseup", mouseupEvent);
 
         window.addEventListener("click", clickEvent);
+
+        window.addEventListener("keydown", keydownEvent);
     }
 
     /**
@@ -336,12 +338,6 @@ function PWD(settings = {}) {
 
             let index = this.panels.indexOf(panel);
 
-            if (index === -1) {
-                error("Panel was not found.");
-
-                return;
-            }
-
             /**
              * If panel is selected -> deselect and minimize the associated window
              */
@@ -356,7 +352,7 @@ function PWD(settings = {}) {
             }
 
             /**
-             * If panel is deselected -> select and bring up the associated window
+             * If panel is not selected -> select and bring up the associated window
              */
             if (!this.panels[index].getIsSelected()) {
                 selectWindowPanelApp(index);
@@ -460,6 +456,10 @@ function PWD(settings = {}) {
          */
         if (target instanceof MyWindow) {
             let pwdWindow = target;
+
+            let index = this.windows.indexOf(pwdWindow);
+
+            selectWindowPanelApp(index);
 
             /**
              * If a click has been made on the close button -> close the window
@@ -599,8 +599,108 @@ function PWD(settings = {}) {
         }
     }
 
+    function keydownEvent(e) {
+        /**
+         * Update position of selected window using the arrow key
+         */
+        if (this.windows[0]) {
+            let pwdWindow = this.windows[0];
+
+            /**
+             * Move only if is selected and holding ctrl key
+             */
+            if (pwdWindow.getIsSelected() && e.ctrlKey) {
+                let x = pwdWindow.getXPos();
+                let y = pwdWindow.getYPos();
+
+                let velocity = 10;
+
+                if (e.keyCode === 37) {
+                    // Left
+                    x -= velocity;
+                } else if (e.keyCode === 38) {
+                    // Up
+                    y -= velocity;
+                } else if (e.keyCode === 39) {
+                    // Right
+                    x += velocity;
+                } else if (e.keyCode === 40) {
+                    // Down
+                    y += velocity;
+                }
+
+                pwdWindow.updatePos(x, y);
+            }
+        }
+    }
+
+    /**
+     * Handles error messages
+     */
     function error(message) {
         console.log("ERROR! " + message);
+    }
+
+    /**
+     * Check if a given target exists in a window, panel or icon
+     */
+    function findTarget(target) {
+        if (this.startButton.contains(target)) {
+            return "startButton";
+        }
+
+        if (this.start.contains(target)) {
+            return "start";
+        }
+
+        if (this.clockButton.contains(target)) {
+            return "clockButton";
+        }
+
+        if (this.clock.contains(target)) {
+            return "clock";
+        }
+
+        /**
+         * Iterate the windows
+         */
+        for (let i = 0; i < this.windows.length; i++) {
+            /**
+             * If a mousedown has been made in a window -> mark the window and the panel as selected
+             */
+            if (this.windows[i].getContainer().contains(target)) {
+                return this.windows[i];
+            }
+        }
+
+        /**
+         * Iterate the panels
+         */
+        for (let i = 0; i < this.panels.length; i++) {
+            /**
+             * If a mousedown has been made in a panel -> mark the panel and the window as selected
+             */
+            if (this.panels[i].getContainer().contains(target)) {
+                return this.panels[i];
+            }
+        }
+
+        /**
+         * Iterate the icons
+         */
+        for (let i = 0; i < this.icons.length; i++) {
+            /**
+             * If a mousedown has been made on an icon -> mark the icon as selected
+             */
+            if (this.icons[i].getContainer().contains(target)) {
+                return this.icons[i];
+            }
+        }
+
+        /**
+         * There is no target -> return undefined
+         */
+        return undefined;
     }
 
     /**
@@ -712,68 +812,6 @@ function PWD(settings = {}) {
          * When a panel is removed, make sure the other panels' width is correct
          */
          calculatePanelsWidth();
-    }
-
-    /**
-     * Check if a given target exists in a window, panel or icon
-     */
-    function findTarget(target) {
-        if (this.startButton.contains(target)) {
-            return "startButton";
-        }
-
-        if (this.start.contains(target)) {
-            return "start";
-        }
-
-        if (this.clockButton.contains(target)) {
-            return "clockButton";
-        }
-
-        if (this.clock.contains(target)) {
-            return "clock";
-        }
-
-        /**
-         * Iterate the windows
-         */
-        for (let i = 0; i < this.windows.length; i++) {
-            /**
-             * If a mousedown has been made in a window -> mark the window and the panel as selected
-             */
-            if (this.windows[i].getContainer().contains(target)) {
-                return this.windows[i];
-            }
-        }
-
-        /**
-         * Iterate the panels
-         */
-        for (let i = 0; i < this.panels.length; i++) {
-            /**
-             * If a mousedown has been made in a panel -> mark the panel and the window as selected
-             */
-            if (this.panels[i].getContainer().contains(target)) {
-                return this.panels[i];
-            }
-        }
-
-        /**
-         * Iterate the icons
-         */
-        for (let i = 0; i < this.icons.length; i++) {
-            /**
-             * If a mousedown has been made on an icon -> mark the icon as selected
-             */
-            if (this.icons[i].getContainer().contains(target)) {
-                return this.icons[i];
-            }
-        }
-
-        /**
-         * There is no target -> return undefined
-         */
-        return undefined;
     }
 
     /**
