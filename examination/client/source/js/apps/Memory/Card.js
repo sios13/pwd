@@ -15,15 +15,15 @@ function Card(value) {
     let cardTemplateFrag = document.importNode(cardTemplate.content, true);
 
     // The cardElem is the element wrapping the two images
-    this.cardElem = cardTemplateFrag.querySelector(".Memory-card");
+    this.cardElem = cardTemplateFrag.querySelector(".memoryCard");
     this.cardElem.setAttribute("data-index", this.value);
 
     // The coverImage is the question mark above the card image
-    this.coverImage = this.cardElem.querySelector(".Memory-card_back");
+    this.coverImage = this.cardElem.querySelector(".memoryCard__back");
     this.coverImage.src = "image/Memory/" + this.value[0] + ".png";
 
     // The cardImage is the image of the memory card
-    this.cardImage = this.cardElem.querySelector(".Memory-card_front");
+    this.cardImage = this.cardElem.querySelector(".memoryCard__front");
 }
 
 /**
@@ -39,19 +39,19 @@ Card.prototype.getValue = function() {
  */
 Card.prototype.flip = function() {
     if (this.isFlipped) {
-        this.coverImage.classList.remove("Memory-card--flip");
-        this.cardImage.classList.remove("Memory-card--flip");
+        this.coverImage.classList.remove("memoryCard--flip");
+        this.cardImage.classList.remove("memoryCard--flip");
 
-        this.coverImage.classList.add("Memory-card--backflip");
-        this.cardImage.classList.add("Memory-card--backflip");
+        this.coverImage.classList.add("memoryCard--backflip");
+        this.cardImage.classList.add("memoryCard--backflip");
 
         this.isFlipped = false;
     } else {
-        this.coverImage.classList.remove("Memory-card--backflip");
-        this.cardImage.classList.remove("Memory-card--backflip");
+        this.coverImage.classList.remove("memoryCard--backflip");
+        this.cardImage.classList.remove("memoryCard--backflip");
 
-        this.coverImage.classList.add("Memory-card--flip");
-        this.cardImage.classList.add("Memory-card--flip");
+        this.coverImage.classList.add("memoryCard--flip");
+        this.cardImage.classList.add("memoryCard--flip");
 
         this.isFlipped = true;
     }

@@ -11,10 +11,8 @@ function MemoryGame(settings = {}) {
      * Elements
      */
     // Wrapper
-    let memoryWrapperTemplate = document.querySelector("#memoryWrapperTemplate");
-    let memoryWrapperFrag = document.importNode(memoryWrapperTemplate.content, true);
-
-    let memoryWrapperDiv = memoryWrapperFrag.querySelector(".Memory-wrapper");
+    let memoryWrapperDiv = document.querySelector(container);
+    memoryWrapperDiv.classList.add("memoryWrapper");
 
     // Header
     let memoryHeaderTemplate = document.querySelector("#memoryHeaderTemplate");
@@ -27,7 +25,7 @@ function MemoryGame(settings = {}) {
     let memoryPairFormTemplate = document.querySelector("#memoryPairFormTemplate");
     let memoryPairFormFrag = document.importNode(memoryPairFormTemplate.content, true);
 
-    let memoryPairForm = memoryPairFormFrag.querySelector("#memoryPairForm");
+    let memoryPairForm = memoryPairFormFrag.querySelector(".memoryPairForm");
     memoryWrapperDiv.appendChild(memoryPairForm);
 
     // Radio inputs
@@ -59,19 +57,17 @@ function MemoryGame(settings = {}) {
 
     memoryPairForm.appendChild(memoryPairFormButton);
 
-    // Container
-    let memoryContainerDiv = document.querySelector(container);
-    memoryContainerDiv.appendChild(memoryWrapperDiv);
-
     /**
      * Functions
      */
     function memoryPairFormButtonEvent() {
-        let nrOfPairs = document.querySelector("#memoryPairForm input:checked").value;
+        let nrOfPairs = document.querySelector(".memoryPairForm input:checked").value;
 
-        memoryWrapperDiv.parentNode.removeChild(memoryWrapperDiv);
+        memoryWrapperDiv.removeChild(memoryHeader);
+        memoryWrapperDiv.removeChild(memoryPairForm);
 
         settings.nrOfPairs = parseInt(nrOfPairs);
+
         new MemoryGameBoard(settings);
     }
 }

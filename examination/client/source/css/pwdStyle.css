@@ -330,6 +330,7 @@ main {
     height:calc(100% - 35px);
     overflow:auto;
     background:white;
+    position:relative;
 }
 
 .PWD-icon {

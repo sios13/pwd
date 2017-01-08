@@ -12,7 +12,7 @@ function MemoryGameBoard(settings) {
 
     let score = 0;
 
-    let gameTimer = 0;
+    let gameTimer = -1;
 
     let attempts = 0;
 
@@ -28,10 +28,8 @@ function MemoryGameBoard(settings) {
      * ELements
      */
     // Memory wrapper
-    let memoryWrapperTemplate = document.querySelector("#memoryWrapperTemplate");
-    let memoryWrapperFrag = document.importNode(memoryWrapperTemplate.content, true);
-
-    let memoryWrapperDiv = memoryWrapperFrag.querySelector(".Memory-wrapper");
+    let memoryWrapperDiv = document.querySelector(container);
+    memoryWrapperDiv.classList.add("memoryWrapper");
     memoryWrapperDiv.addEventListener("click", memoryWrapperClickEvent);
 
     // Header
@@ -45,23 +43,21 @@ function MemoryGameBoard(settings) {
     let memoryPanelTemplate = document.querySelector("#memoryPanelTemplate");
     let memoryPanelFrag = document.importNode(memoryPanelTemplate.content, true);
 
-    let memoryPanelDiv          = memoryPanelFrag.querySelector(".Memory-panel");
-    let memoryPanelAttemptsSpan = memoryPanelFrag.querySelector("#memoryPanelAttemptsSpan");
-    let memoryPanelTimeSpan     = memoryPanelFrag.querySelector("#memoryPanelTimeSpan");
-    let memoryPanelMessageSpan  = memoryPanelFrag.querySelector("#memoryPanelMessageSpan");
+    let memoryPanelDiv          = memoryPanelFrag.querySelector(".memoryPanel");
+    let memoryPanelAttemptsSpan = memoryPanelFrag.querySelector(".memoryPanel__attemptsSpan");
+    let memoryPanelTimeSpan     = memoryPanelFrag.querySelector(".memoryPanel__timeSpan");
+    let memoryPanelMessageSpan  = memoryPanelFrag.querySelector(".memoryPanel__messageSpan");
     memoryWrapperDiv.appendChild(memoryPanelDiv);
 
     // Memory cards
     let memoyCardsTemplate = document.querySelector("#memoryCardsTemplate");
     let memoryCardsFrag = document.importNode(memoryCardsTemplate.content, true);
 
-    let memoryCardsDiv = memoryCardsFrag.querySelector(".Memory-cards");
+    let memoryCardsDiv = memoryCardsFrag.querySelector(".memoryCards");
     memoryCardsDiv.appendChild(cards.getCardsFrag());
     memoryWrapperDiv.appendChild(memoryCardsDiv);
 
-    // Memory container
-    let memoryContainerDiv = document.querySelector(container);
-    memoryContainerDiv.appendChild(memoryWrapperDiv);
+    timer();
 
     /**
      * Functions
@@ -120,8 +116,8 @@ function MemoryGameBoard(settings) {
                 firstCard.setIsComplete(true);
                 secondCard.setIsComplete(true);
 
-                firstCard.addClass("Memory-card--correct");
-                secondCard.addClass("Memory-card--correct");
+                firstCard.addClass("memoryCard--correct");
+                secondCard.addClass("memoryCard--correct");
 
                 score += 1;
 
