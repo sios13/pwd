@@ -235,13 +235,12 @@ main {
     height:600px;
 }
 .PWD-window--minimize {
-    top:10000px !important;
+    top:3000px !important;
     opacity:0;
-    height:0;
-    transition:all 2.5s, opacity 0.25s;
+    transition:all 0.5s ease-in, opacity 0.2s ease-in;
 }
 .PWD-window--maximize {
-    transition:all 0.3s, opacity 0.5s;
+    transition:all 0.2s ease-out, opacity 0.2s ease-out;
 }
 
 .PWD-window_topbar_wrapper {
