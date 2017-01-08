@@ -413,12 +413,16 @@ function PWD(settings = {}) {
         let target = findTarget(e.target);
 
         if (target === "startButton") {
+            e.preventDefault();
+
             this.start.classList.toggle("PWD-start--hide");
 
             return;
         }
 
         if (target === "clockButton") {
+            e.preventDefault();
+
             this.clock.classList.toggle("PWD-clock--hide");
 
             return;
@@ -436,6 +440,8 @@ function PWD(settings = {}) {
             let windowCloseDiv = pwdWindow.getContainer().querySelector(".PWD-window_close");
 
             if (windowCloseDiv.contains(e.target)) {
+                e.preventDefault();
+
                 let index = this.windows.indexOf(pwdWindow);
 
                 closeWindow(index);
@@ -449,6 +455,8 @@ function PWD(settings = {}) {
             let windowResizeDiv = pwdWindow.getContainer().querySelector(".PWD-window_resize");
 
             if (windowResizeDiv.contains(e.target)) {
+                e.preventDefault();
+
                 pwdWindow.resize();
 
                 return;
@@ -460,6 +468,8 @@ function PWD(settings = {}) {
             let windowMinimizeDiv = pwdWindow.getContainer().querySelector(".PWD-window_minimize");
 
             if (windowMinimizeDiv.contains(e.target)) {
+                e.preventDefault();
+
                 pwdWindow.setMinimized(true);
 
                 pwdWindow.setIsSelected(false);
@@ -476,6 +486,8 @@ function PWD(settings = {}) {
          * If a click has been made on a panel
          */
         if (target instanceof Panel) {
+            e.preventDefault();
+
             let panel = target;
 
             let index = panels.indexOf(panel);
@@ -488,6 +500,13 @@ function PWD(settings = {}) {
 
                 return;
             }
+        }
+
+        /**
+         * If a click has been made on an icon
+         */
+        if (target instanceof Icon) {
+            e.preventDefault();
         }
     }
 
