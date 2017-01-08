@@ -7,7 +7,7 @@ function Chat(settings) {
     this.username = settings.username ? settings.username : "simon";
 
     this.socket = new WebSocket("ws://vhost3.lnu.se:20080/socket/");
-    //socket.addEventListener("open", socketOpenEvent);
+    this.socket.addEventListener("open", socketOpenEvent);
     this.socket.addEventListener("message", socketMessageEvent);
 
     /**
@@ -40,7 +40,9 @@ function Chat(settings) {
     // Textarea in the input div
     let inputDiv_textarea = document.createElement("textarea");
     inputDiv_textarea.classList.add("chatInput_textarea");
-    inputDiv_textarea.setAttribute("placeholder", "Enter message");
+    inputDiv_textarea.disabled = true;
+    inputDiv_textarea.setAttribute("placeholder", "Waiting for connection...");
+    inputDiv_textarea.addEventListener("keyup", textareaEvent.bind(this));
     inputDiv.appendChild(inputDiv_textarea);
 
     // Button in the input div
@@ -48,6 +50,7 @@ function Chat(settings) {
     inputDiv_button.addEventListener("click", buttonEvent.bind(this));
     inputDiv_button.classList.add("chatInput_button");
     inputDiv_button.setAttribute("type", "button");
+    inputDiv_button.disabled = true;
     inputDiv_button.textContent = "Send";
     inputDiv.appendChild(inputDiv_button);
 
@@ -66,11 +69,13 @@ function Chat(settings) {
     /**
      * Functions
      */
-    /*
     function socketOpenEvent(e) {
-        socket.send(JSON.stringify(data));
+        inputDiv_textarea.disabled = false;
+        inputDiv_textarea.setAttribute("placeholder", "Enter message");
+
+        inputDiv_button.disabled = false;
     }
-    */
+
     function socketMessageEvent(e) {
         let response = JSON.parse(e.data);
         console.log(response);
@@ -117,7 +122,7 @@ function Chat(settings) {
     function buttonEvent(e) {
         let value = inputDiv_textarea.value;
 
-        if (value === "") {
+        if (value === "" || value === "\n") {
             console.log("Must enter a message!");
 
             return;
@@ -131,8 +136,18 @@ function Chat(settings) {
             "username": this.username,
             "key": "eDBE76deU7L0H9mEBgxUKVR0VCnq0XBd"
         }
-
         this.socket.send(JSON.stringify(data));
+    }
+
+    function textareaEvent(e) {
+        /**
+         * If pressing enter and shift is not pressed -> click button
+         */
+        if (e.keyCode === 13 && !e.shiftKey) {
+            e.preventDefault();
+
+            inputDiv_button.click();
+        }
     }
 }
 
