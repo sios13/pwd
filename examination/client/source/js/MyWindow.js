@@ -26,7 +26,8 @@ function MyWindow(settings = {}) {
     /**
      * Elements
      */
-    this.container = document.createElement("div");
+    this.container = document.createElement("a");
+    this.container.setAttribute("href", "#");
     this.container.classList.add("PWD-window");
     this.container.style.left = this.xPos + "px";
     this.container.style.top = this.yPos + "px";

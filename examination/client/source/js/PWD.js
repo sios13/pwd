@@ -223,13 +223,6 @@ function PWD(settings = {}) {
             selectWindowPanelApp(index);
 
             /**
-             * Deselect icon
-             */
-            if (this.icons[0]) {
-                this.icons[0].setIsSelected(false);
-            }
-
-            /**
              * If target is the window top bar -> set the window as dragTarget and add mousemove listener
              */
             let windowTopBarElem = pwdWindow.getContainer().querySelector(".PWD-window_topbar");
@@ -249,6 +242,8 @@ function PWD(settings = {}) {
          * If a mousedown has been made on a panel
          */
         if (target instanceof Panel) {
+            let panel = target;
+
             return;
         }
 
@@ -258,23 +253,10 @@ function PWD(settings = {}) {
         if (target instanceof Icon) {
             let icon = target;
 
-            let index = icons.indexOf(icon);
-
             /**
              * Set the icon as selected
              */
-            selectIcon(index);
-
-            /**
-             * Deselect the window and associated panel
-             */
-            if (this.windows[0]) {
-                this.windows[0].setIsSelected(false);
-            }
-
-            if (this.panels[0]) {
-                this.panels[0].setIsSelected(false);
-            }
+            selectIcon(icon);
 
             /**
              * Set the icon as dragTarget and add mousemove listener
@@ -534,6 +516,10 @@ function PWD(settings = {}) {
          */
         if (target instanceof Icon) {
             e.preventDefault();
+
+            let icon = target;
+
+            selectIcon(icon);
         }
 
         /**
@@ -601,7 +587,7 @@ function PWD(settings = {}) {
 
     function keydownEvent(e) {
         /**
-         * Update position of selected window using the arrow key
+         * Update position of the selected window using the arrow key
          */
         if (this.windows[0]) {
             let pwdWindow = this.windows[0];
@@ -704,15 +690,22 @@ function PWD(settings = {}) {
     }
 
     /**
-     * Bring the icon with the given index to the front of the icons array
+     * Bring the given icon to the front of the icons array
      * Being in front of the array means "selected"
      */
-    function selectIcon(index) {
+    function selectIcon(icon) {
+        let index = this.icons.indexOf(icon);
+
         let iconTemp = this.icons[index];
 
         this.icons.splice(index, 1);
 
         this.icons.unshift(iconTemp);
+
+        /**
+         * Set the icon as selected
+         */
+        this.icons[0].setIsSelected(true);
 
         /**
          * Deselect the last active icon
@@ -721,7 +714,16 @@ function PWD(settings = {}) {
             this.icons[1].setIsSelected(false);
         }
 
-        this.icons[0].setIsSelected(true);
+        /**
+         * Deselect the window and associated panel
+         */
+        if (this.windows[0]) {
+            this.windows[0].setIsSelected(false);
+        }
+
+        if (this.panels[0]) {
+            this.panels[0].setIsSelected(false);
+        }
     }
 
     /**
@@ -747,6 +749,7 @@ function PWD(settings = {}) {
 
         this.windows.unshift(windowTemp);
 
+        // Make sure the previous selected window is not selected
         if (this.windows[1]) {
             this.windows[1].setIsSelected(false);
         }
@@ -762,11 +765,19 @@ function PWD(settings = {}) {
 
         this.panels.unshift(panelTemp);
 
+        // Make sure the previous selected panel is not selected
         if (this.panels[1]) {
             this.panels[1].setIsSelected(false);
         }
 
         this.panels[0].setIsSelected(true);
+
+        /**
+         * Deselect icon
+         */
+        if (this.icons[0]) {
+            this.icons[0].setIsSelected(false);
+        }
 
         /**
          * Give windows z-index
