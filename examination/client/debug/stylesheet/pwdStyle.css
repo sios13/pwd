@@ -219,6 +219,10 @@ main {
     text-decoration:none;
     cursor:default;
 }
+.PWD-window:focus {
+    box-shadow:0 0 10px 2px #9ecaed;
+    transition:box-shadow 0.2s;
+}
 .PWD-window.selected {
     box-shadow:0 0 10px 0 rgba(0,0,0,0.5), 0 0 0 2px rgb(24,131,215);
 }
@@ -345,6 +349,10 @@ main {
     text-align:center;
     text-decoration:none;
     cursor:default;
+}
+.PWD-icon:focus {
+    box-shadow:0 0 10px 2px #9ecaed;
+    transition:box-shadow 0.2s;
 }
 .PWD-icon:hover {
     background-color:rgba(255,255,255,0.2);
