@@ -38,11 +38,6 @@ function MemoryGame(settings = {}) {
         let memoryPairRadio = memoryPairLabel.querySelector("input");
 
         memoryPairLabel.appendChild(document.createTextNode(i + " pairs"));
-        // Fix to make radio inputs clickable
-        memoryPairLabel.addEventListener("click", function(e) {
-            e.stopPropagation();
-            this.click();
-        });
         memoryPairRadio.setAttribute("value", i);
 
         memoryPairForm.appendChild(memoryPairLabel);
@@ -61,7 +56,15 @@ function MemoryGame(settings = {}) {
      * Functions
      */
     function memoryPairFormButtonEvent() {
-        let nrOfPairs = document.querySelector(".memoryPairForm input:checked").value;
+        let checkedInput = document.querySelector(".memoryPairForm input:checked");
+
+        if (!checkedInput) {
+            console.log("You must choose pairs!");
+
+            return;
+        }
+
+        let nrOfPairs = checkedInput.value;
 
         memoryWrapperDiv.removeChild(memoryHeader);
         memoryWrapperDiv.removeChild(memoryPairForm);

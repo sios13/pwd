@@ -91,7 +91,7 @@ function Settings(settings = {}) {
     spans[1].textContent = "1280x720";
     spans[2].textContent = "1600x900";
     spans[3].textContent = "1920x1080";
-    spans[4].textContent = "2460x1400";
+    spans[4].textContent = "2460x1440";
 
     /**
      * Save button

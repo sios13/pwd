@@ -71,6 +71,7 @@ function Chat(settings) {
      */
     function socketOpenEvent(e) {
         inputDiv_textarea.disabled = false;
+
         inputDiv_textarea.setAttribute("placeholder", "Enter message");
 
         inputDiv_button.disabled = false;
@@ -87,7 +88,15 @@ function Chat(settings) {
         let chatMessageSpan = document.createElement("span");
         chatMessageSpan.classList.add("chatMessage");
 
-        chatMessageSpan.textContent += "[" + response.type + "] ";
+        if (response.type === "notification") {
+            chatMessageSpan.textContent += "[" + response.type + "] ";
+        } else {
+            let date = new Date();
+
+            let currentTime = (date.getHours() < 10 ? "0" + date.getHours() : date.getHours()) + ":" + (date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes());
+
+            chatMessageSpan.textContent += "[" + currentTime + "] ";
+        }
         chatMessageSpan.textContent += response.username + ": ";
         chatMessageSpan.textContent += response.data;
 
@@ -152,7 +161,6 @@ function Chat(settings) {
 }
 
 Chat.prototype.close = function() {
-    debugger;
     this.socket.close();
 }
 

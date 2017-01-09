@@ -52,7 +52,7 @@
 .chatNameChange span {
     float:left;
     height:100%;
-    width:60%;
+    width:calc(60% - 5px);
     line-height:30px;
     font-size:15px;
     overflow:hidden;
@@ -60,7 +60,7 @@
     text-overflow:ellipsis;
 }
 .chatNameChange button {
-    float:left;
+    float:right;
     height:100%;
     width:40%;
     border:0;
@@ -73,9 +73,10 @@
 .chatNameChange input {
     float:left;
     height:calc(100% - 4px);
-    width:calc(60% - 4px);
-    padding:0;
+    width:calc(60% - 13px);
+    padding:0 2px;
     font-family:inherit;
+    font-size:15px;
 }
 
 .chatMessages {

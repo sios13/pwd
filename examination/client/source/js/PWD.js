@@ -205,6 +205,13 @@ function PWD(settings = {}) {
      */
     function mousedownEvent(e) {
         /**
+         * Only left mousedown
+         */
+        if (e.which !== 1) {
+            return;
+        }
+
+        /**
          * For every mousedown event we will attempt to find a new target
          */
         let target = findTarget(e.target);
@@ -272,6 +279,13 @@ function PWD(settings = {}) {
     }
 
     function mouseupEvent(e) {
+        /**
+         * Only left mouseup
+         */
+        if (e.which !== 1) {
+            return;
+        }
+
         let target = findTarget(e.target);
 
         /**
@@ -296,6 +310,8 @@ function PWD(settings = {}) {
          * If a mouse up has been made on a window
          */
         if (target instanceof MyWindow) {
+            e.preventDefault();
+
             let pwdWindow = target;
 
             /**
@@ -403,6 +419,13 @@ function PWD(settings = {}) {
     }
 
     function clickEvent(e) {
+        /**
+         * Only left click
+         */
+        if (e.which !== 1) {
+            return;
+        }
+
         if (this.isDblClick) {
             dblclickEvent(e);
 
@@ -449,8 +472,6 @@ function PWD(settings = {}) {
             let windowCloseDiv = pwdWindow.getContainer().querySelector(".PWD-window_close");
 
             if (windowCloseDiv.contains(e.target)) {
-                e.preventDefault();
-
                 let index = this.windows.indexOf(pwdWindow);
 
                 closeWindow(index);
@@ -573,11 +594,11 @@ function PWD(settings = {}) {
             /**
              * If mouse pointer is outside window -> do not update the position
              */
-            if (cursorY + 10 < 0 || cursorY > pwdHeight - 40 - 10) {
+            if (cursorY - 10 < 0 || cursorY + 40 + 10 > pwdHeight) {
                 movementY = 0;
             }
 
-            if (cursorX + 10 < 0 || cursorX > pwdWidth - 10) {
+            if (cursorX - 10 < 0 || cursorX + 10 > pwdWidth) {
                 movementX = 0;
             }
 

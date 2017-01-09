@@ -220,7 +220,7 @@ main {
     cursor:default;
 }
 .PWD-window.selected {
-    box-shadow:0 0 10px 0 rgba(0,0,0,0.5), 0 0 0 1px rgb(24,131,215);
+    box-shadow:0 0 10px 0 rgba(0,0,0,0.5), 0 0 0 2px rgb(24,131,215);
 }
 .PWD-window.selected > .PWD-window_topbar_wrapper {
     color:black;
