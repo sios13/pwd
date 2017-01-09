@@ -83,7 +83,7 @@ function PWD(settings = {}) {
         function updateClockButton() {
             let date = new Date();
 
-            this.clockButton.textContent = date.getHours() + ":" + (date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes());
+            this.clockButton.textContent = (date.getHours() < 10 ? "0" + date.getHours() : date.getHours()) + ":" + (date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes());
         }
 
         updateClockButton();
@@ -106,9 +106,9 @@ function PWD(settings = {}) {
         function updateClock() {
             let date = new Date();
 
-            this.clock_bigClock.textContent = date.getHours() + ":" + (date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes()) + ":" + (date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds());
+            this.clock_bigClock.textContent = (date.getHours() < 10 ? "0" + date.getHours() : date.getHours()) + ":" + (date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes()) + ":" + (date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds());
 
-            let monthNames = ["Januari", "Februari", "Mars", "April", "Maj", "Juni", "July", "Augusti", "September", "Oktober", "November", "December"];
+            let monthNames = ["januari", "februari", "mars", "april", "maj", "juni", "juli", "augusti", "september", "oktober", "november", "december"];
 
             this.clock_date.textContent = "den " + date.getDate() + " " + monthNames[date.getMonth()] + " " + date.getFullYear();
         }
@@ -652,7 +652,7 @@ function PWD(settings = {}) {
          */
         for (let i = 0; i < this.windows.length; i++) {
             /**
-             * If a mousedown has been made in a window -> mark the window and the panel as selected
+             * If target is contianed in a window -> return the window
              */
             if (this.windows[i].getContainer().contains(target)) {
                 return this.windows[i];
@@ -664,7 +664,7 @@ function PWD(settings = {}) {
          */
         for (let i = 0; i < this.panels.length; i++) {
             /**
-             * If a mousedown has been made in a panel -> mark the panel and the window as selected
+             * If target is contianed in a panel -> return the panel
              */
             if (this.panels[i].getContainer().contains(target)) {
                 return this.panels[i];
@@ -676,7 +676,7 @@ function PWD(settings = {}) {
          */
         for (let i = 0; i < this.icons.length; i++) {
             /**
-             * If a mousedown has been made on an icon -> mark the icon as selected
+             * If target is contianed in an icon -> return the icon
              */
             if (this.icons[i].getContainer().contains(target)) {
                 return this.icons[i];
@@ -914,7 +914,7 @@ function PWD(settings = {}) {
          */
         selectWindowPanelApp(this.applications.length - 1);
 
-        this.windowCounter++;
+        this.windowCounter += 1;
     }
 
     /**
